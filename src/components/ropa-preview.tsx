@@ -228,7 +228,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
             <CardHeader className="flex flex-row items-center justify-between">
                 <div className="flex items-center justify-between w-full gap-4">
                     <CardTitle>{t("generatedDocument")}</CardTitle>
-                    <div className="flex tems-center gap-1 bg-muted rounded-full p-1">
+                    <div className="flex items-center gap-1 bg-muted rounded-full p-1">
                         <Button
                             variant={viewMode === 'edit' ? 'default' : 'ghost'}
                             size="sm"
