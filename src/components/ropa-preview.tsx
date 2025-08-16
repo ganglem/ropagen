@@ -207,15 +207,16 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
     };
 
     const getDownloadButtonText = () => {
+        const downloadPrefix = t("downloadAs");
         switch (downloadFormat) {
             case 'markdown':
-                return 'Download .md';
+                return `${downloadPrefix} .md`;
             case 'text':
-                return 'Download .txt';
+                return `${downloadPrefix} .txt`;
             case 'json':
-                return 'Download .json';
+                return `${downloadPrefix} .json`;
             case 'pdf':
-                return 'Download .pdf';
+                return `${downloadPrefix} .pdf`;
             default:
                 return t("downloadDocument");
         }
@@ -235,7 +236,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                             className="h-8 px-3 text-xs"
                         >
                             <Edit className="h-3 w-3 mr-1" />
-                            Edit
+                            {t("edit")}
                         </Button>
                         <Button
                             variant={viewMode === 'preview' ? 'default' : 'ghost'}
@@ -244,7 +245,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                             className="h-8 px-3 text-xs"
                         >
                             <Eye className="h-3 w-3 mr-1" />
-                            Preview
+                            {t("preview")}
                         </Button>
                     </div>
                 </div>
