@@ -8,12 +8,12 @@ import { Input } from "./ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "./ui/textarea";
 import {Button} from "@/components/ui/button";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {generateDocument} from "@/actions/actions";
 import { Loader2 } from "lucide-react"
 import RopaTemplateSelector from "./ropa-template-selector";
 import {useTranslations} from "next-intl";
-
-
+import { availableModels, defaultModel } from "@/config/models";
 
 export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
@@ -29,6 +29,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         additionalInfo: "",
     });
 
+    const [selectedModel, setSelectedModel] = useState<string>(defaultModel);
     const [isGenerating, setIsGenerating] = useState<boolean>(false)
 
     function handleTitleChange(title: string) {
@@ -46,7 +47,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
     async function handleGenerateDocument() {
         setIsGenerating(true);
         // @ts-ignore
-        const generatedDocument = await generateDocument(documentData, t("locale"));
+        const generatedDocument = await generateDocument(documentData, t("locale"), selectedModel);
         setIsGenerating(false);
         setGeneratedDocument(generatedDocument)
     }
@@ -101,12 +102,30 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             />
                         </div>
 
-                        <Button onClick={handleGenerateDocument} disabled={isGenerating}>
-                            {isGenerating ? (
-                                <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("generating")}</>) : (
-                                t("generateButton")
-                            )}
-                        </Button>
+                        <div className="flex flex-col sm:flex-row gap-4 items-end">
+                            <div className="space-y-2 flex-1">
+                                <Label htmlFor="model-select">AI Model</Label>
+                                <Select value={selectedModel} onValueChange={setSelectedModel}>
+                                    <SelectTrigger id="model-select">
+                                        <SelectValue placeholder="Select AI model"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {availableModels.map((model) => (
+                                            <SelectItem key={model.value} value={model.value}>
+                                                {model.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <Button onClick={handleGenerateDocument} disabled={isGenerating} className="sm:w-auto w-full">
+                                {isGenerating ? (
+                                    <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("generating")}</>) : (
+                                    t("generateButton")
+                                )}
+                            </Button>
+                        </div>
                     </div>
 
                 </CardContent>
