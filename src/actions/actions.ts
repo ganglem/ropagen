@@ -9,13 +9,12 @@ export async function fetchMockTemplates(): Promise<Template[]> {
     return templates as unknown as Template[];
 }
 
-
-export async function generateDocument(data: DocumentData, locale: string): Promise<string> {
+export async function generateDocument(data: DocumentData, locale: string, model: string = 'gpt-4o'): Promise<string> {
     try {
         const prompt = generatePromptFromData(data, locale);
 
         const {text: llmResponse} = await generateText({
-            model: openai('gpt-4o'),
+            model: openai(model),
             prompt: prompt,
             temperature: 0,
         });
