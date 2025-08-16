@@ -300,7 +300,7 @@ export async function POST(request: NextRequest) {
       displayHeaderFooter: false
     });
 
-    await browser.close();
+    // browser will be closed in finally
 
     // Return the PDF as a response
     return new NextResponse(pdfBuffer, {
