@@ -26,7 +26,13 @@
     "generating": "Generating ROPA..."
   },
   "Preview": {
-    "generatedDocument": "Generated Document"
+    "generatedDocument": "Generated Document",
+    "downloadDocument": "Download Document",
+    "downloadAs": "Download as",
+    "markdown": "Markdown (.md)",
+    "text": "Text (.txt)",
+    "json": "JSON (.json)",
+    "pdf": "PDF (.pdf)"
   },
 
   "Footer": {
@@ -35,3 +41,4 @@
     "rights": "All rights reserved."
   }
 }
+
