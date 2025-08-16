@@ -30,6 +30,8 @@
 
   "Preview": {
     "generatedDocument": "Erstelltes Dokument",
+    "edit": "Bearbeiten",
+    "preview": "Vorschau",
     "downloadDocument": "Dokument herunterladen",
     "downloadAs": "Herunterladen als",
     "markdown": "Markdown (.md)",
