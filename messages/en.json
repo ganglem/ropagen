@@ -27,6 +27,8 @@
   },
   "Preview": {
     "generatedDocument": "Generated Document",
+    "edit": "Edit",
+    "preview": "Preview",
     "downloadDocument": "Download Document",
     "downloadAs": "Download as",
     "markdown": "Markdown (.md)",
