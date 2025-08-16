@@ -35,6 +35,7 @@ export default function RopaTemplateSelector({onSelect}: {
                 title: selectedTemplate.title,
                 categories: selectedTemplate.categories,
                 additionalInfo: selectedTemplate.additionalInfo,
+                language: selectedTemplate.language,
             })
         }
     }
