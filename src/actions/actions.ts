@@ -4,22 +4,56 @@ import {Category, DocumentData, Template} from "@/models/DocumentData";
 import { generateText } from "ai";
 import {openai} from '@ai-sdk/openai';
 import templates from "../../data/mock.json";
+import {Mistral} from "@mistralai/mistralai";
+import {availableModels} from "@/config/models";
 
 export async function fetchMockTemplates(): Promise<Template[]> {
     return templates as unknown as Template[];
 }
 
-export async function generateDocument(data: DocumentData, locale: string, model: string = 'gpt-4o'): Promise<string> {
+export async function generateDocument(data: DocumentData, locale: string, selectedModel: string = 'gpt-4o'): Promise<string> {
     try {
         const prompt = generatePromptFromData(data, locale);
+        
+        //TODO this is hardcoded, make it more flexible in the future
 
-        const {text: llmResponse} = await generateText({
-            model: openai(model),
-            prompt: prompt,
-            temperature: 0,
-        });
+        let llmResponse = "";
+
+        const modelEndpoint = availableModels.find(model => model.name == selectedModel)?.endpoint
+
+        if (modelEndpoint == "mistral") {
+            const mistralApiKey = process.env.MISTRAL_API_KEY;
+
+            const client = new Mistral({apiKey: mistralApiKey});
+
+            const response = await client.chat.complete({
+                model: selectedModel,
+                messages: [
+                    {
+                        role: 'user',
+                        content: prompt,
+                    },
+                ],
+            })
+
+            // @ts-ignore
+            llmResponse = response.choices[0].message.content[1].text as string;
+
+            console.log(response)
+
+        } else if (modelEndpoint == "openai") {
+            const response = await generateText({
+                model: openai(selectedModel),
+                prompt: prompt,
+                temperature: 0,
+            });
+            llmResponse = response.text;
+
+            console.log(response)
+        }
 
         return llmResponse;
+
     } catch (error) {
         console.error('Error generating document:', error);
         throw new Error('Failed to generate document');
