@@ -142,14 +142,9 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
     const downloadAsPdf = async () => {
         try {
             // Show loading state
-            const originalText = document.querySelector('[data-pdf-btn]')?.textContent;
-            const pdfButton = document.querySelector('[data-pdf-btn]') as HTMLButtonElement;
-        let originalText: string | null = null;
-        try {
-            // Show loading state
+            let originalText = document.querySelector('[data-pdf-btn]')?.textContent;
             const pdfButton = document.querySelector('[data-pdf-btn]') as HTMLButtonElement;
             if (pdfButton) {
-                originalText = pdfButton.textContent;
                 pdfButton.textContent = 'Generating PDF...';
                 pdfButton.disabled = true;
             }
