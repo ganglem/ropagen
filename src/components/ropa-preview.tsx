@@ -2,17 +2,17 @@ import {Textarea} from "@/components/ui/textarea";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {ShineBorder} from "@/components/ui/shine-border";
 import {Button} from "@/components/ui/button";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useTranslations} from "next-intl";
-import {Download, ChevronDown, Eye, Edit} from "lucide-react";
-import {useState, useEffect, useRef} from "react";
+import {Download, Eye, Edit} from "lucide-react";
+import {useState, useEffect} from "react";
 import {marked} from "marked";
 
 export default function RopaPreview({generatedDocument, setGeneratedDocument}: { generatedDocument: string, setGeneratedDocument: (doc: string) => void }) {
 
     const t = useTranslations('Preview');
-    const [showDownloadOptions, setShowDownloadOptions] = useState(false);
     const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [downloadFormat, setDownloadFormat] = useState<'markdown' | 'text' | 'json' | 'pdf'>('pdf');
 
     // Configure marked for consistent rendering
     useEffect(() => {
@@ -105,20 +105,6 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
         }
     };
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setShowDownloadOptions(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
     const downloadFile = (content: string, filename: string, mimeType: string) => {
         const blob = new Blob([content], { type: mimeType });
         const url = URL.createObjectURL(blob);
@@ -129,7 +115,6 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        setShowDownloadOptions(false);
     };
 
     const downloadAsMarkdown = () => {
@@ -191,8 +176,6 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-
-            setShowDownloadOptions(false);
         } catch (error) {
             console.error('Error generating PDF:', error);
             alert('Error generating PDF. Please try again.');
@@ -206,13 +189,45 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
         }
     };
 
+    const handleDownload = () => {
+        switch (downloadFormat) {
+            case 'markdown':
+                downloadAsMarkdown();
+                break;
+            case 'text':
+                downloadAsText();
+                break;
+            case 'json':
+                downloadAsJson();
+                break;
+            case 'pdf':
+                downloadAsPdf();
+                break;
+        }
+    };
+
+    const getDownloadButtonText = () => {
+        switch (downloadFormat) {
+            case 'markdown':
+                return 'Download .md';
+            case 'text':
+                return 'Download .txt';
+            case 'json':
+                return 'Download .json';
+            case 'pdf':
+                return 'Download .pdf';
+            default:
+                return t("downloadDocument");
+        }
+    };
+
     return (
         <Card className="relative overflow-hidden w-full mt-8">
             <ShineBorder shineColor={["#7440ff", "#ffc200"]} />
             <CardHeader className="flex flex-row items-center justify-between">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between w-full gap-4">
                     <CardTitle>{t("generatedDocument")}</CardTitle>
-                    <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+                    <div className="flex tems-center gap-1 bg-muted rounded-full p-1">
                         <Button
                             variant={viewMode === 'edit' ? 'default' : 'ghost'}
                             size="sm"
@@ -232,58 +247,6 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                             Preview
                         </Button>
                     </div>
-                </div>
-                <div className="relative" ref={dropdownRef}>
-                    <Button
-                        variant="outline"
-                        onClick={() => setShowDownloadOptions(!showDownloadOptions)}
-                        className="flex items-center gap-2"
-                    >
-                        <Download className="h-4 w-4" />
-                        {t("downloadDocument")}
-                        <ChevronDown className="h-4 w-4" />
-                    </Button>
-
-                    {showDownloadOptions && (
-                        <div className="absolute right-0 top-full mt-2 w-48 bg-background border rounded-md shadow-lg z-10">
-                            <div className="p-2">
-                                <p className="text-sm font-medium mb-2 px-2">{t("downloadAs")}:</p>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={downloadAsMarkdown}
-                                    className="w-full justify-start mb-1"
-                                >
-                                    {t("markdown")}
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={downloadAsText}
-                                    className="w-full justify-start mb-1"
-                                >
-                                    {t("text")}
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={downloadAsJson}
-                                    className="w-full justify-start mb-1"
-                                >
-                                    {t("json")}
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={downloadAsPdf}
-                                    className="w-full justify-start"
-                                    data-pdf-btn
-                                >
-                                    {t("pdf")}
-                                </Button>
-                            </div>
-                        </div>
-                    )}
                 </div>
             </CardHeader>
             <CardContent>
@@ -306,6 +269,26 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                         dangerouslySetInnerHTML={{ __html: getRenderedHtml() }}
                     />
                 )}
+                <div className="flex items-center justify-end mt-4 gap-2">
+                    <Select value={downloadFormat} onValueChange={(value: 'markdown' | 'text' | 'json' | 'pdf') => setDownloadFormat(value)}>
+                        <SelectTrigger className="w-32">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="pdf">PDF</SelectItem>
+                            <SelectItem value="markdown">{t("markdown")}</SelectItem>
+                            <SelectItem value="text">{t("text")}</SelectItem>
+                            <SelectItem value="json">JSON</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <Button
+                        onClick={handleDownload}
+                        className="flex items-center gap-2"
+                    >
+                        <Download className="h-4 w-4" />
+                        {getDownloadButtonText()}
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     )
