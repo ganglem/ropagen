@@ -29,7 +29,13 @@
   },
 
   "Preview": {
-    "generatedDocument": "Erstelltes Dokument"
+    "generatedDocument": "Erstelltes Dokument",
+    "downloadDocument": "Dokument herunterladen",
+    "downloadAs": "Herunterladen als",
+    "markdown": "Markdown (.md)",
+    "text": "Text (.txt)",
+    "json": "JSON (.json)",
+    "pdf": "PDF (.pdf)"
   },
 
   "Footer": {
@@ -38,3 +44,4 @@
     "rights": "Alle Rechte vorbehalten."
   }
 }
+
