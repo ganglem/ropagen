@@ -10,19 +10,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Markdown content is required' }, { status: 400 });
     }
 
-    // Clean up the markdown content - remove code block markers
-    let cleanMarkdown = markdown.trim();
-
-    // Remove markdown code block markers if they exist
-    if (cleanMarkdown.startsWith('```markdown')) {
-      cleanMarkdown = cleanMarkdown.replace(/^```markdown\s*/, '');
-    }
-    if (cleanMarkdown.startsWith('```')) {
-      cleanMarkdown = cleanMarkdown.replace(/^```\s*/, '');
-    }
-    if (cleanMarkdown.endsWith('```')) {
-      cleanMarkdown = cleanMarkdown.replace(/\s*```$/, '');
-    }
+    // Since we now receive clean markdown from the frontend, no need for complex cleaning
+    // Just trim and use as-is
+    const cleanMarkdown = markdown.trim();
 
     // Configure marked with better options
     marked.setOptions({
