@@ -112,7 +112,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     </SelectTrigger>
                                     <SelectContent>
                                         {availableModels.map((model) => (
-                                            <SelectItem key={model.value} value={model.value}>
+                                            <SelectItem key={model.name} value={model.name}>
                                                 {model.label}
                                             </SelectItem>
                                         ))}

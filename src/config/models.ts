@@ -1,18 +1,26 @@
 // Available LLM models configuration
 export interface ModelOption {
-    value: string;
+    name: string;
     label: string;
+    endpoint: string;
 }
 
 export const availableModels: ModelOption[] = [
-
     {
-        value: "gpt-4.1",
+        name: "gpt-4.1",
         label: "GPT-4.1",
+        endpoint: "openai"
+
     },
     {
-        value: "gpt-4o",
+        name: "gpt-4o",
         label: "GPT-4o",
+        endpoint: "openai"
+    },
+    {
+        name: "magistral-small-latest",
+        label: "Magistral Small",
+        endpoint: "mistral"
     }
 ];
 
