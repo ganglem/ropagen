@@ -52,6 +52,8 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         setGeneratedDocument(generatedDocument)
     }
 
+    //TODO: translate AI Models
+
     return (
         <div className="space-y-6 w-full">
 
@@ -102,12 +104,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             />
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4 items-end">
-                            <div className="space-y-2 flex-1">
-                                <Label htmlFor="model-select">AI Model</Label>
+                        <div className="w-full flex items-center justify-between">
+                            <div className="">
                                 <Select value={selectedModel} onValueChange={setSelectedModel}>
                                     <SelectTrigger id="model-select">
-                                        <SelectValue placeholder="Select AI model"/>
+                                        <SelectValue placeholder="AI model"/>
                                     </SelectTrigger>
                                     <SelectContent>
                                         {availableModels.map((model) => (
@@ -119,7 +120,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 </Select>
                             </div>
 
-                            <Button onClick={handleGenerateDocument} disabled={isGenerating} className="sm:w-auto w-full">
+                            <Button onClick={handleGenerateDocument} disabled={isGenerating} className="w-auto">
                                 {isGenerating ? (
                                     <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("generating")}</>) : (
                                     t("generateButton")
