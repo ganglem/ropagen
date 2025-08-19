@@ -251,12 +251,12 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                     />
                 ) : (
                     <div
-                        className="max-h-[500px] min-h-[200px] overflow-auto prose prose-sm max-w-none p-4 bg-muted/30 rounded-md border"
+                        className="max-h-[500px] min-h-[200px] field-sizing-content overflow-auto prose prose-sm max-w-none px-3 py-2 bg-background border border-border rounded-xl"
                         style={{
                             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", Roboto, Helvetica, Arial, sans-serif',
-                            fontSize: '14px',
-                            lineHeight: '1.6',
-                            color: '#24292f'
+                            fontSize: 'md:text-sm text-base',
+                            lineHeight: '1.8',
+                            color: 'text-foreground'
                         }}
                         //@ts-ignore
                         dangerouslySetInnerHTML={{ __html: getRenderedHtml() }}
