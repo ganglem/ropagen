@@ -19,7 +19,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
 
   dev:
-    container_name: ganglem-ropagen
+    container_name: ganglem-ropagen-dev
     image: ganglem/ropagen-dev:latest
     env_file:
       - .env
