@@ -4,7 +4,7 @@ import {ShineBorder} from "@/components/ui/shine-border";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useTranslations} from "next-intl";
-import {Download, Eye, Edit} from "lucide-react";
+import {Download, Eye, Edit, Loader2} from "lucide-react";
 import {useState, useEffect} from "react";
 import {marked} from "marked";
 
@@ -13,6 +13,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
     const t = useTranslations('Preview');
     const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
     const [downloadFormat, setDownloadFormat] = useState<'markdown' | 'text' | 'json' | 'pdf'>('pdf');
+    const [isGenerating, setIsGenerating] = useState(false);
 
     // Configure marked for consistent rendering
     useEffect(() => {
@@ -141,13 +142,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
 
     const downloadAsPdf = async () => {
         try {
-            // Show loading state
-            let originalText = document.querySelector('[data-pdf-btn]')?.textContent;
-            const pdfButton = document.querySelector('[data-pdf-btn]') as HTMLButtonElement;
-            if (pdfButton) {
-                pdfButton.textContent = 'Generating PDF...';
-                pdfButton.disabled = true;
-            }
+            setIsGenerating(true);
 
             // Send clean markdown (no code block wrappers) to PDF API
             const response = await fetch('/api/generate-pdf', {
@@ -180,12 +175,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
             console.error('Error generating PDF:', error);
             alert('Error generating PDF. Please try again.');
         } finally {
-            // Restore button state
-            const pdfButton = document.querySelector('[data-pdf-btn]') as HTMLButtonElement;
-            if (pdfButton) {
-                pdfButton.textContent = 'PDF';
-                pdfButton.disabled = false;
-            }
+            setIsGenerating(false);
         }
     };
 
@@ -288,9 +278,14 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                         onClick={handleDownload}
                         className="flex items-center gap-2"
                         data-pdf-btn
+                        disabled={isGenerating}
                     >
-                        <Download className="h-4 w-4" />
-                        {getDownloadButtonText()}
+                        {isGenerating ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <Download className="h-4 w-4" />
+                        )}
+                        {isGenerating ? "Generating PDF..." : getDownloadButtonText()}
                     </Button>
                 </div>
             </CardContent>
