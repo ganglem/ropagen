@@ -6,7 +6,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "./ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "./ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {generateDocument} from "@/actions/actions";
@@ -120,9 +120,13 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 </Select>
                             </div>
 
-                            <Button onClick={handleGenerateDocument} disabled={isGenerating} className="w-auto">
+                            <Button onClick={handleGenerateDocument} disabled={isGenerating} className="w-auto flex items-center gap-2">
                                 {isGenerating ? (
-                                    <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("generating")}</>) : (
+                                    <>
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                        {t("generating")}
+                                    </>
+                                ) : (
                                     t("generateButton")
                                 )}
                             </Button>
