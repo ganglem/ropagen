@@ -1,4 +1,4 @@
-name: Build and Push Docker Image (Autodeploy on main)
+name: Autodeploy MAIN
 
 on:
   push:
