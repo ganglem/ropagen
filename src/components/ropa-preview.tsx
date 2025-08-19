@@ -274,7 +274,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                 )}
                 <div className="flex items-center justify-end mt-4 gap-2">
                     <Select value={downloadFormat} onValueChange={(value: 'markdown' | 'text' | 'json' | 'pdf') => setDownloadFormat(value)}>
-                        <SelectTrigger className="w-32">
+                        <SelectTrigger className="w-40">
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
