@@ -55,21 +55,27 @@ export default async function RootLayout({
                     ></div>
 
                     {/* HEADER */}
-                    <header className="sticky top-0 py-2 z-50">
-                      <div className="flex items-center justify-between">
-                        <NavHeader
-                          logoSrc="/star.svg"
-                          brandName="ROPAgen"
-                          links={[
-                            {name: t("generate"), href: "/generate"}
-                          ]}
-                        />
-                        <LocaleSwitch currentLocale={locale} />
+                    <header className="sticky top-0 py-2 z-50 pointer-events-none">
+                      <div className="relative pointer-events-none flex items-center justify-end h-12">
+                        {/* Centered Nav */}
+                        <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2">
+                          <NavHeader
+                            logoSrc="/star.svg"
+                            brandName="ROPAgen"
+                            links={[
+                              {name: t("generate"), href: "/generate"}
+                            ]}
+                          />
+                        </div>
+                        {/* Right-aligned Locale Switch */}
+                        <div className="pointer-events-auto">
+                          <LocaleSwitch currentLocale={locale} />
+                        </div>
                       </div>
                     </header>
 
                     {/* MAIN CONTENT */}
-                    <main className="flex-grow px-2 md:px-4 pt-4 md:pt-6">{children}</main>
+                    <main className="flex-grow px-2 md:px-4 pt-16">{children}</main>
                   </div>
 
                   {/* FOOTER - now outside the background area */}

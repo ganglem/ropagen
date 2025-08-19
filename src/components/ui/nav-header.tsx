@@ -55,20 +55,14 @@ export default function NavHeader({
     const TOP_BAR_HEIGHT = 48;
 
     return (
-        <div className="relative w-full">
+        <div className="relative pointer-events-none w-fit">
             {/* Desktop nav */}
             <motion.ul
                 onMouseLeave={() => setPillPos((prev) => ({ ...prev, opacity: 0 }))}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
-                className="
-                    flex mx-auto items-center justify-center
-                    w-fit rounded-full border-border bg-gradient-to-br from-white/20 to-white/80 dark:from-black/5 dark:to-white/20
-                    backdrop-blur-xs shadow-md
-          h-12
-          px-3
-                "
+                className="pointer-events-auto flex mx-auto items-center justify-center w-fit rounded-full overflow-hidden border-border bg-gradient-to-br from-white/20 to-white/80 dark:from-black/5 dark:to-white/20 backdrop-blur-xs h-12 px-3"
                 style={{ gap: 24 }}
             >
                 {/* Logo + Brand */}
