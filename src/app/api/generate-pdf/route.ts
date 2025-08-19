@@ -1,30 +1,30 @@
-import { NextRequest, NextResponse } from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 import puppeteer from 'puppeteer';
-import { marked } from 'marked';
+import {marked} from 'marked';
 
 export async function POST(request: NextRequest) {
-  try {
-    const { markdown } = await request.json();
+    try {
+        const {markdown} = await request.json();
 
-    if (!markdown) {
-      return NextResponse.json({ error: 'Markdown content is required' }, { status: 400 });
-    }
+        if (!markdown) {
+            return NextResponse.json({error: 'Markdown content is required'}, {status: 400});
+        }
 
-    // Since we now receive clean markdown from the frontend, no need for complex cleaning
-    // Just trim and use as-is
-    const cleanMarkdown = markdown.trim();
+        // Since we now receive clean markdown from the frontend, no need for complex cleaning
+        // Just trim and use as-is
+        const cleanMarkdown = markdown.trim();
 
-    // Configure marked with better options
-    marked.setOptions({
-      breaks: true,
-      gfm: true,
-    });
+        // Configure marked with better options
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+        });
 
-    // Convert cleaned markdown to HTML
-    const html = await marked(cleanMarkdown);
+        // Convert cleaned markdown to HTML
+        const html = await marked(cleanMarkdown);
 
-    // Create a complete HTML document with VS Code/Obsidian-like styles
-    const fullHtml = `
+        // Create a complete HTML document with VS Code/Obsidian-like styles
+        const fullHtml = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
@@ -153,7 +153,6 @@ export async function POST(request: NextRequest) {
           
           pre code {
             display: inline;
-            max-width: auto;
             padding: 0;
             margin: 0;
             overflow: visible;
@@ -265,56 +264,66 @@ export async function POST(request: NextRequest) {
       </html>
     `;
 
-    // Launch Puppeteer
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-    // Get (or launch) Puppeteer browser instance
-    const browser = await getBrowser();
+        try {
+            // Launch Puppeteer
+            const browser = await puppeteer.launch({
+                headless: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+            });
 
-    const page = await browser.newPage();
+            const page = await browser.newPage();
 
-    // Set viewport for consistent rendering
-    await page.setViewport({
-      width: 1200,
-      height: 800,
-      deviceScaleFactor: 2
-    });
+            // Set viewport for consistent rendering
+            await page.setViewport({
+                width: 1200,
+                height: 800,
+                deviceScaleFactor: 2
+            });
 
-    // Set the HTML content
-    await page.setContent(fullHtml, {
-      waitUntil: 'networkidle0'
-    });
+            // Set the HTML content
+            await page.setContent(fullHtml, {
+                waitUntil: 'networkidle0'
+            });
 
-    // Generate PDF with better options
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      margin: {
-        top: '20mm',
-        right: '20mm',
-        bottom: '20mm',
-        left: '20mm'
-      },
-      printBackground: true,
-      preferCSSPageSize: false,
-      displayHeaderFooter: false
-    });
+            // Generate PDF with better options
+            const pdfBuffer = await page.pdf({
+                format: 'A4',
+                margin: {
+                    top: '20mm',
+                    right: '20mm',
+                    bottom: '20mm',
+                    left: '20mm'
+                },
+                printBackground: true,
+                preferCSSPageSize: false,
+                displayHeaderFooter: false
+            });
 
-    // browser will be closed in finally
+            // Close browser
+            await browser.close();
 
-    // Return the PDF as a response
-    return new NextResponse(pdfBuffer, {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="ropa-document.pdf"'
-      }
-    });
+            // Return the PDF as a response
+            return new NextResponse(pdfBuffer, {
+                headers: {
+                    'Content-Type': 'application/pdf',
+                    'Content-Disposition': 'attachment; filename="ropa-document.pdf"'
+                }
+            });
 
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate PDF' },
-      { status: 500 }
-    );
-  }
+        } catch (pdfError) {
+            console.error('Error in PDF generation process:', pdfError);
+            return NextResponse.json(
+                {error: 'Failed to generate PDF'},
+                {status: 500}
+            );
+        }
+
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        return NextResponse.json(
+            {error: 'Failed to generate PDF'},
+            {status: 500}
+        );
+    }
 }
+

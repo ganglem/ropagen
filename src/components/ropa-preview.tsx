@@ -222,6 +222,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
         }
     };
 
+
     return (
         <Card className="relative overflow-hidden w-full mt-8">
             <ShineBorder shineColor={["#7440ff", "#ffc200"]} />
@@ -267,6 +268,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                             lineHeight: '1.6',
                             color: '#24292f'
                         }}
+                        //@ts-ignore
                         dangerouslySetInnerHTML={{ __html: getRenderedHtml() }}
                     />
                 )}
