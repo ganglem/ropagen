@@ -6,35 +6,28 @@ import Image from "next/image";
 import Link from "next/link";
 import SlideHoverLink from "@/components/ui/slide-hover-link";
 import ThemeToggle from "@/components/ui/themetoggle";
+import { ShineBorder } from "@/components/ui/shine-border";
 
-interface NavHeaderProps {
+interface NavPillProps {
     logoSrc: string;
     brandName: string;
     links: { name: string; href: string }[];
     hoverVariant?: "slide" | "color" | "pill";
 }
 
-export default function NavHeader({
+export default function NavPill({
                                       logoSrc,
                                       brandName,
                                       links,
                                       hoverVariant = "slide",
-                                  }: NavHeaderProps) {
+                                  }: NavPillProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showGenerate, setShowGenerate] = useState(false);
-    const [mobileOpen, setMobileOpen] = useState(false);
 
     // pill position for desktop
     const [pillPos, setPillPos] = useState({
         left: 0,
         width: 0,
-        opacity: 0,
-    });
-
-    // pill position for mobile (vertical, based on top and height)
-    const [pillPosMobile, setPillPosMobile] = useState({
-        top: 0,
-        height: 0,
         opacity: 0,
     });
 
@@ -50,10 +43,6 @@ export default function NavHeader({
         }
     }, [isExpanded]);
 
-    const toggleMobile = () => setMobileOpen((v) => !v);
-
-    const TOP_BAR_HEIGHT = 48;
-
     return (
         <div className="relative pointer-events-none w-fit">
             {/* Desktop nav */}
@@ -62,9 +51,13 @@ export default function NavHeader({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
-                className="pointer-events-auto flex mx-auto items-center justify-center w-fit rounded-full overflow-hidden border-border bg-gradient-to-br from-white/20 to-white/80 dark:from-black/5 dark:to-white/20 backdrop-blur-xs h-12 px-3"
+                className="pointer-events-auto relative flex mx-auto items-center justify-center w-fit rounded-full overflow-hidden border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] h-12 px-3"
                 style={{ gap: 24 }}
             >
+                {/* Animated border shimmer like SpotlightCard */}
+                <ShineBorder borderWidth={0.3} duration={24} shineColor={["#ffffff","rgba(234,242,255,0.15)","#ffffff"]} className="z-0 opacity-80 dark:opacity-60" />
+
+                {/* Chromatic aberration removed as requested */}
                 {/* Logo + Brand */}
                 <li className="relative z-10 cursor-pointer text-base flex items-center">
                     <Link href="/" className="flex items-center gap-2">
@@ -147,7 +140,7 @@ export default function NavHeader({
                         initial={{ left: 0, width: 0, opacity: 0 }}
                         animate={pillPos}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="absolute z-0 inset-y-1 rounded-full bg-accent"
+                        className="absolute z-[1] inset-y-1 rounded-full bg-accent"
                         style={{ left: pillPos.left, width: pillPos.width }}
                     />
                 )}

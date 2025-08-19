@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import {ThemeProvider} from "next-themes";
-import NavHeader from "@/components/ui/nav-header";
+import NavPill from "@/components/ui/nav-pill";
 import Footer from "@/components/ui/footer";
 import Head from "next/head";
 import {NextIntlClientProvider, hasLocale} from 'next-intl';
@@ -59,7 +59,7 @@ export default async function RootLayout({
                       <div className="relative pointer-events-none flex items-center justify-end h-12">
                         {/* Centered Nav */}
                         <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2">
-                          <NavHeader
+                          <NavPill
                             logoSrc="/star.svg"
                             brandName="ROPAgen"
                             links={[
