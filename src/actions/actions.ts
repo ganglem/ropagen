@@ -1,6 +1,6 @@
 "use server";
 
-import {Category, DocumentData, Template} from "@/models/DocumentData";
+import {DocumentData, Template} from "@/models/DocumentData";
 import { generateText } from "ai";
 import {openai} from '@ai-sdk/openai';
 import templates from "../../data/mock.json";
@@ -62,9 +62,60 @@ export async function generateDocument(data: DocumentData, locale: string, selec
 
 function generatePromptFromData(documentData: DocumentData, locale: string): string {
 
-    const selectedCategories = Object.entries(documentData.categories)
+    // Process data sources
+    const selectedDataSources = Object.entries(documentData.categories.dataSources)
         .filter(([_, isSelected]) => isSelected)
-        .map(([key]) => `- ${Category[key as keyof typeof Category]}`)
+        .map(([key]) => `- ${key.replace(/([A-Z])/g, ' $1').trim()}`)
+        .join('\n');
+
+    // Process data categories
+    const selectedDataCategories = Object.entries(documentData.categories.dataCategories)
+        .map(([categoryKey, categoryData]) => {
+            const selectedSubCategories = Object.entries(categoryData)
+                .filter(([_, isSelected]) => isSelected)
+                .map(([subKey]) => `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`)
+                .join('\n');
+
+            if (selectedSubCategories) {
+                return `${categoryKey.replace(/([A-Z])/g, ' $1').trim()}:\n${selectedSubCategories}`;
+            }
+            return null;
+        })
+        .filter(Boolean)
+        .join('\n\n');
+
+    // Process person categories
+    const selectedPersonCategories = Object.entries(documentData.categories.persons)
+        .map(([categoryKey, categoryData]) => {
+            const selectedSubCategories = Object.entries(categoryData)
+                .filter(([_, isSelected]) => isSelected)
+                .map(([subKey]) => `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`)
+                .join('\n');
+
+            if (selectedSubCategories) {
+                return `${categoryKey.replace(/([A-Z])/g, ' $1').trim()}:\n${selectedSubCategories}`;
+            }
+            return null;
+        })
+        .filter(Boolean)
+        .join('\n\n');
+
+    // Process legal basis
+    const selectedLegalBasis = Object.entries(documentData.legalBasis)
+        .filter(([_, isSelected]) => isSelected)
+        .map(([key]) => `- ${key.replace(/([A-Z])/g, ' $1').trim()}`)
+        .join('\n');
+
+    // Process retention periods
+    const retentionInfo = Object.entries(documentData.retentionPeriods)
+        .filter(([key, value]) => {
+            if (key === 'deletionTime') return value && value.trim() !== '';
+            return value === true;
+        })
+        .map(([key, value]) => {
+            if (key === 'deletionTime') return `- Deletion Time: ${value}`;
+            return `- ${key.replace(/([A-Z])/g, ' $1').trim()}`;
+        })
         .join('\n');
 
     const prompt = `
@@ -77,20 +128,56 @@ function generatePromptFromData(documentData: DocumentData, locale: string): str
     Document Title:
     ${documentData.title || 'No title provided. Use standard GDPR best practices.'}
     
-    Included GDPR Compliance Categories:
-    ${selectedCategories || 'None specified. Apply general GDPR processing practices.'}
+    Organization Information:
+    - Name: ${documentData.organization.name || 'Not specified'}
+    - Role: ${documentData.organization.role || 'Not specified'}
+    - Address: ${documentData.organization.contact.address || 'Not specified'}
+    - Email: ${documentData.organization.contact.email || 'Not specified'}
+    - Phone: ${documentData.organization.contact.phone || 'Not specified'}
+    - Representative: ${documentData.organization.representative || 'Not specified'}
+    - Data Protection Officer: ${documentData.organization.dpo || 'Not specified'}
+    
+    Purpose of Data Processing:
+    ${documentData.purposeOfDataProcessing || 'No purpose specified. Use standard GDPR processing practices.'}
+    
+    Technical and Organizational Measures:
+    ${documentData.technicalOrganizationalMeasures || 'No measures specified. Use standard GDPR security measures.'}
+    
+    Legal Basis for Processing:
+    ${selectedLegalBasis || 'No legal basis specified. Apply general GDPR legal basis requirements.'}
+    
+    Data Sources:
+    ${selectedDataSources || 'No data sources specified.'}
+    
+    Data Categories:
+    ${selectedDataCategories || 'No data categories specified.'}
+    
+    Person Categories:
+    ${selectedPersonCategories || 'No person categories specified.'}
+    
+    Retention Periods:
+    ${retentionInfo || 'No retention periods specified. Use standard GDPR retention practices.'}
     
     Additional Information and Special Instructions:
     ${documentData.additionalInfo || 'No additional instructions provided. Use standard GDPR best practices.'}
     
     Instructions:
-    - Begin with an executive summary.
-    - Clearly structure the document with headings for each included category.
-    - For each category, describe processing purposes, legal basis, data subjects involved, data processors/controllers, retention periods, and safeguards.
+    - Create a comprehensive ROPA document structure with the following sections:
+      1. Organization and Controller Information
+      2. Purpose and Legal Basis for Processing
+      3. Data Categories and Sources
+      4. Data Subjects and Recipients
+      5. Data Retention and Deletion
+      6. Technical and Organizational Measures
+    - It should be a continuous text without bullet points or lists.
+    - For each section, provide detailed information based on the provided data.
+    - Include specific details about data processing activities, purposes, and safeguards.
+    - Ensure compliance with GDPR Articles 30 (Records of processing activities) requirements.
     - Maintain a professional, legally appropriate tone throughout.
+    - Structure the document for easy review by Data Protection Authorities.
     
     The output should be suitable for use by a Data Protection Officer (DPO) or legal counsel.
-    The output should be in .md style.
+    The output should be in .md style with proper headings and formatting.
         `.trim();
 
     return prompt;

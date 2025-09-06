@@ -285,7 +285,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                         ) : (
                             <Download className="h-4 w-4" />
                         )}
-                        {isGenerating ? "Generating PDF..." : getDownloadButtonText()}
+                        {isGenerating ? t("generatingPdf") : getDownloadButtonText()}
                     </Button>
                 </div>
             </CardContent>

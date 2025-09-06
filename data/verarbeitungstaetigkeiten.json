@@ -43,7 +43,8 @@
         "BDSG26": false,
         "HGB257": false,
         "HGB239Abs1": false,
-        "AO147": false
+        "AO147": false,
+        "other": ""
       },
       "dataSources": {
         "microsoftOffice365": false,
@@ -63,7 +64,8 @@
         "enterpriseSystems": false,
         "securityAndCompliance": false,
         "documentProcessing": false,
-        "otherSpecializedSoftware": false
+        "otherSpecializedSoftware": false,
+        "other": ""
       },
       "dataCategories": {
         "personalData": {
@@ -145,7 +147,8 @@
           "queryDateTime": false,
           "deliveryConditions": false,
           "username": false,
-          "dataVolume": false
+          "dataVolume": false,
+          "other": ""
         }
       },
       "persons": {
@@ -188,7 +191,8 @@
           "healthRoles": false,
           "hrAndRecruitmentRoles": false,
           "otherRoles": false
-        }
+        },
+        "other": ""
       }
     },
     "retentionPeriods": {
@@ -202,3 +206,4 @@
     "additionalInfo": ""
   }
 ]
+

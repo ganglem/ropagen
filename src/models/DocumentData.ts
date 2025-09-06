@@ -29,11 +29,12 @@ export interface LegalBasis {
     DSGVOArt6Abs1c: boolean;
     DSGVOArt6Abs1f: boolean;
     IfSG28b: boolean;
-    "SARS-CoV-Arbeitsschutzverordnung": boolean;
+    SARSCoV: boolean;
     BDSG26: boolean;
     HGB257: boolean;
     HGB239Abs1: boolean;
     AO147: boolean;
+    other: string;
 }
 
 // Data sources interface
@@ -56,6 +57,7 @@ export interface DataSources {
     securityAndCompliance: boolean;
     documentProcessing: boolean;
     otherSpecializedSoftware: boolean;
+    other: string;
 }
 
 // Personal data categories
@@ -147,6 +149,7 @@ export interface Other {
     deliveryConditions: boolean;
     username: boolean;
     dataVolume: boolean;
+    other: string;
 }
 
 // Data categories interface
@@ -191,10 +194,10 @@ export interface ExternalRecipientCategoriesEU {
     others: boolean;
 }
 
-export interface ExternalRecipientCategoriesThirdCountry {
-    serviceProviders: boolean;
-    dataProcessors: boolean;
-}
+//export interface ExternalRecipientCategoriesThirdCountry {
+ //   serviceProviders: boolean;
+ //   dataProcessors: boolean;
+//}
 
 export interface AuthorizedPersons {
     managementRoles: boolean;
@@ -213,8 +216,9 @@ export interface PersonCategories {
     affectedPersons: AffectedPersons;
     internalRecipientCategories: InternalRecipientCategories;
     externalRecipientCategoriesEU: ExternalRecipientCategoriesEU;
-    externalRecipientCategoriesThirdCountry: ExternalRecipientCategoriesThirdCountry;
+    // externalRecipientCategoriesThirdCountry: ExternalRecipientCategoriesThirdCountry;
     authorizedPersons: AuthorizedPersons;
+    other: string;
 }
 
 // Retention periods interface
@@ -234,6 +238,12 @@ export interface Categories {
     persons: PersonCategories;
 }
 
+export interface ThirdCountryTransfers {
+    "country":  string,
+    "transferMechanism": string,
+    "safeguards": string,
+}
+
 // Main document data interface
 export interface DocumentData {
     id: string;
@@ -245,10 +255,14 @@ export interface DocumentData {
     legalBasis: LegalBasis;
     categories: Categories;
     retentionPeriods: RetentionPeriods;
+    // thirdCountryTransfers: ThirdCountryTransfers[];
     additionalInfo: string;
     language?: string;
 }
 
 // Template interface - same as DocumentData
 export interface Template extends DocumentData {}
+
+
+
 
