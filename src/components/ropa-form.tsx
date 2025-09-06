@@ -17,6 +17,7 @@ import { DocumentData } from "@/models/DocumentData";
 
 export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
+    // TODO: handle external and third country better
     const t = useTranslations('Generate');
 
     const [documentData, setDocumentData] = useState<DocumentData>({
@@ -652,7 +653,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             </Card>
 
             <Card>
-                // TODO: handle external and third country better
+
                 <CardHeader>
                     <CardTitle>{t("personCategories")}</CardTitle>
                 </CardHeader>
