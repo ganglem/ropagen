@@ -653,6 +653,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             </Card>
 
             <Card>
+                // TODO: handle external and third country better
                 <CardHeader>
                     <CardTitle>{t("personCategories")}</CardTitle>
                 </CardHeader>
