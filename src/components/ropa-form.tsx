@@ -652,30 +652,33 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             </Card>
 
             <Card>
+                // TODO: handle external and third country better
                 <CardHeader>
                     <CardTitle>{t("personCategories")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-6">
-                        {Object.entries(documentData.categories.persons).filter(([key]) => key !== 'other').map(([categoryKey, categoryValue]) => (
-                            <div key={categoryKey} className="space-y-3">
-                                <h4 className="font-medium capitalize">{getTranslatedCategoryHeader(categoryKey)}</h4>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-4">
-                                    {Object.entries(categoryValue).map(([subKey, subValue]) => (
-                                        <div key={subKey} className="flex items-center space-x-2">
-                                            <Checkbox
-                                                id={`${categoryKey}-${subKey}`}
-                                                checked={subValue as boolean}
-                                                onCheckedChange={(checked) => handlePersonCategoryChange(categoryKey, subKey, checked === true)}
-                                            />
-                                            <Label htmlFor={`${categoryKey}-${subKey}`} className="cursor-pointer">
-                                                {getTranslatedLabel(categoryKey, subKey)}
-                                            </Label>
-                                        </div>
-                                    ))}
+                        {Object.entries(documentData.categories.persons)
+                            .filter(([key]) => key !== 'externalRecipientCategoriesThirdCountry') // Exclude third-country recipients
+                            .map(([categoryKey, categoryValue]) => (
+                                <div key={categoryKey} className="space-y-3">
+                                    <h4 className="font-medium capitalize">{getTranslatedCategoryHeader(categoryKey)}</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-4">
+                                        {Object.entries(categoryValue).map(([subKey, subValue]) => (
+                                            <div key={subKey} className="flex items-center space-x-2">
+                                                <Checkbox
+                                                    id={`${categoryKey}-${subKey}`}
+                                                    checked={subValue as boolean}
+                                                    onCheckedChange={(checked) => handlePersonCategoryChange(categoryKey, subKey, checked === true)}
+                                                />
+                                                <Label htmlFor={`${categoryKey}-${subKey}`} className="cursor-pointer">
+                                                    {getTranslatedLabel(categoryKey, subKey)}
+                                                </Label>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
                         <div className="space-y-2">
                             <Label htmlFor="personCategoriesOther">{t("otherPersonCategories")}</Label>
                             <Input
