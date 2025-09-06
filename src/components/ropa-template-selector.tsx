@@ -32,8 +32,16 @@ export default function RopaTemplateSelector({onSelect}: {
         const selectedTemplate = templates.find((t) => t.id === templateId)
         if (selectedTemplate) {
             onSelect({
+                id: selectedTemplate.id,
                 title: selectedTemplate.title,
+                organization: selectedTemplate.organization,
+                processors: selectedTemplate.processors,
+                technicalOrganizationalMeasures: selectedTemplate.technicalOrganizationalMeasures,
+                purposeOfDataProcessing: selectedTemplate.purposeOfDataProcessing,
+                legalBasis: selectedTemplate.legalBasis,
                 categories: selectedTemplate.categories,
+                retentionPeriods: selectedTemplate.retentionPeriods,
+                // thirdCountryTransfers: selectedTemplate.thirdCountryTransfers,
                 additionalInfo: selectedTemplate.additionalInfo,
                 language: selectedTemplate.language,
             })
@@ -64,4 +72,3 @@ export default function RopaTemplateSelector({onSelect}: {
         </Card>
     )
 }
-

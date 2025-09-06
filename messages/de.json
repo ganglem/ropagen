@@ -20,12 +20,227 @@
     "templatePlaceholder": "Wählen Sie ein Template aus",
     "info": "Dokumentinformationen",
     "infoTitle": "Dokumenttitel",
-    "infoPlaceholder": "z.B. Datenschutzrichtlinie für Unternehmen ABC",
+    "infoPlaceholder": "z.B. Mitarbeiterdatenverarbeitung, Kundenverwaltung, Marketingaktivitäten",
     "categories": "Dokumentkategorien",
     "additionalInfo": "Zusätzliche Informationen",
-    "additionalInfoPlaceholder": "Geben Sie spezifische Details zu Ihrem Unternehmen oder Anforderungen ein...",
+    "additionalInfoPlaceholder": "z.B. Besondere Sicherheitsmaßnahmen, Auftragsverarbeiter, internationale Übermittlungen...",
     "generateButton": "ROPA erstellen",
-    "generating": "ROPA wird erstellt..."
+    "generating": "ROPA wird erstellt...",
+    "organization": "Organisation",
+    "organizationName": "Organisationsname",
+    "organizationNamePlaceholder": "z.B. ABC Unternehmen GmbH, Tech Solutions AG",
+    "organizationRole": "Rolle",
+    "organizationRolePlaceholder": "z.B. Verantwortlicher, gemeinsam Verantwortlicher, Auftragsverarbeiter",
+    "organizationAddress": "Adresse",
+    "organizationAddressPlaceholder": "z.B. Musterstraße 123, 12345 Musterstadt, Deutschland",
+    "organizationEmail": "E-Mail",
+    "organizationEmailPlaceholder": "z.B. kontakt@unternehmen.de, datenschutz@organisation.com",
+    "organizationPhone": "Telefon",
+    "organizationPhonePlaceholder": "z.B. +49 123 456789, 030 12345678",
+    "organizationRepresentative": "Vertreter",
+    "organizationRepresentativePlaceholder": "z.B. Max Mustermann (Geschäftsführer), Dr. Maria Schmidt (Rechtsabteilung)",
+    "organizationDpo": "Datenschutzbeauftragter",
+    "organizationDpoPlaceholder": "z.B. Dr. Hans Weber, extern@datenschutz-service.de",
+    "purposeOfDataProcessing": "Zweck der Datenverarbeitung",
+    "purposeOfDataProcessingPlaceholder": "z.B. Personalverwaltung, Kundenbeziehungsmanagement, Bestellabwicklung, Marketingkampagnen...",
+    "technicalOrganizationalMeasures": "Technische und organisatorische Maßnahmen",
+    "technicalOrganizationalMeasuresPlaceholder": "z.B. Verschlüsselung, Zugangskontrollen, regelmäßige Backups, Mitarbeiterschulungen, Incident Response...",
+    "legalBasis": "Rechtsgrundlage",
+    "dataSources": "Datenquellen",
+    "dataCategories": "Datenkategorien",
+    "personCategories": "Personenkategorien",
+    "retentionPeriods": "Aufbewahrungsfristen",
+    "deletionTime": "Löschfrist",
+    "deletionTimePlaceholder": "z.B. 12 Monate, 2 Jahre, 3 Monate nach Vertragsende",
+    "otherLegalBasis": "Andere Rechtsgrundlage",
+    "otherLegalBasisPlaceholder": "Geben Sie eine andere Rechtsgrundlage für die Datenverarbeitung an",
+    "otherDataSources": "Andere Datenquellen",
+    "otherDataSourcesPlaceholder": "Geben Sie andere Datenquellen an, die oben nicht aufgeführt sind",
+    "otherDataCategories": "Andere Datenkategorien",
+    "otherDataCategoriesPlaceholder": "Geben Sie andere Datenkategorien an, die oben nicht aufgeführt sind",
+    "otherPersonCategories": "Andere Personenkategorien",
+    "otherPersonCategoriesPlaceholder": "Geben Sie andere Personenkategorien an, die oben nicht aufgeführt sind",
+    "legalBasisLabels": {
+      "DSGVOArt6Abs1a": "DSGVO Art. 6(1)(a) - Einwilligung",
+      "DSGVOArt6Abs1b": "DSGVO Art. 6(1)(b) - Vertrag",
+      "DSGVOArt6Abs1c": "DSGVO Art. 6(1)(c) - Rechtliche Verpflichtung",
+      "DSGVOArt6Abs1f": "DSGVO Art. 6(1)(f) - Berechtigte Interessen",
+      "IfSG28b": "IfSG § 28b - Infektionsschutzgesetz",
+      "SARSCoV": "SARS-CoV-2-Arbeitsschutzverordnung",
+      "BDSG26": "BDSG § 26 - Beschäftigtendatenschutz",
+      "HGB257": "HGB § 257 - Aufbewahrungspflicht",
+      "HGB239Abs1": "HGB § 239(1) - Buchführungspflicht",
+      "AO147": "AO § 147 - Steuerrechtliche Aufbewahrung"
+    },
+    "thirdCountryLabels":{
+      "country": "Datenübermittlung in ein Drittland",
+      "transferMechanism": "Übermittlungsmechanismus",
+      "safeguards": "Garantien"
+    },
+    "dataSourceLabels": {
+      "microsoftOffice365": "Microsoft Office 365",
+      "emailProvider": "E-Mail-Anbieter",
+      "microsoftAzure": "Microsoft Azure",
+      "googleWorkspace": "Google Workspace",
+      "googleCloud": "Google Cloud",
+      "videoConferencing": "Videokonferenzen",
+      "amazonAWS": "Amazon AWS",
+      "ecommercePlatform": "E-Commerce-Plattform",
+      "libreOffice": "LibreOffice",
+      "onlineBanking": "Online-Banking",
+      "financialServices": "Finanzdienstleistungen",
+      "webAndIntranet": "Web und Intranet",
+      "creditServices": "Kreditdienstleistungen",
+      "hrSoftware": "HR-Software",
+      "enterpriseSystems": "Unternehmenssysteme",
+      "securityAndCompliance": "Sicherheit und Compliance",
+      "documentProcessing": "Dokumentenverarbeitung",
+      "otherSpecializedSoftware": "Andere Spezialsoftware"
+    },
+    "personalDataLabels": {
+      "lastName": "Nachname",
+      "firstName": "Vorname",
+      "dateOfBirth": "Geburtsdatum",
+      "placeOfBirth": "Geburtsort",
+      "gender": "Geschlecht",
+      "nationality": "Staatsangehörigkeit",
+      "address": "Adresse",
+      "phoneNumber": "Telefonnummer",
+      "emailAddress": "E-Mail-Adresse",
+      "maritalStatus": "Familienstand",
+      "religiousAffiliation": "Religionszugehörigkeit"
+    },
+    "employmentLabels": {
+      "workingHours": "Arbeitszeiten",
+      "professionalPosition": "Berufliche Position",
+      "personnelNumber": "Personalnummer",
+      "companyAffiliation": "Unternehmenszugehörigkeit",
+      "vacationEntitlement": "Urlaubsanspruch",
+      "vacationDays": "Urlaubstage",
+      "vacationTimes": "Urlaubszeiten"
+    },
+    "financeLabels": {
+      "salaryWage": "Gehalt/Lohn",
+      "bankDetails": "Bankverbindung",
+      "taxIdentificationNumber": "Steueridentifikationsnummer",
+      "taxClass": "Steuerklasse",
+      "monthlySalaries": "Monatsgehälter",
+      "monthlyWages": "Monatslöhne",
+      "revenue": "Umsatz",
+      "invoiceInformation": "Rechnungsinformationen"
+    },
+    "healthLabels": {
+      "healthInsuranceNumber": "Krankenversicherungsnummer",
+      "socialSecurityNumber": "Sozialversicherungsnummer",
+      "sickDays": "Krankheitstage",
+      "healthData": "Gesundheitsdaten",
+      "insuranceStatus": "Versicherungsstatus",
+      "expiryDateVaccinationRecoveryStatus": "Ablaufdatum Impf-/Genesenenstatus",
+      "copyProofCertificate": "Kopie Nachweiszertifikat"
+    },
+    "legalLabels": {
+      "contractData": "Vertragsdaten",
+      "identityDocuments": "Ausweisdokumente",
+      "insolvencyDecree": "Insolvenzverfahren",
+      "schufaInformation": "SCHUFA-Informationen",
+      "subscriptionData": "Abonnementdaten"
+    },
+    "behaviorLabels": {
+      "usageBehavior": "Nutzungsverhalten",
+      "behavioralData": "Verhaltensdaten",
+      "browserHistory": "Browser-Verlauf",
+      "metadata": "Metadaten"
+    },
+    "documentationLabels": {
+      "individualDocumentation": "Individuelle Dokumentation",
+      "complaintData": "Beschwerdedaten",
+      "receipts": "Belege",
+      "imageMaterial": "Bildmaterial",
+      "billingData": "Abrechnungsdaten",
+      "offer": "Angebot",
+      "orderData": "Bestelldaten",
+      "deliveryAddress": "Lieferadresse",
+      "incomingInvoice": "Eingangsrechnung",
+      "outgoingInvoice": "Ausgangsrechnung"
+    },
+    "vehicleLabels": {
+      "licensePlate": "Kennzeichen",
+      "drivingData": "Fahrdaten",
+      "driversLicense": "Führerschein"
+    },
+    "otherLabels": {
+      "expertise": "Fachwissen",
+      "skills": "Fähigkeiten",
+      "examinationDate": "Prüfungsdatum",
+      "proofStatus": "Nachweisstatus",
+      "queryDateTime": "Abfragedatum/-zeit",
+      "deliveryConditions": "Lieferbedingungen",
+      "username": "Benutzername",
+      "dataVolume": "Datenvolumen"
+    },
+    "affectedPersonsLabels": {
+      "internalGroups": "Interne Gruppen",
+      "externalCustomers": "Externe Kunden",
+      "legalEntities": "Juristische Personen",
+      "healthcareInstitutions": "Gesundheitseinrichtungen",
+      "recruitmentAgencies": "Personalvermittlungen"
+    },
+    "internalRecipientsLabels": {
+      "management": "Geschäftsführung",
+      "administration": "Verwaltung",
+      "technical": "Technik",
+      "finance": "Finanzen",
+      "legalAndCompliance": "Recht und Compliance",
+      "marketingAndSales": "Marketing und Vertrieb",
+      "logisticsAndOperations": "Logistik und Betrieb"
+    },
+    "externalRecipientsEULabels": {
+      "governmentAuthorities": "Behörden",
+      "softwareAndCloudProviders": "Software- und Cloud-Anbieter",
+      "healthAndInsuranceProviders": "Gesundheits- und Versicherungsanbieter",
+      "financialInstitutions": "Finanzinstitute",
+      "businessPartnersAndAgencies": "Geschäftspartner und Agenturen",
+      "serviceProviders": "Dienstleister",
+      "others": "Sonstige"
+    },
+    "externalRecipientsThirdCountryLabels": {
+      "serviceProviders": "Dienstleister",
+      "dataProcessors": "Auftragsverarbeiter"
+    },
+    "authorizedPersonsLabels": {
+      "managementRoles": "Führungsrollen",
+      "administrativeRoles": "Verwaltungsrollen",
+      "technicalRoles": "Technische Rollen",
+      "financialRoles": "Finanzrollen",
+      "legalAndComplianceRoles": "Rechts- und Compliance-Rollen",
+      "marketingAndSalesRoles": "Marketing- und Vertriebsrollen",
+      "healthRoles": "Gesundheitsrollen",
+      "hrAndRecruitmentRoles": "HR- und Recruiting-Rollen",
+      "otherRoles": "Sonstige Rollen"
+    },
+    "retentionLabels": {
+      "afterTerminationOfEmployment": "Nach Beendigung des Arbeitsverhältnisses",
+      "afterContractTermination": "Nach Vertragsbeendigung",
+      "uponRevocation": "Bei Widerruf",
+      "exceptForBeyondRetentionObligations": "Außer bei gesetzlichen Aufbewahrungspflichten",
+      "specialDeletionConcept": "Besonderes Löschkonzept"
+    },
+    "categoryHeaders": {
+      "personalData": "Personenbezogene Daten",
+      "employment": "Beschäftigungsdaten",
+      "finance": "Finanzdaten",
+      "health": "Gesundheitsdaten",
+      "legal": "Rechtliche Daten",
+      "behavior": "Verhaltensdaten",
+      "documentationAndRecords": "Dokumentation und Aufzeichnungen",
+      "vehicle": "Fahrzeugdaten",
+      "other": "Sonstige Daten",
+      "affectedPersons": "Betroffene Personen",
+      "internalRecipientCategories": "Interne Empfänger",
+      "externalRecipientCategoriesEU": "Externe Empfänger (EU)",
+      "externalRecipientCategoriesThirdCountry": "Externe Empfänger (Drittland)",
+      "authorizedPersons": "Berechtigte Personen"
+    }
   },
 
   "Preview": {
@@ -37,7 +252,8 @@
     "markdown": "Markdown (.md)",
     "text": "Text (.txt)",
     "json": "JSON (.json)",
-    "pdf": "PDF (.pdf)"
+    "pdf": "PDF (.pdf)",
+    "generatingPdf": "PDF wird erstellt..."
   },
 
   "Footer": {
@@ -46,4 +262,3 @@
     "rights": "Alle Rechte vorbehalten."
   }
 }
-
