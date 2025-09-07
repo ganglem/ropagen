@@ -318,7 +318,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             return;
         }
 
-        // @ts-ignore
         setDocumentData({
             ...documentData,
             categories: {
@@ -326,7 +325,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 persons: {
                     ...documentData.categories.persons,
                     [category]: {
-                        ...documentData.categories.persons[category as keyof typeof documentData.categories.persons],
+                        ...(documentData.categories.persons[category as keyof typeof documentData.categories.persons] as unknown as Record<string, boolean>),
                         [subcategory]: checked
                     }
                 }
@@ -653,15 +652,12 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             </Card>
 
             <Card>
-
                 <CardHeader>
                     <CardTitle>{t("personCategories")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-6">
-                        {Object.entries(documentData.categories.persons)
-                            .filter(([key]) => key !== 'externalRecipientCategoriesThirdCountry') // Exclude third-country recipients
-                            .map(([categoryKey, categoryValue]) => (
+                        {Object.entries(documentData.categories.persons).filter(([key]) => key !== 'other').map(([categoryKey, categoryValue]) => (
                                 <div key={categoryKey} className="space-y-3">
                                     <h4 className="font-medium capitalize">{getTranslatedCategoryHeader(categoryKey)}</h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-4">
@@ -775,3 +771,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         </div>
     )
 }
+
+
+
