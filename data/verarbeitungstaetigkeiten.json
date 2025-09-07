@@ -1,39 +1,10 @@
 [
   {
-    "id": "1",
-    "title": "ROPA Template Muster",
-    "organization": {
-      "name":             "Muster GmbH",
-      "contact": {
-        "address":        "Musterstraße 1, 12345 Musterstadt",
-        "email":          "dpo@muster.de",
-        "phone":        "+49 30 1234567"
-      },
-      "role":            "controller",
-      "jointController":  [ { "name": "Partner AG", "contact": "kontakt@partner.de" } ],
-      "representative":        "Rep GmbH, rep@vertretung.eu",
-      "dpo":              "Max Müller, dpo@muster.de"
-    },
-    "processors": [
-      {
-        "name":           "CloudSpeicher GmbH",
-        "contact":        "support@cloudspeicher.de",
-        "activities":    "Speicherung von Backups für HR-Daten"
-      }
-    ],
-    "thirdCountryTransfers": [
-      {
-        "country":              "USA",
-        "transferMechanism":"Standardvertragsklauseln",
-        "safeguards":"Verschlüsselung nach AES-256 während der Übertragung"
-      }
-    ],
-    "technicalOrganizationalMeasures":
-    "Verschlüsselung ruhender Daten, Zutrittskontrolle, regelmäßige Pen-Tests",
-
-    "purposeOfDataProcessing": "",
-    "categories": {
-      "legalBasis": {
+    "id": "",
+    "titel": "",
+    "zweckDerDatenverarbeitung": "",
+    "kategorien": {
+      "rechtsgrundlage": {
         "DSGVOArt6Abs1a": false,
         "DSGVOArt6Abs1b": false,
         "DSGVOArt6Abs1c": false,
@@ -43,167 +14,161 @@
         "BDSG26": false,
         "HGB257": false,
         "HGB239Abs1": false,
-        "AO147": false,
-        "other": ""
+        "AO147": false
       },
-      "dataSources": {
+      "datenquellen": {
         "microsoftOffice365": false,
-        "emailProvider": false,
+        "emailAnbieter": false,
         "microsoftAzure": false,
         "googleWorkspace": false,
         "googleCloud": false,
-        "videoConferencing": false,
+        "videokonferenzen": false,
         "amazonAWS": false,
-        "ecommercePlatform": false,
+        "ecommercePlattform": false,
         "libreOffice": false,
         "onlineBanking": false,
-        "financialServices": false,
-        "webAndIntranet": false,
-        "creditServices": false,
-        "hrSoftware": false,
-        "enterpriseSystems": false,
-        "securityAndCompliance": false,
-        "documentProcessing": false,
-        "otherSpecializedSoftware": false,
-        "other": ""
+        "finanzdienstleistungen": false,
+        "webUndIntranet": false,
+        "kreditdienste": false,
+        "personalSoftware": false,
+        "unternehmenssysteme": false,
+        "sicherheitUndCompliance": false,
+        "dokumentenverarbeitung": false,
+        "andereSpezialisierteSoftware": false
       },
-      "dataCategories": {
-        "personalData": {
-          "lastName": false,
-          "firstName": false,
-          "dateOfBirth": false,
-          "placeOfBirth": false,
-          "gender": false,
-          "nationality": false,
-          "address": false,
-          "phoneNumber": false,
-          "emailAddress": false,
-          "maritalStatus": false,
-          "religiousAffiliation": false
+      "datenkategorien": {
+        "personen": {
+          "nachname": false,
+          "vorname": false,
+          "geburtsdatum": false,
+          "geburtsort": false,
+          "geschlecht": false,
+          "staatsangehoerigkeit": false,
+          "adresse": false,
+          "telefonnummer": false,
+          "emailAdresse": false,
+          "familienstand": false,
+          "religionszugehoerigkeit": false
         },
-        "employment": {
-          "workingHours": false,
-          "professionalPosition": false,
-          "personnelNumber": false,
-          "companyAffiliation": false,
-          "vacationEntitlement": false,
-          "vacationDays": false,
-          "vacationTimes": false
+        "beschaeftigung": {
+          "arbeitszeiten": false,
+          "beruflichePosition": false,
+          "personalnummer": false,
+          "firmenzugehörigkeit": false,
+          "urlaubsanspruch": false,
+          "urlaubstage": false,
+          "urlaubszeiten": false
         },
-        "finance": {
-          "salaryWage": false,
-          "bankDetails": false,
-          "taxIdentificationNumber": false,
-          "taxClass": false,
-          "monthlySalaries": false,
-          "monthlyWages": false,
-          "revenue": false,
-          "invoiceInformation": false
+        "finanzen": {
+          "gehaltLohn": false,
+          "bankverbindung": false,
+          "steueridentifikationsnummer": false,
+          "steuerklasse": false,
+          "monatsgehaelter": false,
+          "monatsloehne": false,
+          "umsatz": false,
+          "rechnungsinformationen": false
         },
-        "health": {
-          "healthInsuranceNumber": false,
-          "socialSecurityNumber": false,
-          "sickDays": false,
-          "healthData": false,
-          "insuranceStatus": false,
-          "expiryDateVaccinationRecoveryStatus": false,
-          "copyProofCertificate": false
+        "gesundheit": {
+          "krankenversicherungsnummer": false,
+          "sozialversicherungsnummer": false,
+          "krankheitstage": false,
+          "gesundheitsdaten": false,
+          "versicherungsstatus": false,
+          "datumAblaufImpfGenesenStatus": false,
+          "kopieNachweisZertifikat": false
         },
-        "legal": {
-          "contractData": false,
-          "identityDocuments": false,
-          "insolvencyDecree": false,
-          "schufaInformation": false,
-          "subscriptionData": false
+        "rechtliches": {
+          "vertragsdaten": false,
+          "ausweisdaten": false,
+          "insolvenzbescheid": false,
+          "schufaAuskunft": false,
+          "datenZurSubscription": false
         },
-        "behavior": {
-          "usageBehavior": false,
-          "behavioralData": false,
-          "browserHistory": false,
-          "metadata": false
+        "verhalten": {
+          "nutzungsverhalten": false,
+          "verhaltensdaten": false,
+          "browserverlaeufe": false,
+          "metadaten": false
         },
-        "documentationAndRecords": {
-          "individualDocumentation": false,
-          "complaintData": false,
-          "receipts": false,
-          "imageMaterial": false,
-          "billingData": false,
-          "offer": false,
-          "orderData": false,
-          "deliveryAddress": false,
-          "incomingInvoice": false,
-          "outgoingInvoice": false
+        "dokumentationUndAufzeichnungen": {
+          "individuelleDokumentation": false,
+          "beschwerdeDaten": false,
+          "belegeQuittung": false,
+          "bildmaterial": false,
+          "abrechnungsdaten": false,
+          "angebot": false,
+          "datenDerBestellung": false,
+          "lieferadresse": false,
+          "eingangsrechnung": false,
+          "ausgangsrechnung": false
         },
-        "vehicle": {
-          "licensePlate": false,
-          "drivingData": false,
-          "driversLicense": false
+        "fahrzeug": {
+          "kfzKennzeichen": false,
+          "fahrdaten": false,
+          "fuehrerschein": false
         },
-        "other": {
-          "expertise": false,
-          "skills": false,
-          "examinationDate": false,
-          "proofStatus": false,
-          "queryDateTime": false,
-          "deliveryConditions": false,
-          "username": false,
-          "dataVolume": false,
-          "other": ""
+        "sonstiges": {
+          "fachkenntnisse": false,
+          "fäigkeiten": false,
+          "datumDerPruefung": false,
+          "statusDesNachweises": false,
+          "datumUhrzeitDerAbfrage": false,
+          "lieferkonditionen": false,
+          "nutzername": false,
+          "mengeDerDaten": false
         }
       },
-      "persons": {
-        "affectedPersons": {
-          "internalGroups": false,
-          "externalCustomers": false,
-          "legalEntities": false,
-          "healthcareInstitutions": false,
-          "recruitmentAgencies": false
-        },
-        "internalRecipientCategories": {
-          "management": false,
-          "administration": false,
-          "technical": false,
-          "finance": false,
-          "legalAndCompliance": false,
-          "marketingAndSales": false,
-          "logisticsAndOperations": false
-        },
-        "externalRecipientCategoriesEU": {
-          "governmentAuthorities": false,
-          "softwareAndCloudProviders": false,
-          "healthAndInsuranceProviders": false,
-          "financialInstitutions": false,
-          "businessPartnersAndAgencies": false,
-          "serviceProviders": false,
-          "others": false
-        },
-        "externalRecipientCategoriesThirdCountry": {
-          "serviceProviders": false,
-          "dataProcessors": false
-        },
-        "authorizedPersons": {
-          "managementRoles": false,
-          "administrativeRoles": false,
-          "technicalRoles": false,
-          "financialRoles": false,
-          "legalAndComplianceRoles": false,
-          "marketingAndSalesRoles": false,
-          "healthRoles": false,
-          "hrAndRecruitmentRoles": false,
-          "otherRoles": false
-        },
-        "other": ""
+      "betroffenePersonen": {
+        "interneGruppen": false,
+        "externeKunden": false,
+        "juristischePersonen": false,
+        "gesundheitseinrichtungen": false,
+        "rekrutierungsstellen": false
+      },
+      "interneEmpfaengerkategorien": {
+        "management": false,
+        "verwaltung": false,
+        "technik": false,
+        "finanzen": false,
+        "rechtUndCompliance": false,
+        "marketingUndVertrieb": false,
+        "logistikUndBetrieb": false
+      },
+      "externeEmpfaengerkategorienEU": {
+        "staatlicheBehoerden": false,
+        "softwareUndCloudAnbieter": false,
+        "gesundheitsUndVersicherungsanbieter": false,
+        "finanzinstitute": false,
+        "geschaeftspartnerUndAgenturen": false,
+        "dienstleister": false,
+        "andere": false
+      },
+      "externeEmpfaengerkategorienDrittland": {
+        "dienstleister": false,
+        "auftragsverarbeiter": false
+      },
+      "zugriffsberechtigtePersonen": {
+        "managementRollen": false,
+        "administrativeRollen": false,
+        "technischeRollen": false,
+        "finanzielleRollen": false,
+        "rechtUndComplianceRollen": false,
+        "marketingUndVertriebsRollen": false,
+        "gesundheitsRollen": false,
+        "hrUndRekrutierungsRollen": false,
+        "sonstigeRollen": false
+      },
+      "regelfristenLoeschung": {
+        "nachBeendigungsDesArbeitsverhaeltnisses": false,
+        "nach6Monaten": false,
+        "nach48Monaten": false,
+        "nach11Jahren": false,
+        "aufWiderruf": false,
+        "ausgenommenFuerDrueberHinausgehendeAufbewahrungspflichten": false,
+        "speziellesLoeschkonzept": false
       }
-    },
-    "retentionPeriods": {
-      "afterTerminationOfEmployment": false,
-      "afterContractTermination": false,
-      "uponRevocation": false,
-      "deletionTime": "",
-      "exceptForBeyondRetentionObligations": false,
-      "specialDeletionConcept": false
     },
     "additionalInfo": ""
   }
 ]
-
