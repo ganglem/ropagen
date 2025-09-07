@@ -194,9 +194,11 @@ export interface ExternalRecipientCategoriesEU {
     others: boolean;
 }
 
+// TODO: The ExternalRecipientCategoriesThirdCountry interface is currently not in use.
+// It is commented out for now, but may be needed in the future if third country recipient categories are required.
 //export interface ExternalRecipientCategoriesThirdCountry {
- //   serviceProviders: boolean;
- //   dataProcessors: boolean;
+//   serviceProviders: boolean;
+//   dataProcessors: boolean;
 //}
 
 export interface AuthorizedPersons {
