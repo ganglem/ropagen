@@ -32,20 +32,20 @@
     "Verschlüsselung ruhender Daten, Zutrittskontrolle, regelmäßige Pen-Tests",
 
     "purposeOfDataProcessing": "",
+    "legalBasis": {
+      "DSGVOArt6Abs1a": false,
+      "DSGVOArt6Abs1b": false,
+      "DSGVOArt6Abs1c": false,
+      "DSGVOArt6Abs1f": false,
+      "IfSG28b": false,
+      "SARS-CoV-Arbeitsschutzverordnung": false,
+      "BDSG26": false,
+      "HGB257": false,
+      "HGB239Abs1": false,
+      "AO147": false,
+      "other": ""
+    },
     "categories": {
-      "legalBasis": {
-        "DSGVOArt6Abs1a": false,
-        "DSGVOArt6Abs1b": false,
-        "DSGVOArt6Abs1c": false,
-        "DSGVOArt6Abs1f": false,
-        "IfSG28b": false,
-        "SARS-CoV-Arbeitsschutzverordnung": false,
-        "BDSG26": false,
-        "HGB257": false,
-        "HGB239Abs1": false,
-        "AO147": false,
-        "other": ""
-      },
       "dataSources": {
         "microsoftOffice365": false,
         "emailProvider": false,
