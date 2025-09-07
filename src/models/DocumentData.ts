@@ -241,9 +241,9 @@ export interface Categories {
 }
 
 export interface ThirdCountryTransfers {
-    "country":  string,
-    "transferMechanism": string,
-    "safeguards": string,
+    country: string,
+    transferMechanism: string,
+    safeguards: string,
 }
 
 // Main document data interface
