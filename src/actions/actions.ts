@@ -64,16 +64,34 @@ function generatePromptFromData(documentData: DocumentData, locale: string): str
 
     // Process data sources
     const selectedDataSources = Object.entries(documentData.categories.dataSources)
-        .filter(([_, isSelected]) => isSelected)
-        .map(([key]) => `- ${key.replace(/([A-Z])/g, ' $1').trim()}`)
+        .filter(([key, value]) => {
+            if (typeof value === 'boolean') return value;
+            if (typeof value === 'string') return value.trim() !== '';
+            return false;
+        })
+        .map(([key, value]) => {
+            if (typeof value === 'string' && value.trim() !== '') {
+                return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
+            }
+            return `- ${key.replace(/([A-Z])/g, ' $1').trim()}`;
+        })
         .join('\n');
 
     // Process data categories
     const selectedDataCategories = Object.entries(documentData.categories.dataCategories)
         .map(([categoryKey, categoryData]) => {
             const selectedSubCategories = Object.entries(categoryData)
-                .filter(([_, isSelected]) => isSelected)
-                .map(([subKey]) => `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`)
+                .filter(([subKey, value]) => {
+                    if (typeof value === 'boolean') return value;
+                    if (typeof value === 'string') return value.trim() !== '';
+                    return false;
+                })
+                .map(([subKey, value]) => {
+                    if (typeof value === 'string' && value.trim() !== '') {
+                        return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
+                    }
+                    return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`;
+                })
                 .join('\n');
 
             if (selectedSubCategories) {
@@ -87,6 +105,14 @@ function generatePromptFromData(documentData: DocumentData, locale: string): str
     // Process person categories
     const selectedPersonCategories = Object.entries(documentData.categories.persons)
         .map(([categoryKey, categoryData]) => {
+            if (categoryKey === 'other') {
+                // Handle the 'other' field which is a string
+                if (typeof categoryData === 'string' && categoryData.trim() !== '') {
+                    return `Other Person Categories: ${categoryData}`;
+                }
+                return null;
+            }
+
             const selectedSubCategories = Object.entries(categoryData)
                 .filter(([_, isSelected]) => isSelected)
                 .map(([subKey]) => `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`)
@@ -102,8 +128,17 @@ function generatePromptFromData(documentData: DocumentData, locale: string): str
 
     // Process legal basis
     const selectedLegalBasis = Object.entries(documentData.legalBasis)
-        .filter(([_, isSelected]) => isSelected)
-        .map(([key]) => `- ${key.replace(/([A-Z])/g, ' $1').trim()}`)
+        .filter(([key, value]) => {
+            if (typeof value === 'boolean') return value;
+            if (typeof value === 'string') return value.trim() !== '';
+            return false;
+        })
+        .map(([key, value]) => {
+            if (typeof value === 'string' && value.trim() !== '') {
+                return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
+            }
+            return `- ${key.replace(/([A-Z])/g, ' $1').trim()}`;
+        })
         .join('\n');
 
     // Process retention periods
@@ -169,16 +204,15 @@ function generatePromptFromData(documentData: DocumentData, locale: string): str
       4. Data Subjects and Recipients
       5. Data Retention and Deletion
       6. Technical and Organizational Measures
-    - It should be a continuous text without bullet points or lists.
-    - For each section, provide detailed information based on the provided data.
-    - Include specific details about data processing activities, purposes, and safeguards.
+    - Each category can have a continous text and bullet points as needed.
     - Ensure compliance with GDPR Articles 30 (Records of processing activities) requirements.
-    - Maintain a professional, legally appropriate tone throughout.
-    - Structure the document for easy review by Data Protection Authorities.
+    - Respect the Additional Information and Special Instructions provided.
+    - You must include all data given, and must not omit any data provided.
     
     The output should be suitable for use by a Data Protection Officer (DPO) or legal counsel.
     The output should be in .md style with proper headings and formatting.
         `.trim();
 
+    console.log(prompt)
     return prompt;
 }
