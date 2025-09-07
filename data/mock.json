@@ -180,10 +180,6 @@
           "serviceProviders": true,
           "others": false
         },
-        "externalRecipientCategoriesThirdCountry": {
-          "serviceProviders": false,
-          "dataProcessors": false
-        },
         "authorizedPersons": {
           "managementRoles": true,
           "administrativeRoles": true,
@@ -388,10 +384,6 @@
           "businessPartnersAndAgencies": true,
           "serviceProviders": true,
           "others": false
-        },
-        "externalRecipientCategoriesThirdCountry": {
-          "serviceProviders": false,
-          "dataProcessors": false
         },
         "authorizedPersons": {
           "managementRoles": true,
@@ -603,10 +595,6 @@
           "serviceProviders": false,
           "others": false
         },
-        "externalRecipientCategoriesThirdCountry": {
-          "serviceProviders": true,
-          "dataProcessors": true
-        },
         "authorizedPersons": {
           "managementRoles": false,
           "administrativeRoles": false,
@@ -817,10 +805,6 @@
           "serviceProviders": true,
           "others": false
         },
-        "externalRecipientCategoriesThirdCountry": {
-          "serviceProviders": false,
-          "dataProcessors": false
-        },
         "authorizedPersons": {
           "managementRoles": false,
           "administrativeRoles": true,
@@ -1025,10 +1009,6 @@
           "businessPartnersAndAgencies": true,
           "serviceProviders": true,
           "others": false
-        },
-        "externalRecipientCategoriesThirdCountry": {
-          "serviceProviders": false,
-          "dataProcessors": false
         },
         "authorizedPersons": {
           "managementRoles": false,
