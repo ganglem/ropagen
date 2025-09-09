@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.ganglem-ropagen.rule=Host(`ganglem.space`)
+      - traefik.http.routers.ganglem-ropagen.rule=Host(`ropagen.eu`)
       - traefik.http.routers.ganglem-ropagen.entrypoints=websecure
       - traefik.http.routers.ganglem-ropagen.tls=true
       - traefik.http.routers.ganglem-ropagen.tls.certresolver=lets-encrypt
@@ -28,7 +28,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.ganglem-ropagen-dev.rule=Host(`dev.ganglem.space`)
+      - traefik.http.routers.ganglem-ropagen-dev.rule=Host(`dev.ropagen.eu`)
       - traefik.http.routers.ganglem-ropagen-dev.entrypoints=websecure
       - traefik.http.routers.ganglem-ropagen-dev.tls=true
       - traefik.http.routers.ganglem-ropagen-dev.tls.certresolver=lets-encrypt
