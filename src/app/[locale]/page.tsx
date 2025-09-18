@@ -11,8 +11,13 @@ import { UserCheck } from 'lucide-react';
 import {useTranslations} from 'next-intl';
 import {Link} from '@/i18n/navigation';
 
+interface HomeProps {
+    params: {
+        locale: string;
+    };
+}
 
-export default function Home() {
+export default function Home({ params: { locale } }: HomeProps) {
     const t = useTranslations('Home');
 
     return (
@@ -61,7 +66,7 @@ export default function Home() {
             </section>
 
             <div className="-mx-2 md:-mx-4 w-screen ">
-                <MovingBanner />
+                <MovingBanner locale={locale} />
             </div>
 
             <section className="py-10 grid grid-cols-1 md:grid-cols-3 gap-6">

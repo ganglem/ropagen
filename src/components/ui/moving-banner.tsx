@@ -2,15 +2,27 @@
 
 import Link from "next/link"
 import {motion} from "framer-motion"
-import templatesData from "../../../data/mock.json"
+import {useEffect, useState} from "react"
 
-// Extract titles and create arrays for each row
-const titles = templatesData.map((template) => template.title)
-const topRowItems = [...titles, ...titles, ...titles] // Repeat to fill the row
-const middleRowItems = [...titles, ...titles, ...titles]
-const bottomRowItems = [...titles, ...titles, ...titles]
+interface MovingBannerProps {
+    locale: string;
+}
 
-export default function MovingBanner() {
+export default function MovingBanner({locale}: MovingBannerProps) {
+    const [titles, setTitles] = useState<string[]>([])
+
+    useEffect(() => {
+        import(`../../../data/mock-${locale}.json`).then((mod) => {
+            const templatesData = mod.default
+            setTitles(templatesData.map((template: any) => template.title))
+        })
+    }, [locale])
+
+    // Extract titles and create arrays for each row
+    const topRowItems = [...titles, ...titles, ...titles] // Repeat to fill the row
+    const middleRowItems = [...titles, ...titles, ...titles]
+    const bottomRowItems = [...titles, ...titles, ...titles]
+
     const scrollAnimation = (direction: "left" | "right", duration: number) => ({
         x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
         transition: {duration, repeat: Infinity, ease: "linear"},
