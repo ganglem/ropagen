@@ -11,6 +11,7 @@ import {getTranslations} from 'next-intl/server';
 import LocaleSwitch from "@/components/ui/locale-switch";
 
 
+
 export const metadata: Metadata = {
   title: "ROPAgen",
   description: "Generate your own ROPA files with ease",
