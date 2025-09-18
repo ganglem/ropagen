@@ -1,0 +1,1037 @@
+[
+  {
+    "id": "template_hr_management",
+    "title": "Personalverwaltung - Mitarbeiterdatenverarbeitung",
+    "organization": {
+      "name": "Ihr Firmenname",
+      "contact": {
+        "address": "Ihre Adresse, Postleitzahl Stadt",
+        "email": "dpo@ihrefirma.com",
+        "phone": "+49 XX XXXXXXX"
+      },
+      "role": "Verantwortlicher",
+      "jointController": [],
+      "representative": "",
+      "dpo": "Name des Datenschutzbeauftragten, dpo@ihrefirma.com"
+    },
+    "processors": [
+      {
+        "name": "HR-Software-Anbieter",
+        "contact": "support@hrsoftware.com",
+        "activities": "HR-System-Hosting und -Wartung"
+      },
+      {
+        "name": "Lohnbuchhaltungsdienstleister",
+        "contact": "service@payroll.com",
+        "activities": "Lohnbuchhaltung und Steuerberechnungen"
+      }
+    ],
+    "thirdCountryTransfers": [
+      {
+        "country": "USA",
+        "transferMechanism": "Standardvertragsklauseln",
+        "safeguards": "Verschlüsselung nach AES-256 während der Übertragung"
+      }
+    ],
+    "technicalOrganizationalMeasures": "Zugangskontrollen, Datenverschlüsselung, regelmäßige Sicherheitsaudits, Mitarbeiterschulungen, Incident-Response-Verfahren",
+    "purposeOfDataProcessing": "Personalverwaltung, Lohnbuchhaltung, Leistungsmanagement, Einhaltung arbeitsrechtlicher Bestimmungen",
+    "legalBasis": {
+      "DSGVOArt6Abs1a": false,
+      "DSGVOArt6Abs1b": true,
+      "DSGVOArt6Abs1c": true,
+      "DSGVOArt6Abs1f": false,
+      "IfSG28b": false,
+      "SARSCoV": false,
+      "BDSG26": true,
+      "HGB257": false,
+      "HGB239Abs1": false,
+      "AO147": false,
+      "other": ""
+    },
+    "categories": {
+      "dataSources": {
+        "microsoftOffice365": true,
+        "emailProvider": true,
+        "microsoftAzure": false,
+        "googleWorkspace": false,
+        "googleCloud": false,
+        "videoConferencing": false,
+        "amazonAWS": false,
+        "ecommercePlatform": false,
+        "libreOffice": false,
+        "onlineBanking": false,
+        "financialServices": false,
+        "webAndIntranet": true,
+        "creditServices": false,
+        "hrSoftware": true,
+        "enterpriseSystems": true,
+        "securityAndCompliance": false,
+        "documentProcessing": true,
+        "otherSpecializedSoftware": false,
+        "other": ""
+      },
+      "dataCategories": {
+        "personalData": {
+          "lastName": true,
+          "firstName": true,
+          "dateOfBirth": true,
+          "placeOfBirth": false,
+          "gender": false,
+          "nationality": true,
+          "address": true,
+          "phoneNumber": true,
+          "emailAddress": true,
+          "maritalStatus": false,
+          "religiousAffiliation": false
+        },
+        "employment": {
+          "workingHours": true,
+          "professionalPosition": true,
+          "personnelNumber": true,
+          "companyAffiliation": true,
+          "vacationEntitlement": true,
+          "vacationDays": true,
+          "vacationTimes": true
+        },
+        "finance": {
+          "salaryWage": true,
+          "bankDetails": true,
+          "taxIdentificationNumber": true,
+          "taxClass": true,
+          "monthlySalaries": true,
+          "monthlyWages": false,
+          "revenue": false,
+          "invoiceInformation": false
+        },
+        "health": {
+          "healthInsuranceNumber": true,
+          "socialSecurityNumber": true,
+          "sickDays": true,
+          "healthData": false,
+          "insuranceStatus": false,
+          "expiryDateVaccinationRecoveryStatus": false,
+          "copyProofCertificate": false
+        },
+        "legal": {
+          "contractData": true,
+          "identityDocuments": true,
+          "insolvencyDecree": false,
+          "schufaInformation": false,
+          "subscriptionData": false
+        },
+        "behavior": {
+          "usageBehavior": false,
+          "behavioralData": false,
+          "browserHistory": false,
+          "metadata": false
+        },
+        "documentationAndRecords": {
+          "individualDocumentation": true,
+          "complaintData": false,
+          "receipts": false,
+          "imageMaterial": false,
+          "billingData": false,
+          "offer": false,
+          "orderData": false,
+          "deliveryAddress": false,
+          "incomingInvoice": false,
+          "outgoingInvoice": false
+        },
+        "vehicle": {
+          "licensePlate": false,
+          "drivingData": false,
+          "driversLicense": false
+        },
+        "other": {
+          "expertise": true,
+          "skills": true,
+          "examinationDate": false,
+          "proofStatus": false,
+          "queryDateTime": false,
+          "deliveryConditions": false,
+          "username": true,
+          "dataVolume": false,
+          "other": ""
+        }
+      },
+      "persons": {
+        "affectedPersons": {
+          "internalGroups": true,
+          "externalCustomers": false,
+          "legalEntities": false,
+          "healthcareInstitutions": false,
+          "recruitmentAgencies": false
+        },
+        "internalRecipientCategories": {
+          "management": true,
+          "administration": true,
+          "technical": false,
+          "finance": true,
+          "legalAndCompliance": true,
+          "marketingAndSales": false,
+          "logisticsAndOperations": false
+        },
+        "externalRecipientCategoriesEU": {
+          "governmentAuthorities": true,
+          "softwareAndCloudProviders": true,
+          "healthAndInsuranceProviders": true,
+          "financialInstitutions": false,
+          "businessPartnersAndAgencies": false,
+          "serviceProviders": true,
+          "others": false
+        },
+        "authorizedPersons": {
+          "managementRoles": true,
+          "administrativeRoles": true,
+          "technicalRoles": false,
+          "financialRoles": true,
+          "legalAndComplianceRoles": true,
+          "marketingAndSalesRoles": false,
+          "healthRoles": false,
+          "hrAndRecruitmentRoles": true,
+          "otherRoles": false
+        },
+        "other": ""
+      }
+    },
+    "retentionPeriods": {
+      "afterTerminationOfEmployment": true,
+      "afterContractTermination": false,
+      "uponRevocation": false,
+      "deletionTime": "10 Jahre nach Beendigung des Arbeitsverhältnisses",
+      "exceptForBeyondRetentionObligations": true,
+      "specialDeletionConcept": false
+    },
+    "additionalInfo": "Mitarbeiterdaten werden gemäß arbeitsrechtlichen Bestimmungen und Tarifverträgen verarbeitet."
+  },
+  {
+    "id": "template_customer_management",
+    "title": "Kundenverwaltung - CRM-System",
+    "organization": {
+      "name": "Ihr Firmenname",
+      "contact": {
+        "address": "Ihre Adresse, Postleitzahl Stadt",
+        "email": "dpo@ihrefirma.com",
+        "phone": "+49 XX XXXXXXX"
+      },
+      "role": "Verantwortlicher",
+      "jointController": [],
+      "representative": "",
+      "dpo": "Name des Datenschutzbeauftragten, dpo@ihrefirma.com"
+    },
+    "processors": [
+      {
+        "name": "CRM-Software-Anbieter",
+        "contact": "support@crmsoftware.com",
+        "activities": "CRM-System-Hosting und technischer Support"
+      },
+      {
+        "name": "E-Mail-Marketing-Dienst",
+        "contact": "support@emailservice.com",
+        "activities": "Verwaltung von E-Mail-Marketing-Kampagnen"
+      }
+    ],
+    "thirdCountryTransfers": [
+      {
+        "country": "USA",
+        "transferMechanism": "Standardvertragsklauseln",
+        "safeguards": "Verschlüsselung nach AES-256 während der Übertragung"
+      }
+    ],
+    "technicalOrganizationalMeasures": "SSL-Verschlüsselung, Zugangskontrollen, regelmäßige Backups, Datenanonymisierungsoptionen, Audit-Protokollierung",
+    "purposeOfDataProcessing": "Kundenbeziehungsmanagement, Vertriebsunterstützung, Kundenservice, Marketing-Kommunikation",
+    "legalBasis": {
+      "DSGVOArt6Abs1a": true,
+      "DSGVOArt6Abs1b": true,
+      "DSGVOArt6Abs1c": false,
+      "DSGVOArt6Abs1f": true,
+      "IfSG28b": false,
+      "SARSCoV": false,
+      "BDSG26": false,
+      "HGB257": false,
+      "HGB239Abs1": false,
+      "AO147": false,
+      "other": ""
+    },
+    "categories": {
+      "dataSources": {
+        "microsoftOffice365": false,
+        "emailProvider": true,
+        "microsoftAzure": false,
+        "googleWorkspace": false,
+        "googleCloud": false,
+        "videoConferencing": true,
+        "amazonAWS": false,
+        "ecommercePlatform": false,
+        "libreOffice": false,
+        "onlineBanking": false,
+        "financialServices": false,
+        "webAndIntranet": true,
+        "creditServices": false,
+        "hrSoftware": false,
+        "enterpriseSystems": true,
+        "securityAndCompliance": false,
+        "documentProcessing": false,
+        "otherSpecializedSoftware": true,
+        "other": "CRM-System"
+      },
+      "dataCategories": {
+        "personalData": {
+          "lastName": true,
+          "firstName": true,
+          "dateOfBirth": false,
+          "placeOfBirth": false,
+          "gender": false,
+          "nationality": false,
+          "address": true,
+          "phoneNumber": true,
+          "emailAddress": true,
+          "maritalStatus": false,
+          "religiousAffiliation": false
+        },
+        "employment": {
+          "workingHours": false,
+          "professionalPosition": true,
+          "personnelNumber": false,
+          "companyAffiliation": true,
+          "vacationEntitlement": false,
+          "vacationDays": false,
+          "vacationTimes": false
+        },
+        "finance": {
+          "salaryWage": false,
+          "bankDetails": false,
+          "taxIdentificationNumber": false,
+          "taxClass": false,
+          "monthlySalaries": false,
+          "monthlyWages": false,
+          "revenue": true,
+          "invoiceInformation": true
+        },
+        "health": {
+          "healthInsuranceNumber": false,
+          "socialSecurityNumber": false,
+          "sickDays": false,
+          "healthData": false,
+          "insuranceStatus": false,
+          "expiryDateVaccinationRecoveryStatus": false,
+          "copyProofCertificate": false
+        },
+        "legal": {
+          "contractData": true,
+          "identityDocuments": false,
+          "insolvencyDecree": false,
+          "schufaInformation": false,
+          "subscriptionData": true
+        },
+        "behavior": {
+          "usageBehavior": true,
+          "behavioralData": true,
+          "browserHistory": false,
+          "metadata": true
+        },
+        "documentationAndRecords": {
+          "individualDocumentation": true,
+          "complaintData": true,
+          "receipts": false,
+          "imageMaterial": false,
+          "billingData": true,
+          "offer": true,
+          "orderData": true,
+          "deliveryAddress": true,
+          "incomingInvoice": false,
+          "outgoingInvoice": true
+        },
+        "vehicle": {
+          "licensePlate": false,
+          "drivingData": false,
+          "driversLicense": false
+        },
+        "other": {
+          "expertise": false,
+          "skills": false,
+          "examinationDate": false,
+          "proofStatus": false,
+          "queryDateTime": true,
+          "deliveryConditions": false,
+          "username": true,
+          "dataVolume": false,
+          "other": "Kundenpräferenzen, Kommunikationsverlauf"
+        }
+      },
+      "persons": {
+        "affectedPersons": {
+          "internalGroups": false,
+          "externalCustomers": true,
+          "legalEntities": true,
+          "healthcareInstitutions": false,
+          "recruitmentAgencies": false
+        },
+        "internalRecipientCategories": {
+          "management": true,
+          "administration": true,
+          "technical": false,
+          "finance": true,
+          "legalAndCompliance": false,
+          "marketingAndSales": true,
+          "logisticsAndOperations": true
+        },
+        "externalRecipientCategoriesEU": {
+          "governmentAuthorities": false,
+          "softwareAndCloudProviders": true,
+          "healthAndInsuranceProviders": false,
+          "financialInstitutions": false,
+          "businessPartnersAndAgencies": true,
+          "serviceProviders": true,
+          "others": false
+        },
+        "authorizedPersons": {
+          "managementRoles": true,
+          "administrativeRoles": true,
+          "technicalRoles": false,
+          "financialRoles": false,
+          "legalAndComplianceRoles": false,
+          "marketingAndSalesRoles": true,
+          "healthRoles": false,
+          "hrAndRecruitmentRoles": false,
+          "otherRoles": false
+        },
+        "other": ""
+      }
+    },
+    "retentionPeriods": {
+      "afterTerminationOfEmployment": false,
+      "afterContractTermination": true,
+      "uponRevocation": true,
+      "deletionTime": "3 Jahre nach letztem Kontakt oder Vertragsende",
+      "exceptForBeyondRetentionObligations": false,
+      "specialDeletionConcept": true
+    },
+    "additionalInfo": "Kundendaten werden auf Basis von Einwilligung und berechtigten Geschäftsinteressen verarbeitet. Kunden können ihre Einwilligung jederzeit widerrufen."
+  },
+  {
+    "id": "template_website_analytics",
+    "title": "Website-Analyse - Nutzerverhalten-Tracking",
+    "organization": {
+      "name": "Ihr Firmenname",
+      "contact": {
+        "address": "Ihre Adresse, Postleitzahl Stadt",
+        "email": "dpo@ihrefirma.com",
+        "phone": "+49 XX XXXXXXX"
+      },
+      "role": "Verantwortlicher",
+      "jointController": [
+        {
+          "name": "Google Ireland Limited",
+          "contact": "privacy@google.com"
+        }
+      ],
+      "representative": "",
+      "dpo": "Name des Datenschutzbeauftragten, dpo@ihrefirma.com"
+    },
+    "processors": [
+      {
+        "name": "Google Analytics",
+        "contact": "privacy@google.com",
+        "activities": "Webanalyse und Nutzerverhalten-Analyse"
+      },
+      {
+        "name": "Website-Hosting-Anbieter",
+        "contact": "support@hostingprovider.com",
+        "activities": "Website-Hosting und Server-Logs"
+      }
+    ],
+    "thirdCountryTransfers": [
+      {
+        "country": "USA",
+        "transferMechanism": "Standardvertragsklauseln",
+        "safeguards": "Verschlüsselung nach AES-256 während der Übertragung"
+      }
+    ],
+    "technicalOrganizationalMeasures": "IP-Anonymisierung, Cookie-Einwilligungsverwaltung, Datenspeicher-Kontrollen, sichere Datenübertragung",
+    "purposeOfDataProcessing": "Website-Optimierung, Verbesserung der Nutzererfahrung, Marketing-Analyse, Leistungsüberwachung",
+    "legalBasis": {
+      "DSGVOArt6Abs1a": true,
+      "DSGVOArt6Abs1b": false,
+      "DSGVOArt6Abs1c": false,
+      "DSGVOArt6Abs1f": true,
+      "IfSG28b": false,
+      "SARSCoV": false,
+      "BDSG26": false,
+      "HGB257": false,
+      "HGB239Abs1": false,
+      "AO147": false,
+      "other": ""
+    },
+    "categories": {
+      "dataSources": {
+        "microsoftOffice365": false,
+        "emailProvider": false,
+        "microsoftAzure": false,
+        "googleWorkspace": false,
+        "googleCloud": true,
+        "videoConferencing": false,
+        "amazonAWS": false,
+        "ecommercePlatform": false,
+        "libreOffice": false,
+        "onlineBanking": false,
+        "financialServices": false,
+        "webAndIntranet": true,
+        "creditServices": false,
+        "hrSoftware": false,
+        "enterpriseSystems": false,
+        "securityAndCompliance": false,
+        "documentProcessing": false,
+        "otherSpecializedSoftware": true,
+        "other": "Google Analytics, Website-Tracking-Tools"
+      },
+      "dataCategories": {
+        "personalData": {
+          "lastName": false,
+          "firstName": false,
+          "dateOfBirth": false,
+          "placeOfBirth": false,
+          "gender": false,
+          "nationality": false,
+          "address": false,
+          "phoneNumber": false,
+          "emailAddress": false,
+          "maritalStatus": false,
+          "religiousAffiliation": false
+        },
+        "employment": {
+          "workingHours": false,
+          "professionalPosition": false,
+          "personnelNumber": false,
+          "companyAffiliation": false,
+          "vacationEntitlement": false,
+          "vacationDays": false,
+          "vacationTimes": false
+        },
+        "finance": {
+          "salaryWage": false,
+          "bankDetails": false,
+          "taxIdentificationNumber": false,
+          "taxClass": false,
+          "monthlySalaries": false,
+          "monthlyWages": false,
+          "revenue": false,
+          "invoiceInformation": false
+        },
+        "health": {
+          "healthInsuranceNumber": false,
+          "socialSecurityNumber": false,
+          "sickDays": false,
+          "healthData": false,
+          "insuranceStatus": false,
+          "expiryDateVaccinationRecoveryStatus": false,
+          "copyProofCertificate": false
+        },
+        "legal": {
+          "contractData": false,
+          "identityDocuments": false,
+          "insolvencyDecree": false,
+          "schufaInformation": false,
+          "subscriptionData": false
+        },
+        "behavior": {
+          "usageBehavior": true,
+          "behavioralData": true,
+          "browserHistory": true,
+          "metadata": true
+        },
+        "documentationAndRecords": {
+          "individualDocumentation": false,
+          "complaintData": false,
+          "receipts": false,
+          "imageMaterial": false,
+          "billingData": false,
+          "offer": false,
+          "orderData": false,
+          "deliveryAddress": false,
+          "incomingInvoice": false,
+          "outgoingInvoice": false
+        },
+        "vehicle": {
+          "licensePlate": false,
+          "drivingData": false,
+          "driversLicense": false
+        },
+        "other": {
+          "expertise": false,
+          "skills": false,
+          "examinationDate": false,
+          "proofStatus": false,
+          "queryDateTime": true,
+          "deliveryConditions": false,
+          "username": false,
+          "dataVolume": true,
+          "other": "IP-Adressen, Geräteinformationen, Sitzungsdaten, Referrer-URLs"
+        }
+      },
+      "persons": {
+        "affectedPersons": {
+          "internalGroups": false,
+          "externalCustomers": true,
+          "legalEntities": false,
+          "healthcareInstitutions": false,
+          "recruitmentAgencies": false
+        },
+        "internalRecipientCategories": {
+          "management": true,
+          "administration": false,
+          "technical": true,
+          "finance": false,
+          "legalAndCompliance": false,
+          "marketingAndSales": true,
+          "logisticsAndOperations": false
+        },
+        "externalRecipientCategoriesEU": {
+          "governmentAuthorities": false,
+          "softwareAndCloudProviders": true,
+          "healthAndInsuranceProviders": false,
+          "financialInstitutions": false,
+          "businessPartnersAndAgencies": false,
+          "serviceProviders": false,
+          "others": false
+        },
+        "authorizedPersons": {
+          "managementRoles": false,
+          "administrativeRoles": false,
+          "technicalRoles": true,
+          "financialRoles": false,
+          "legalAndComplianceRoles": false,
+          "marketingAndSalesRoles": true,
+          "healthRoles": false,
+          "hrAndRecruitmentRoles": false,
+          "otherRoles": false
+        },
+        "other": "Website-Besucher"
+      }
+    },
+    "retentionPeriods": {
+      "afterTerminationOfEmployment": false,
+      "afterContractTermination": false,
+      "uponRevocation": true,
+      "deletionTime": "26 Monate (Google Analytics Standard)",
+      "exceptForBeyondRetentionObligations": false,
+      "specialDeletionConcept": true
+    },
+    "additionalInfo": "Analysedaten werden anonymisiert und aggregiert. Nutzer können über Cookie-Einstellungen opt-out wählen."
+  },
+  {
+    "id": "template_ecommerce",
+    "title": "E-Commerce-Betrieb - Online-Shop",
+    "organization": {
+      "name": "Ihr Firmenname",
+      "contact": {
+        "address": "Ihre Adresse, Postleitzahl Stadt",
+        "email": "dpo@ihrefirma.com",
+        "phone": "+49 XX XXXXXXX"
+      },
+      "role": "Verantwortlicher",
+      "jointController": [],
+      "representative": "",
+      "dpo": "Name des Datenschutzbeauftragten, dpo@ihrefirma.com"
+    },
+    "processors": [
+      {
+        "name": "E-Commerce-Plattform-Anbieter",
+        "contact": "support@shopplatform.com",
+        "activities": "Online-Shop-Hosting und Bestellabwicklung"
+      },
+      {
+        "name": "Zahlungsdienstleister",
+        "contact": "support@paymentprovider.com",
+        "activities": "Zahlungsabwicklung und Betrugsprävention"
+      },
+      {
+        "name": "Versandunternehmen",
+        "contact": "service@shipping.com",
+        "activities": "Paketzustellung und Sendungsverfolgung"
+      }
+    ],
+    "thirdCountryTransfers": [
+      {
+        "country": "USA",
+        "transferMechanism": "Standardvertragsklauseln",
+        "safeguards": "Verschlüsselung nach AES-256 während der Übertragung"
+      }
+    ],
+    "technicalOrganizationalMeasures": "PCI DSS-Compliance, SSL-Verschlüsselung, sichere Zahlungsabwicklung, Sendungsverfolgungs-Sicherheit, Kundendatenschutz",
+    "purposeOfDataProcessing": "Bestellabwicklung, Zahlungsabwicklung, Versandkoordination, Kundensupport, Betrugsprävention",
+    "legalBasis": {
+      "DSGVOArt6Abs1a": true,
+      "DSGVOArt6Abs1b": true,
+      "DSGVOArt6Abs1c": true,
+      "DSGVOArt6Abs1f": true,
+      "IfSG28b": false,
+      "SARSCoV": false,
+      "BDSG26": false,
+      "HGB257": true,
+      "HGB239Abs1": true,
+      "AO147": true,
+      "other": ""
+    },
+    "categories": {
+      "dataSources": {
+        "microsoftOffice365": false,
+        "emailProvider": true,
+        "microsoftAzure": false,
+        "googleWorkspace": false,
+        "googleCloud": false,
+        "videoConferencing": false,
+        "amazonAWS": false,
+        "ecommercePlatform": true,
+        "libreOffice": false,
+        "onlineBanking": false,
+        "financialServices": true,
+        "webAndIntranet": true,
+        "creditServices": false,
+        "hrSoftware": false,
+        "enterpriseSystems": true,
+        "securityAndCompliance": true,
+        "documentProcessing": false,
+        "otherSpecializedSoftware": false,
+        "other": ""
+      },
+      "dataCategories": {
+        "personalData": {
+          "lastName": true,
+          "firstName": true,
+          "dateOfBirth": false,
+          "placeOfBirth": false,
+          "gender": false,
+          "nationality": false,
+          "address": true,
+          "phoneNumber": true,
+          "emailAddress": true,
+          "maritalStatus": false,
+          "religiousAffiliation": false
+        },
+        "employment": {
+          "workingHours": false,
+          "professionalPosition": false,
+          "personnelNumber": false,
+          "companyAffiliation": false,
+          "vacationEntitlement": false,
+          "vacationDays": false,
+          "vacationTimes": false
+        },
+        "finance": {
+          "salaryWage": false,
+          "bankDetails": true,
+          "taxIdentificationNumber": false,
+          "taxClass": false,
+          "monthlySalaries": false,
+          "monthlyWages": false,
+          "revenue": false,
+          "invoiceInformation": true
+        },
+        "health": {
+          "healthInsuranceNumber": false,
+          "socialSecurityNumber": false,
+          "sickDays": false,
+          "healthData": false,
+          "insuranceStatus": false,
+          "expiryDateVaccinationRecoveryStatus": false,
+          "copyProofCertificate": false
+        },
+        "legal": {
+          "contractData": true,
+          "identityDocuments": false,
+          "insolvencyDecree": false,
+          "schufaInformation": false,
+          "subscriptionData": false
+        },
+        "behavior": {
+          "usageBehavior": true,
+          "behavioralData": true,
+          "browserHistory": false,
+          "metadata": true
+        },
+        "documentationAndRecords": {
+          "individualDocumentation": false,
+          "complaintData": true,
+          "receipts": true,
+          "imageMaterial": false,
+          "billingData": true,
+          "offer": false,
+          "orderData": true,
+          "deliveryAddress": true,
+          "incomingInvoice": false,
+          "outgoingInvoice": true
+        },
+        "vehicle": {
+          "licensePlate": false,
+          "drivingData": false,
+          "driversLicense": false
+        },
+        "other": {
+          "expertise": false,
+          "skills": false,
+          "examinationDate": false,
+          "proofStatus": false,
+          "queryDateTime": true,
+          "deliveryConditions": true,
+          "username": true,
+          "dataVolume": false,
+          "other": "Warenkorb-Daten, Kaufhistorie, Produktpräferenzen"
+        }
+      },
+      "persons": {
+        "affectedPersons": {
+          "internalGroups": false,
+          "externalCustomers": true,
+          "legalEntities": false,
+          "healthcareInstitutions": false,
+          "recruitmentAgencies": false
+        },
+        "internalRecipientCategories": {
+          "management": false,
+          "administration": true,
+          "technical": true,
+          "finance": true,
+          "legalAndCompliance": false,
+          "marketingAndSales": true,
+          "logisticsAndOperations": true
+        },
+        "externalRecipientCategoriesEU": {
+          "governmentAuthorities": true,
+          "softwareAndCloudProviders": true,
+          "healthAndInsuranceProviders": false,
+          "financialInstitutions": true,
+          "businessPartnersAndAgencies": true,
+          "serviceProviders": true,
+          "others": false
+        },
+        "authorizedPersons": {
+          "managementRoles": false,
+          "administrativeRoles": true,
+          "technicalRoles": true,
+          "financialRoles": true,
+          "legalAndComplianceRoles": false,
+          "marketingAndSalesRoles": true,
+          "healthRoles": false,
+          "hrAndRecruitmentRoles": false,
+          "otherRoles": false
+        },
+        "other": ""
+      }
+    },
+    "retentionPeriods": {
+      "afterTerminationOfEmployment": false,
+      "afterContractTermination": true,
+      "uponRevocation": false,
+      "deletionTime": "10 Jahre für Buchhaltungsdaten, 3 Jahre für andere Kundendaten",
+      "exceptForBeyondRetentionObligations": true,
+      "specialDeletionConcept": true
+    },
+    "additionalInfo": "E-Commerce-Daten werden gemäß handels- und steuerrechtlichen Anforderungen verarbeitet. Zahlungsdaten werden von zertifizierten Zahlungsabwicklern verarbeitet."
+  },
+  {
+    "id": "template_marketing",
+    "title": "Marketing-Kommunikation - Newsletter & Kampagnen",
+    "organization": {
+      "name": "Ihr Firmenname",
+      "contact": {
+        "address": "Ihre Adresse, Postleitzahl Stadt",
+        "email": "dpo@ihrefirma.com",
+        "phone": "+49 XX XXXXXXX"
+      },
+      "role": "Verantwortlicher",
+      "jointController": [],
+      "representative": "",
+      "dpo": "Name des Datenschutzbeauftragten, dpo@ihrefirma.com"
+    },
+    "processors": [
+      {
+        "name": "E-Mail-Marketing-Plattform",
+        "contact": "support@emailplatform.com",
+        "activities": "E-Mail-Kampagnen-Management und -Versand"
+      },
+      {
+        "name": "Marketing-Automatisierungs-Tool",
+        "contact": "support@marketingautomation.com",
+        "activities": "Lead-Scoring und Kampagnen-Automatisierung"
+      }
+    ],
+    "thirdCountryTransfers": [
+      {
+        "country": "USA",
+        "transferMechanism": "Standardvertragsklauseln",
+        "safeguards": "Verschlüsselung nach AES-256 während der Übertragung"
+      }
+    ],
+    "technicalOrganizationalMeasures": "Double-Opt-In-Verfahren, Abmelde-Mechanismen, Datenverschlüsselung, Zugangskontrollen, Einwilligungsverwaltung",
+    "purposeOfDataProcessing": "Newsletter-Versand, Marketing-Kampagnen, Lead-Generierung, Kundenkommunikation, Marktforschung",
+    "legalBasis": {
+      "DSGVOArt6Abs1a": true,
+      "DSGVOArt6Abs1b": false,
+      "DSGVOArt6Abs1c": false,
+      "DSGVOArt6Abs1f": true,
+      "IfSG28b": false,
+      "SARSCoV": false,
+      "BDSG26": false,
+      "HGB257": false,
+      "HGB239Abs1": false,
+      "AO147": false,
+      "other": ""
+    },
+    "categories": {
+      "dataSources": {
+        "microsoftOffice365": false,
+        "emailProvider": true,
+        "microsoftAzure": false,
+        "googleWorkspace": false,
+        "googleCloud": false,
+        "videoConferencing": false,
+        "amazonAWS": false,
+        "ecommercePlatform": false,
+        "libreOffice": false,
+        "onlineBanking": false,
+        "financialServices": false,
+        "webAndIntranet": true,
+        "creditServices": false,
+        "hrSoftware": false,
+        "enterpriseSystems": false,
+        "securityAndCompliance": false,
+        "documentProcessing": false,
+        "otherSpecializedSoftware": true,
+        "other": "E-Mail-Marketing-Plattformen, CRM-Systeme"
+      },
+      "dataCategories": {
+        "personalData": {
+          "lastName": true,
+          "firstName": true,
+          "dateOfBirth": false,
+          "placeOfBirth": false,
+          "gender": false,
+          "nationality": false,
+          "address": false,
+          "phoneNumber": false,
+          "emailAddress": true,
+          "maritalStatus": false,
+          "religiousAffiliation": false
+        },
+        "employment": {
+          "workingHours": false,
+          "professionalPosition": true,
+          "personnelNumber": false,
+          "companyAffiliation": true,
+          "vacationEntitlement": false,
+          "vacationDays": false,
+          "vacationTimes": false
+        },
+        "finance": {
+          "salaryWage": false,
+          "bankDetails": false,
+          "taxIdentificationNumber": false,
+          "taxClass": false,
+          "monthlySalaries": false,
+          "monthlyWages": false,
+          "revenue": false,
+          "invoiceInformation": false
+        },
+        "health": {
+          "healthInsuranceNumber": false,
+          "socialSecurityNumber": false,
+          "sickDays": false,
+          "healthData": false,
+          "insuranceStatus": false,
+          "expiryDateVaccinationRecoveryStatus": false,
+          "copyProofCertificate": false
+        },
+        "legal": {
+          "contractData": false,
+          "identityDocuments": false,
+          "insolvencyDecree": false,
+          "schufaInformation": false,
+          "subscriptionData": true
+        },
+        "behavior": {
+          "usageBehavior": true,
+          "behavioralData": true,
+          "browserHistory": false,
+          "metadata": true
+        },
+        "documentationAndRecords": {
+          "individualDocumentation": false,
+          "complaintData": false,
+          "receipts": false,
+          "imageMaterial": false,
+          "billingData": false,
+          "offer": false,
+          "orderData": false,
+          "deliveryAddress": false,
+          "incomingInvoice": false,
+          "outgoingInvoice": false
+        },
+        "vehicle": {
+          "licensePlate": false,
+          "drivingData": false,
+          "driversLicense": false
+        },
+        "other": {
+          "expertise": false,
+          "skills": false,
+          "examinationDate": false,
+          "proofStatus": false,
+          "queryDateTime": true,
+          "deliveryConditions": false,
+          "username": false,
+          "dataVolume": false,
+          "other": "E-Mail-Präferenzen, Interaktionsverlauf, Lead-Quelle"
+        }
+      },
+      "persons": {
+        "affectedPersons": {
+          "internalGroups": false,
+          "externalCustomers": true,
+          "legalEntities": true,
+          "healthcareInstitutions": false,
+          "recruitmentAgencies": false
+        },
+        "internalRecipientCategories": {
+          "management": false,
+          "administration": false,
+          "technical": false,
+          "finance": false,
+          "legalAndCompliance": false,
+          "marketingAndSales": true,
+          "logisticsAndOperations": false
+        },
+        "externalRecipientCategoriesEU": {
+          "governmentAuthorities": false,
+          "softwareAndCloudProviders": true,
+          "healthAndInsuranceProviders": false,
+          "financialInstitutions": false,
+          "businessPartnersAndAgencies": true,
+          "serviceProviders": true,
+          "others": false
+        },
+        "authorizedPersons": {
+          "managementRoles": false,
+          "administrativeRoles": false,
+          "technicalRoles": false,
+          "financialRoles": false,
+          "legalAndComplianceRoles": false,
+          "marketingAndSalesRoles": true,
+          "healthRoles": false,
+          "hrAndRecruitmentRoles": false,
+          "otherRoles": false
+        },
+        "other": "Newsletter-Abonnenten, Marketing-Leads"
+      }
+    },
+    "retentionPeriods": {
+      "afterTerminationOfEmployment": false,
+      "afterContractTermination": false,
+      "uponRevocation": true,
+      "deletionTime": "Sofortige Löschung bei Abmeldung, oder 3 Jahre Inaktivität",
+      "exceptForBeyondRetentionObligations": false,
+      "specialDeletionConcept": true
+    },
+    "additionalInfo": "Alle Marketing-Kommunikation basiert auf ausdrücklicher Einwilligung. Empfänger können sich jederzeit über bereitgestellte Links abmelden."
+  }
+]
