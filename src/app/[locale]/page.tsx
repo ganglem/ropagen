@@ -94,8 +94,6 @@ export default function Home() {
     </SpotlightCard>
 </section>
 
-
-            {/* …rest of your normal page sections… */}
         </>
     )
 }
