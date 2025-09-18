@@ -9,7 +9,7 @@
         "email": "dpo@yourcompany.com",
         "phone": "+49 XX XXXXXXX"
       },
-      "role": "controller",
+      "role": "Controller",
       "jointController": [],
       "representative": "",
       "dpo": "Data Protection Officer Name, dpo@yourcompany.com"

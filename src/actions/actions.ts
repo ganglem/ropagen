@@ -3,11 +3,12 @@
 import {DocumentData, Template} from "@/models/DocumentData";
 import { generateText } from "ai";
 import {openai} from '@ai-sdk/openai';
-import templates from "../../data/mock.json";
 import {Mistral} from "@mistralai/mistralai";
 import {availableModels} from "@/config/models";
 
-export async function fetchMockTemplates(): Promise<Template[]> {
+export async function fetchMockTemplates(locale: string = "en"): Promise<Template[]> {
+    // Dynamically import the correct mock-<locale>.json file
+    const templates = await import(`../../data/mock-${locale}.json`).then(mod => mod.default);
     return templates as unknown as Template[];
 }
 
