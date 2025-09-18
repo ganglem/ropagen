@@ -5,20 +5,21 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select"
 import {fetchMockTemplates} from "@/actions/actions"
 import {DocumentData, Template} from "@/models/DocumentData"
-import {useTranslations} from "next-intl";
+import {useTranslations, useLocale} from "next-intl";
 
 
 export default function RopaTemplateSelector({onSelect}: {
     onSelect: (template: DocumentData) => void }){
 
     const t = useTranslations('Generate');
+    const locale = useLocale();
 
     const [templates, setTemplates] = useState<Template[]>([])
 
     useEffect(() => {
         const loadTemplates = async () => {
             try {
-                const data = await fetchMockTemplates()
+                const data = await fetchMockTemplates(locale)
                 console.log(data)
                 setTemplates(data)
             } catch (error) {
@@ -26,7 +27,7 @@ export default function RopaTemplateSelector({onSelect}: {
             }
         }
         loadTemplates()
-    }, [])
+    }, [locale])
 
     const handleTemplateChange = (templateId: string) => {
         const selectedTemplate = templates.find((t) => t.id === templateId)
@@ -72,4 +73,3 @@ export default function RopaTemplateSelector({onSelect}: {
         </Card>
     )
 }
-
