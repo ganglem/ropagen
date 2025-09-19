@@ -8,8 +8,8 @@ import {CardHeader, CardContent} from "@/components/ui/card";
 import { BrainCircuit } from 'lucide-react';
 import { Landmark } from 'lucide-react';
 import { UserCheck } from 'lucide-react';
-import {useTranslations} from 'next-intl';
 import {Link} from '@/i18n/navigation';
+import {getTranslations} from "next-intl/server";
 
 interface HomeProps {
     params: Promise<{
@@ -19,7 +19,7 @@ interface HomeProps {
 
 export default async function Home({ params }: HomeProps) {
     const { locale } = await params;
-    const t = useTranslations('Home');
+    const t = await getTranslations('Home');
 
     return (
         <>
