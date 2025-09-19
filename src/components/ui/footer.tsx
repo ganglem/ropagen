@@ -9,7 +9,7 @@ interface FooterProps {
 
 export default function Footer({
                                    productName = "ROPAgen",
-                                   githubUrl = "https://github.com/ganglem/ropagen", // Bitte anpassen
+                                   githubUrl = "https://github.com/DBIS-Legal-LLMs/ropagen",
                                }: FooterProps) {
 
     const t = useTranslations('Footer');
@@ -43,6 +43,11 @@ export default function Footer({
                                 <li>
                                     <Link href="/impressum" className="hover:text-primary transition-colors">
                                         {t("imprint")}
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/docs" className="hover:text-primary transition-colors">
+                                        {t("docs")}
                                     </Link>
                                 </li>
                                 {/*<li>*/}
