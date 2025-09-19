@@ -12,12 +12,13 @@ import {useTranslations} from 'next-intl';
 import {Link} from '@/i18n/navigation';
 
 interface HomeProps {
-    params: {
+    params: Promise<{
         locale: string;
-    };
+    }>;
 }
 
-export default function Home({ params: { locale } }: HomeProps) {
+export default async function Home({ params }: HomeProps) {
+    const { locale } = await params;
     const t = useTranslations('Home');
 
     return (
