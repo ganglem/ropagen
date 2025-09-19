@@ -259,6 +259,7 @@
   "Footer": {
     "legal": "Rechtliche Hinweise",
     "imprint": "Impressum",
-    "rights": "Alle Rechte vorbehalten."
+    "rights": "Alle Rechte vorbehalten.",
+    "docs": "Dokumentation"
   }
 }
