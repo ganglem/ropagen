@@ -256,6 +256,7 @@
   "Footer": {
     "legal": "Legal",
     "imprint": "Imprint",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "docs": "Documentation"
   }
 }
