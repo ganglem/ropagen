@@ -2,15 +2,13 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 import {ThemeProvider} from "next-themes";
 import NavPill from "@/components/ui/nav-pill";
-import Footer from "@/components/ui/footer";
 import Head from "next/head";
 import {NextIntlClientProvider, hasLocale} from 'next-intl';
 import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
 import {getTranslations} from 'next-intl/server';
 import LocaleSwitch from "@/components/ui/locale-switch";
-
-
+import ConditionalFooter from "@/components/ui/conditional-footer";
 
 export const metadata: Metadata = {
   title: "ROPAgen",
@@ -79,10 +77,8 @@ export default async function RootLayout({
                     <main className="flex-grow px-2 md:px-4 pt-16">{children}</main>
                   </div>
 
-                  {/* FOOTER - now outside the background area */}
-                  <footer className="py-0">
-                    <Footer/>
-                  </footer>
+                  {/* FOOTER - conditionally rendered, hidden on docs pages */}
+                  <ConditionalFooter />
                 </div>
               </ThemeProvider>
             </NextIntlClientProvider>
@@ -90,4 +86,3 @@ export default async function RootLayout({
         </html>
     );
 }
-
