@@ -1,8 +1,7 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 
-export function baseOptions(): BaseLayoutProps {
-    return {
-        transparentMode: 'none',
-        banner: undefined
-    };
+export const baseOptions: BaseLayoutProps = {
+    themeSwitch: {
+        enabled: false
+    }
 }
