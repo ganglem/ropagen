@@ -7,9 +7,11 @@ export const dynamic = 'force-dynamic';
 
 // @ts-ignore
 export default function Layout({ children }: LayoutProps<'/docs'>) {
-    return <RootProvider>
-        <DocsLayout tree={source.pageTree} {...baseOptions()}>
-            {children}
-        </DocsLayout>
-    </RootProvider>
+    return <div className="overscroll-y-hidden">
+        <RootProvider>
+            <DocsLayout tree={source.pageTree} {...baseOptions}>
+                {children}
+            </DocsLayout>
+        </RootProvider>
+    </div>
 }
