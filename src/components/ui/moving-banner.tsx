@@ -40,7 +40,7 @@ export default function MovingBanner({locale}: MovingBannerProps) {
                         {[...topRowItems, ...topRowItems].map((item, index) => (
                             <Link
                                 key={index}
-                                href="/generate"
+                                href={`/${locale}/generate`}
                                 className="flex-shrink-0 mx-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium whitespace-nowrap  -primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
                             >
                                 {item}
@@ -58,7 +58,7 @@ export default function MovingBanner({locale}: MovingBannerProps) {
                         {[...middleRowItems, ...middleRowItems].map((item, index) => (
                             <Link
                                 key={index}
-                                href="/generate"
+                                href={`/${locale}/generate`}
                                 className="flex-shrink-0 mx-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-full text-sm font-medium whitespace-nowrap  hover:bg-secondary/80 transition-colors cursor-pointer"
                             >
                                 {item}
@@ -76,7 +76,7 @@ export default function MovingBanner({locale}: MovingBannerProps) {
                         {[...bottomRowItems, ...bottomRowItems].map((item, index) => (
                             <Link
                                 key={index}
-                                href="/generate"
+                                href={`/${locale}/generate`}
                                 className="flex-shrink-0 mx-2 px-4 py-2 bg-accent text-accent-foreground rounded-full text-sm font-medium whitespace-nowrap  hover:bg-accent/80 transition-colors cursor-pointer"
                             >
                                 {item}
