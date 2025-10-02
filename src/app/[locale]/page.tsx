@@ -44,7 +44,7 @@ export default async function Home({ params }: HomeProps) {
 
                 {/* Text + Button at bottom-left */}
                 <div className="">
-                    <h1>
+                    <h1 >
                         <BlurText
                             text="ROPAgen"
                             delay={50}
@@ -70,7 +70,7 @@ export default async function Home({ params }: HomeProps) {
                 <MovingBanner locale={locale} />
             </div>
 
-            <section className="py-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <section className="container py-10 grid grid-cols-1 md:grid-cols-3 gap-6">
     <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(102, 102, 255, 0.2)">
         <CardHeader className="p-6 pb-0 flex items-center">
             <BrainCircuit className="mr-2 size-14" />
