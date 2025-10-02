@@ -15,7 +15,7 @@ export default function Footer({
     const t = useTranslations('Footer');
 
     return (
-        <footer className="border-t border-border text-muted-foreground">
+        <footer className="border-t border-border text-muted-foreground bg-background">
             <div className="container mx-auto px-4 py-5 md:px-3 lg:py-8">
                 <div className="grid gap-10 md:grid-cols-12">
                     {/* Linke Sektion: Produktname & GitHub */}

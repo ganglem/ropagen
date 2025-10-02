@@ -38,19 +38,20 @@ export default async function RootLayout({
         <body>
             <NextIntlClientProvider>
               <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                <div className="min-h-screen flex flex-col">
-                  <div className="relative flex-grow">
-                    <div
-                      className="absolute inset-0 -z-10 h-full w-full"
+                  <div
+                      className="fixed h-screen w-screen top-0 left-0 -z-50"
                       style={{
-                        backgroundImage: `
+                          backgroundImage: `
                           url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='noiseFilter'><feTurbulence type='fractalNoise' baseFrequency='100' numOctaves='1' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23noiseFilter)'/></svg>"),
                           radial-gradient(150% 150% at 50% 1%, var(--background) 5%, var(--primary) 100%)
                         `,
-                        backgroundBlendMode: "overlay",
-                        opacity: 0.95,
+                          backgroundBlendMode: "overlay",
+                          opacity: 0.95,
                       }}
-                    ></div>
+                  ></div>
+                <div className="min-h-screen flex flex-col">
+                  <div className="relative flex-grow">
+
 
                     {/* HEADER */}
                     <header className="sticky top-0 py-2 z-50 pointer-events-none">
