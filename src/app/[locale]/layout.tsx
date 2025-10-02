@@ -39,7 +39,6 @@ export default async function RootLayout({
             <NextIntlClientProvider>
               <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                 <div className="min-h-screen flex flex-col">
-                  {/* Background div moved to cover only header and main content */}
                   <div className="relative flex-grow">
                     <div
                       className="absolute inset-0 -z-10 h-full w-full"
@@ -56,7 +55,6 @@ export default async function RootLayout({
                     {/* HEADER */}
                     <header className="sticky top-0 py-2 z-50 pointer-events-none">
                       <div className="relative pointer-events-none flex items-center justify-end h-12">
-                        {/* Centered Nav */}
                         <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2">
                           <NavPill
                             logoSrc="/star.svg"
@@ -74,7 +72,7 @@ export default async function RootLayout({
                     </header>
 
                     {/* MAIN CONTENT */}
-                    <main className="flex-grow px-2 md:px-4 pt-16">{children}</main>
+                    <main className="flex-grow pt-16">{children}</main>
                   </div>
 
                   {/* FOOTER - conditionally rendered, hidden on docs pages */}
