@@ -223,6 +223,9 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
     const [isGenerating, setIsGenerating] = useState<boolean>(false);
     const [aiSuggestLoading, setAiSuggestLoading] = useState<Record<string, boolean>>({});
 
+    // Check if any AI suggest is currently loading
+    const isAnyAiSuggestLoading = Object.values(aiSuggestLoading).some(loading => loading);
+
     function handleTitleChange(title: string) {
         setDocumentData({...documentData, title});
     }
@@ -498,7 +501,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             <Button
                 variant="outline"
                 onClick={onClick}
-                disabled={disabled || isLoading}
+                disabled={disabled || isLoading || isAnyAiSuggestLoading}
                 className="flex items-center gap-2 ml-2"
             >
                 {isLoading ? (
@@ -630,6 +633,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             className="min-h-[100px]"
                             value={documentData.purposeOfDataProcessing}
                             onChange={(e) => handlePurposeChange(e.target.value)}
+                            disabled={isAnyAiSuggestLoading}
                         />
                     </div>
                 </CardContent>
@@ -648,6 +652,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             className="min-h-[100px]"
                             value={documentData.technicalOrganizationalMeasures}
                             onChange={(e) => handleTechnicalMeasuresChange(e.target.value)}
+                            disabled={isAnyAiSuggestLoading}
                         />
                     </div>
                 </CardContent>
@@ -667,6 +672,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     id={key}
                                     checked={value}
                                     onCheckedChange={(checked) => handleLegalBasisChange(key, checked === true)}
+                                    disabled={isAnyAiSuggestLoading}
                                 />
                                 <Label htmlFor={key} className="cursor-pointer">
                                     {getTranslatedLabel('legalBasis', key)}
@@ -681,6 +687,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             placeholder={t("otherLegalBasisPlaceholder")}
                             value={documentData.legalBasis.other}
                             onChange={(e) => handleLegalBasisChange('other', e.target.value)}
+                            disabled={isAnyAiSuggestLoading}
                         />
                     </div>
                 </CardContent>
@@ -700,6 +707,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     id={key}
                                     checked={value}
                                     onCheckedChange={(checked) => handleDataSourceChange(key, checked === true)}
+                                    disabled={isAnyAiSuggestLoading}
                                 />
                                 <Label htmlFor={key} className="cursor-pointer">
                                     {getTranslatedLabel('dataSources', key)}
@@ -714,6 +722,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             placeholder={t("otherDataSourcesPlaceholder")}
                             value={documentData.categories.dataSources.other}
                             onChange={(e) => handleDataSourceChange('other', e.target.value)}
+                            disabled={isAnyAiSuggestLoading}
                         />
                     </div>
                 </CardContent>
@@ -737,6 +746,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                                 id={`${categoryKey}-${subKey}`}
                                                 checked={subValue as boolean}
                                                 onCheckedChange={(checked) => handleDataCategoryChange(categoryKey, subKey, checked === true)}
+                                                disabled={isAnyAiSuggestLoading}
                                             />
                                             <Label htmlFor={`${categoryKey}-${subKey}`} className="cursor-pointer">
                                                 {getTranslatedLabel(categoryKey, subKey)}
@@ -752,6 +762,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                             placeholder={t("otherDataCategoriesPlaceholder")}
                                             value={documentData.categories.dataCategories.other.other}
                                             onChange={(e) => handleDataCategoryOtherChange(e.target.value)}
+                                            disabled={isAnyAiSuggestLoading}
                                         />
                                     </div>
                                 )}
@@ -779,6 +790,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                                     id={`${categoryKey}-${subKey}`}
                                                     checked={subValue as boolean}
                                                     onCheckedChange={(checked) => handlePersonCategoryChange(categoryKey, subKey, checked === true)}
+                                                    disabled={isAnyAiSuggestLoading}
                                                 />
                                                 <Label htmlFor={`${categoryKey}-${subKey}`} className="cursor-pointer">
                                                     {getTranslatedLabel(categoryKey, subKey)}
@@ -795,6 +807,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("otherPersonCategoriesPlaceholder")}
                                 value={documentData.categories.persons.other}
                                 onChange={(e) => handlePersonCategoryOtherChange(e.target.value)}
+                                disabled={isAnyAiSuggestLoading}
                             />
                         </div>
                     </div>
@@ -816,6 +829,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                         id={key}
                                         checked={value as boolean}
                                         onCheckedChange={(checked) => handleRetentionPeriodChange(key, checked === true)}
+                                        disabled={isAnyAiSuggestLoading}
                                     />
                                     <Label htmlFor={key} className="cursor-pointer">
                                         {getTranslatedLabel('retentionPeriods', key)}
@@ -830,6 +844,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("deletionTimePlaceholder")}
                                 value={documentData.retentionPeriods.deletionTime}
                                 onChange={(e) => handleRetentionPeriodChange('deletionTime', e.target.value)}
+                                disabled={isAnyAiSuggestLoading}
                             />
                         </div>
                     </div>
@@ -851,12 +866,13 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 className="min-h-[150px]"
                                 value={documentData.additionalInfo}
                                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleAdditionalInfoChange(e.target.value)}
+                                disabled={isAnyAiSuggestLoading}
                             />
                         </div>
 
                         <div className="w-full flex items-center justify-between">
                             <div className="">
-                                <Select value={selectedModel} onValueChange={setSelectedModel}>
+                                <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isAnyAiSuggestLoading}>
                                     <SelectTrigger id="model-select">
                                         <SelectValue placeholder="AI model"/>
                                     </SelectTrigger>
@@ -870,7 +886,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 </Select>
                             </div>
 
-                            <Button onClick={handleGenerateDocument} disabled={isGenerating} className="w-auto flex items-center gap-2">
+                            <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading} className="w-auto flex items-center gap-2">
                                 {isGenerating ? (
                                     <>
                                         <Loader2 className="h-4 w-4 animate-spin" />
