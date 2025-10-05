@@ -12,7 +12,7 @@ export async function fetchMockTemplates(locale: string = "en"): Promise<Templat
     return templates as unknown as Template[];
 }
 
-export async function generateDocument(data: DocumentData, locale: string, selectedModel: string = 'gpt-4o'): Promise<string> {
+export async function callLLMapi(data: DocumentData, locale: string, selectedModel: string = 'gpt-4o'): Promise<string> {
     try {
         const prompt = generatePromptFromData(data, locale);
         
@@ -56,8 +56,8 @@ export async function generateDocument(data: DocumentData, locale: string, selec
         return llmResponse;
 
     } catch (error) {
-        console.error('Error generating document:', error);
-        throw new Error('Failed to generate document');
+        console.error('API call error:', error);
+        throw new Error('API call failed.');
     }
 }
 
