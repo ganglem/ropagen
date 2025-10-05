@@ -8,12 +8,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {generateDocument} from "@/actions/actions";
+import {callLLMapi} from "@/actions/actions";
 import { Loader2 } from "lucide-react"
 import RopaTemplateSelector from "./ropa-template-selector";
 import {useTranslations} from "next-intl";
 import { availableModels, defaultModel } from "@/config/models";
 import { DocumentData } from "@/models/DocumentData";
+import { Sparkles } from "lucide-react";
 
 export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
@@ -412,16 +413,25 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
 
     async function handleGenerateDocument() {
         setIsGenerating(true);
-        const generatedDocument = await generateDocument(documentData, t("locale"), selectedModel);
+        const generatedDocument = await callLLMapi(documentData, t("locale"), selectedModel);
         setIsGenerating(false);
         setGeneratedDocument(generatedDocument)
     }
 
+    function AISuggestButton({ onClick, disabled }: { onClick: () => void, disabled: boolean }) {
+        return (
+            <Button variant="outline" onClick={onClick} disabled={disabled} className="flex items-center gap-2 ml-2">
+                <Sparkles className="w-4 h-4" />
+                AI Suggest
+            </Button>
+        );
+    }
+
     return (
         <div className="space-y-6 w-full">
+            <RopaTemplateSelector onSelect={setGeneratedDocument}></RopaTemplateSelector>
 
-            <RopaTemplateSelector onSelect={setDocumentData}></RopaTemplateSelector>
-
+            {/* Title Card (excluded) */}
             <Card>
                 <CardHeader>
                     <CardTitle>{t("info")}</CardTitle>
@@ -441,6 +451,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Organization Card (excluded) */}
             <Card>
                 <CardHeader>
                     <CardTitle>{t("organization")}</CardTitle>
@@ -517,9 +528,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Purpose of Data Processing */}
             <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("purposeOfDataProcessing")}</CardTitle>
+                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for purpose */}} disabled={!documentData.title} />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-2">
@@ -533,9 +546,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Technical and Organizational Measures */}
             <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("technicalOrganizationalMeasures")}</CardTitle>
+                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for measures */}} disabled={!documentData.title} />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-2">
@@ -549,9 +564,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Legal Basis */}
             <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("legalBasis")}</CardTitle>
+                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for legal basis */}} disabled={!documentData.title} />
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -580,9 +597,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Data Sources */}
             <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("dataSources")}</CardTitle>
+                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for data sources */}} disabled={!documentData.title} />
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -611,9 +630,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Data Categories */}
             <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("dataCategories")}</CardTitle>
+                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for data categories */}} disabled={!documentData.title} />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-6">
@@ -651,9 +672,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Person Categories */}
             <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("personCategories")}</CardTitle>
+                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for person categories */}} disabled={!documentData.title} />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-6">
@@ -689,9 +712,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Retention Periods */}
             <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("retentionPeriods")}</CardTitle>
+                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for retention periods */}} disabled={!documentData.title} />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
@@ -722,9 +747,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Additional Information */}
             <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("additionalInfo")}</CardTitle>
+                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for additional info */}} disabled={!documentData.title} />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
@@ -771,6 +798,3 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         </div>
     )
 }
-
-
-
