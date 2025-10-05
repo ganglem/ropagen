@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {callLLMapi} from "@/actions/actions";
+import {callLLMapi, callLLMapiForSuggestion} from "@/actions/actions";
 import { Loader2 } from "lucide-react"
 import RopaTemplateSelector from "./ropa-template-selector";
 import {useTranslations} from "next-intl";
@@ -18,7 +18,6 @@ import { Sparkles } from "lucide-react";
 
 export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
-    // TODO: handle external and third country better
     const t = useTranslations('Generate');
 
     const [documentData, setDocumentData] = useState<DocumentData>({
@@ -221,7 +220,8 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
     });
 
     const [selectedModel, setSelectedModel] = useState<string>(defaultModel);
-    const [isGenerating, setIsGenerating] = useState<boolean>(false)
+    const [isGenerating, setIsGenerating] = useState<boolean>(false);
+    const [aiSuggestLoading, setAiSuggestLoading] = useState<Record<string, boolean>>({});
 
     function handleTitleChange(title: string) {
         setDocumentData({...documentData, title});
@@ -418,18 +418,107 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         setGeneratedDocument(generatedDocument)
     }
 
-    function AISuggestButton({ onClick, disabled }: { onClick: () => void, disabled: boolean }) {
+    async function handleAiSuggest(source: string) {
+        setAiSuggestLoading({...aiSuggestLoading, [source]: true});
+        try {
+            const suggestion = await callLLMapiForSuggestion(documentData, t("locale"), source, selectedModel);
+
+            // Apply the suggestion based on the source
+            switch (source) {
+                case 'purposeOfDataProcessing':
+                    if (suggestion.purposeOfDataProcessing) {
+                        setDocumentData({...documentData, purposeOfDataProcessing: suggestion.purposeOfDataProcessing});
+                    }
+                    break;
+                case 'technicalOrganizationalMeasures':
+                    if (suggestion.technicalOrganizationalMeasures) {
+                        setDocumentData({...documentData, technicalOrganizationalMeasures: suggestion.technicalOrganizationalMeasures});
+                    }
+                    break;
+                case 'legalBasis':
+                    if (suggestion.legalBasis) {
+                        setDocumentData({...documentData, legalBasis: suggestion.legalBasis});
+                    }
+                    break;
+                case 'dataSources':
+                    if (suggestion.dataSources) {
+                        setDocumentData({
+                            ...documentData,
+                            categories: {
+                                ...documentData.categories,
+                                dataSources: suggestion.dataSources
+                            }
+                        });
+                    }
+                    break;
+                case 'dataCategories':
+                    if (suggestion.dataCategories) {
+                        setDocumentData({
+                            ...documentData,
+                            categories: {
+                                ...documentData.categories,
+                                dataCategories: suggestion.dataCategories
+                            }
+                        });
+                    }
+                    break;
+                case 'personCategories':
+                    if (suggestion.persons) {
+                        setDocumentData({
+                            ...documentData,
+                            categories: {
+                                ...documentData.categories,
+                                persons: suggestion.persons
+                            }
+                        });
+                    }
+                    break;
+                case 'retentionPeriods':
+                    if (suggestion.retentionPeriods) {
+                        setDocumentData({...documentData, retentionPeriods: suggestion.retentionPeriods});
+                    }
+                    break;
+                case 'additionalInfo':
+                    if (suggestion.additionalInfo) {
+                        setDocumentData({...documentData, additionalInfo: suggestion.additionalInfo});
+                    }
+                    break;
+            }
+        } catch (error) {
+            console.error('AI suggestion failed:', error);
+            // You might want to show an error toast here
+        } finally {
+            setAiSuggestLoading({...aiSuggestLoading, [source]: false});
+        }
+    }
+
+    function AISuggestButton({ onClick, disabled, source }: { onClick: () => void, disabled: boolean, source: string }) {
+        const isLoading = aiSuggestLoading[source];
         return (
-            <Button variant="outline" onClick={onClick} disabled={disabled} className="flex items-center gap-2 ml-2">
-                <Sparkles className="w-4 h-4" />
+            <Button
+                variant="outline"
+                onClick={onClick}
+                disabled={disabled || isLoading}
+                className="flex items-center gap-2 ml-2"
+            >
+                {isLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                    <Sparkles className="w-4 h-4" />
+                )}
                 AI Suggest
             </Button>
         );
     }
 
+    // Add function to handle template selection
+    function handleTemplateSelect(template: DocumentData) {
+        setDocumentData(template);
+    }
+
     return (
         <div className="space-y-6 w-full">
-            <RopaTemplateSelector onSelect={setGeneratedDocument}></RopaTemplateSelector>
+            <RopaTemplateSelector onSelect={handleTemplateSelect}></RopaTemplateSelector>
 
             {/* Title Card (excluded) */}
             <Card>
@@ -532,7 +621,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("purposeOfDataProcessing")}</CardTitle>
-                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for purpose */}} disabled={!documentData.title} />
+                    <AISuggestButton onClick={() => handleAiSuggest('purposeOfDataProcessing')} disabled={!documentData.title} source="purposeOfDataProcessing" />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-2">
@@ -550,7 +639,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("technicalOrganizationalMeasures")}</CardTitle>
-                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for measures */}} disabled={!documentData.title} />
+                    <AISuggestButton onClick={() => handleAiSuggest('technicalOrganizationalMeasures')} disabled={!documentData.title} source="technicalOrganizationalMeasures" />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-2">
@@ -568,7 +657,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("legalBasis")}</CardTitle>
-                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for legal basis */}} disabled={!documentData.title} />
+                    <AISuggestButton onClick={() => handleAiSuggest('legalBasis')} disabled={!documentData.title} source="legalBasis" />
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -601,7 +690,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("dataSources")}</CardTitle>
-                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for data sources */}} disabled={!documentData.title} />
+                    <AISuggestButton onClick={() => handleAiSuggest('dataSources')} disabled={!documentData.title} source="dataSources" />
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -634,7 +723,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("dataCategories")}</CardTitle>
-                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for data categories */}} disabled={!documentData.title} />
+                    <AISuggestButton onClick={() => handleAiSuggest('dataCategories')} disabled={!documentData.title} source="dataCategories" />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-6">
@@ -676,7 +765,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("personCategories")}</CardTitle>
-                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for person categories */}} disabled={!documentData.title} />
+                    <AISuggestButton onClick={() => handleAiSuggest('personCategories')} disabled={!documentData.title} source="personCategories" />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-6">
@@ -716,7 +805,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("retentionPeriods")}</CardTitle>
-                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for retention periods */}} disabled={!documentData.title} />
+                    <AISuggestButton onClick={() => handleAiSuggest('retentionPeriods')} disabled={!documentData.title} source="retentionPeriods" />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
@@ -751,7 +840,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>{t("additionalInfo")}</CardTitle>
-                    <AISuggestButton onClick={() => {/* TODO: handle AI suggest for additional info */}} disabled={!documentData.title} />
+                    <AISuggestButton onClick={() => handleAiSuggest('additionalInfo')} disabled={!documentData.title} source="additionalInfo" />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">

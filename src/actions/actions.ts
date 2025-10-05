@@ -14,8 +14,8 @@ export async function fetchMockTemplates(locale: string = "en"): Promise<Templat
 
 export async function callLLMapi(data: DocumentData, locale: string, selectedModel: string = 'gpt-4o'): Promise<string> {
     try {
-        const prompt = generatePromptFromData(data, locale);
-        
+        const prompt = await generatePromptFromData(data, locale);
+
         //TODO this is hardcoded, make it more flexible in the future
 
         let llmResponse = "";
@@ -37,8 +37,9 @@ export async function callLLMapi(data: DocumentData, locale: string, selectedMod
                 ],
             })
 
-            // @ts-ignore
-            llmResponse = response.choices[0].message.content[1].text as string;
+            // Fix: Correctly access the Mistral response content with safety checks
+            const content = response.choices[0]?.message?.content;
+            llmResponse = typeof content === 'string' ? content : String(content || '');
 
             console.log(response)
 
@@ -48,12 +49,13 @@ export async function callLLMapi(data: DocumentData, locale: string, selectedMod
                 prompt: prompt,
                 temperature: 0,
             });
-            llmResponse = response.text;
+            llmResponse = response.text || '';
 
             console.log(response)
         }
 
-        return llmResponse;
+        // Ensure we always return a string
+        return typeof llmResponse === 'string' ? llmResponse : String(llmResponse);
 
     } catch (error) {
         console.error('API call error:', error);
@@ -61,7 +63,66 @@ export async function callLLMapi(data: DocumentData, locale: string, selectedMod
     }
 }
 
-function generatePromptFromData(documentData: DocumentData, locale: string): string {
+export async function callLLMapiForSuggestion(data: DocumentData, locale: string, source: string, selectedModel: string = 'gpt-4o'): Promise<any> {
+    try {
+        const prompt = await generatePromptFromData(data, locale, source);
+
+        let llmResponse = "";
+
+        const modelEndpoint = availableModels.find(model => model.name == selectedModel)?.endpoint
+
+        if (modelEndpoint == "mistral") {
+            const mistralApiKey = process.env.MISTRAL_API_KEY;
+
+            const client = new Mistral({apiKey: mistralApiKey});
+
+            const response = await client.chat.complete({
+                model: selectedModel,
+                messages: [
+                    {
+                        role: 'user',
+                        content: prompt,
+                    },
+                ],
+            })
+
+            const content = response.choices[0]?.message?.content;
+            llmResponse = typeof content === 'string' ? content : String(content || '');
+
+            console.log(response)
+
+        } else if (modelEndpoint == "openai") {
+            const response = await generateText({
+                model: openai(selectedModel),
+                prompt: prompt,
+                temperature: 0.3,
+            });
+            llmResponse = response.text || '';
+
+            console.log(response)
+        }
+
+        // Parse the JSON response
+        try {
+            const jsonMatch = llmResponse.match(/```json\n([\s\S]*?)\n```/);
+            if (jsonMatch) {
+                return JSON.parse(jsonMatch[1]);
+            }
+            // Try to parse directly if no code block
+            return JSON.parse(llmResponse);
+        } catch (parseError) {
+            console.error('Failed to parse LLM response as JSON:', parseError);
+            console.log('Raw response:', llmResponse);
+            throw new Error('Failed to parse AI suggestion response');
+        }
+
+    } catch (error) {
+        console.error('API call error:', error);
+        throw new Error('API call failed.');
+    }
+}
+
+async function generatePromptFromData(documentData: DocumentData, locale: string, source: string = 'finalropa'): Promise<string> {
 
     // Process data sources
     const selectedDataSources = Object.entries(documentData.categories.dataSources)
@@ -154,15 +215,33 @@ function generatePromptFromData(documentData: DocumentData, locale: string): str
         })
         .join('\n');
 
-    const prompt = `
-    You are an expert in data protection compliance. Generate a professional, structured Records of Processing Activities (ROPA) document in full compliance with the EU General Data Protection Regulation (GDPR).
-    
-    This ROPA document must be suitable for official regulatory review and written in formal business language.
-    
+    const promptTemplate = await import(`../../data/prompt.json`).then(mod => mod.default);
+
+    let basePrompt: string;
+    switch (source) {
+        case 'purposeOfDataProcessing':
+        case 'technicalOrganizationalMeasures':
+        case 'legalBasis':
+        case 'dataSources':
+        case 'dataCategories':
+        case 'personCategories':
+        case 'retentionPeriods':
+        case 'additionalInfo':
+            basePrompt = promptTemplate[source];
+            break;
+        case 'finalropa':
+        default:
+            basePrompt = promptTemplate.finalropa;
+            break;
+    }
+
+    // For suggestion prompts, add context data
+    const contextData = `
+
     Language: ${locale}
     
     Document Title:
-    ${documentData.title || 'No title provided. Use standard GDPR best practices.'}
+    ${documentData.title || 'No title provided.'}
     
     Organization Information:
     - Name: ${documentData.organization.name || 'Not specified'}
@@ -174,13 +253,13 @@ function generatePromptFromData(documentData: DocumentData, locale: string): str
     - Data Protection Officer: ${documentData.organization.dpo || 'Not specified'}
     
     Purpose of Data Processing:
-    ${documentData.purposeOfDataProcessing || 'No purpose specified. Use standard GDPR processing practices.'}
+    ${documentData.purposeOfDataProcessing || 'No purpose specified.'}
     
     Technical and Organizational Measures:
-    ${documentData.technicalOrganizationalMeasures || 'No measures specified. Use standard GDPR security measures.'}
+    ${documentData.technicalOrganizationalMeasures || 'No measures specified.'}
     
     Legal Basis for Processing:
-    ${selectedLegalBasis || 'No legal basis specified. Apply general GDPR legal basis requirements.'}
+    ${selectedLegalBasis || 'No legal basis specified.'}
     
     Data Sources:
     ${selectedDataSources || 'No data sources specified.'}
@@ -192,27 +271,14 @@ function generatePromptFromData(documentData: DocumentData, locale: string): str
     ${selectedPersonCategories || 'No person categories specified.'}
     
     Retention Periods:
-    ${retentionInfo || 'No retention periods specified. Use standard GDPR retention practices.'}
+    ${retentionInfo || 'No retention periods specified.'}
     
-    Additional Information and Special Instructions:
-    ${documentData.additionalInfo || 'No additional instructions provided. Use standard GDPR best practices.'}
+    Additional Information:
+    ${documentData.additionalInfo || 'No additional information provided.'}
     
-    Instructions:
-    - Create a comprehensive ROPA document structure with the following sections:
-      1. Organization and Controller Information
-      2. Purpose and Legal Basis for Processing
-      3. Data Categories and Sources
-      4. Data Subjects and Recipients
-      5. Data Retention and Deletion
-      6. Technical and Organizational Measures
-    - Each category can have a continous text and bullet points as needed.
-    - Ensure compliance with GDPR Articles 30 (Records of processing activities) requirements.
-    - Respect the Additional Information and Special Instructions provided.
-    - You must include all data given, and must not omit any data provided.
-    
-    The output should be suitable for use by a Data Protection Officer (DPO) or legal counsel.
-    The output should be in .md style with proper headings and formatting.
         `.trim();
+
+    const prompt = basePrompt + contextData;
 
     console.log(prompt)
     return prompt;
