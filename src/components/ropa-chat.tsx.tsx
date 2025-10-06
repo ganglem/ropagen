@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {callAPI} from "@/actions/actions";
+import {callLLMapi, callLLMapiForSuggestion} from "@/actions/actions";
 import { Loader2 } from "lucide-react"
 import RopaTemplateSelector from "./ropa-template-selector";
 import {useTranslations} from "next-intl";
@@ -36,11 +36,11 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         },
         processors: [],
         //thirdCountryTransfers: [
-            //{
-                //"country":              "",
-                //"transferMechanism":"",
-                //"safeguards":""
-            //}
+        //{
+        //"country":              "",
+        //"transferMechanism":"",
+        //"safeguards":""
+        //}
         //],
         technicalOrganizationalMeasures: "",
         purposeOfDataProcessing: "",
@@ -413,7 +413,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
 
     async function handleGenerateDocument() {
         setIsGenerating(true);
-        const generatedDocument = await callAPI(documentData, t("locale"), 'finalropa', selectedModel);
+        const generatedDocument = await callLLMapi(documentData, t("locale"), selectedModel);
         setIsGenerating(false);
         setGeneratedDocument(generatedDocument)
     }
@@ -421,7 +421,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
     async function handleAiSuggest(source: string) {
         setAiSuggestLoading({...aiSuggestLoading, [source]: true});
         try {
-            const suggestion = await callAPI(documentData, t("locale"), source, selectedModel);
+            const suggestion = await callLLMapiForSuggestion(documentData, t("locale"), source, selectedModel);
 
             // Apply the suggestion based on the source
             switch (source) {
@@ -523,9 +523,8 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         setDocumentData(template);
     }
 
-    return (
+    return(
         <div className="space-y-6 w-full">
-            <RopaTemplateSelector onSelect={handleTemplateSelect}></RopaTemplateSelector>
 
             {/* Title Card (excluded) */}
             <Card>
@@ -541,7 +540,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("infoPlaceholder")}
                                 value={documentData.title}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleTitleChange(e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                     </div>
@@ -562,7 +560,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationNamePlaceholder")}
                                 value={documentData.organization.name}
                                 onChange={(e) => handleOrganizationChange('name', e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                         <div className="space-y-2">
@@ -572,7 +569,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationRolePlaceholder")}
                                 value={documentData.organization.role}
                                 onChange={(e) => handleOrganizationChange('role', e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -583,7 +579,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     placeholder={t("organizationAddressPlaceholder")}
                                     value={documentData.organization.contact.address}
                                     onChange={(e) => handleOrganizationContactChange('address', e.target.value)}
-                                    disabled={isGenerating || isAnyAiSuggestLoading}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -594,7 +589,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     placeholder={t("organizationEmailPlaceholder")}
                                     value={documentData.organization.contact.email}
                                     onChange={(e) => handleOrganizationContactChange('email', e.target.value)}
-                                    disabled={isGenerating || isAnyAiSuggestLoading}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -604,7 +598,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     placeholder={t("organizationPhonePlaceholder")}
                                     value={documentData.organization.contact.phone}
                                     onChange={(e) => handleOrganizationContactChange('phone', e.target.value)}
-                                    disabled={isGenerating || isAnyAiSuggestLoading}
                                 />
                             </div>
                         </div>
@@ -615,7 +608,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationRepresentativePlaceholder")}
                                 value={documentData.organization.representative}
                                 onChange={(e) => handleOrganizationChange('representative', e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                         <div className="space-y-2">
@@ -625,293 +617,12 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationDpoPlaceholder")}
                                 value={documentData.organization.dpo}
                                 onChange={(e) => handleOrganizationChange('dpo', e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                     </div>
                 </CardContent>
             </Card>
 
-            {/* Purpose of Data Processing */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("purposeOfDataProcessing")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('purposeOfDataProcessing')} disabled={!documentData.title} source="purposeOfDataProcessing" />
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-2">
-                        <Textarea
-                            placeholder={t("purposeOfDataProcessingPlaceholder")}
-                            className="min-h-[100px]"
-                            value={documentData.purposeOfDataProcessing}
-                            onChange={(e) => handlePurposeChange(e.target.value)}
-                            disabled={isGenerating || isAnyAiSuggestLoading}
-                        />
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Technical and Organizational Measures */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("technicalOrganizationalMeasures")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('technicalOrganizationalMeasures')} disabled={!documentData.title} source="technicalOrganizationalMeasures" />
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-2">
-                        <Textarea
-                            placeholder={t("technicalOrganizationalMeasuresPlaceholder")}
-                            className="min-h-[100px]"
-                            value={documentData.technicalOrganizationalMeasures}
-                            onChange={(e) => handleTechnicalMeasuresChange(e.target.value)}
-                            disabled={isGenerating || isAnyAiSuggestLoading}
-                        />
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Legal Basis */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("legalBasis")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('legalBasis')} disabled={!documentData.title} source="legalBasis" />
-                </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {Object.entries(documentData.legalBasis).filter(([key]) => key !== 'other').map(([key, value]) => (
-                            <div key={key} className="flex items-center space-x-2">
-                                <Checkbox
-                                    id={key}
-                                    checked={value}
-                                    onCheckedChange={(checked) => handleLegalBasisChange(key, checked === true)}
-                                    disabled={isGenerating || isAnyAiSuggestLoading}
-                                />
-                                <Label htmlFor={key} className="cursor-pointer">
-                                    {getTranslatedLabel('legalBasis', key)}
-                                </Label>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="mt-4 space-y-2">
-                        <Label htmlFor="legalBasisOther">{t("otherLegalBasis")}</Label>
-                        <Input
-                            id="legalBasisOther"
-                            placeholder={t("otherLegalBasisPlaceholder")}
-                            value={documentData.legalBasis.other}
-                            onChange={(e) => handleLegalBasisChange('other', e.target.value)}
-                            disabled={isGenerating || isAnyAiSuggestLoading}
-                        />
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Data Sources */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("dataSources")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('dataSources')} disabled={!documentData.title} source="dataSources" />
-                </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {Object.entries(documentData.categories.dataSources).filter(([key]) => key !== 'other').map(([key, value]) => (
-                            <div key={key} className="flex items-center space-x-2">
-                                <Checkbox
-                                    id={key}
-                                    checked={value}
-                                    onCheckedChange={(checked) => handleDataSourceChange(key, checked === true)}
-                                    disabled={isGenerating || isAnyAiSuggestLoading}
-                                />
-                                <Label htmlFor={key} className="cursor-pointer">
-                                    {getTranslatedLabel('dataSources', key)}
-                                </Label>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="mt-4 space-y-2">
-                        <Label htmlFor="dataSourcesOther">{t("otherDataSources")}</Label>
-                        <Input
-                            id="dataSourcesOther"
-                            placeholder={t("otherDataSourcesPlaceholder")}
-                            value={documentData.categories.dataSources.other}
-                            onChange={(e) => handleDataSourceChange('other', e.target.value)}
-                            disabled={isGenerating || isAnyAiSuggestLoading}
-                        />
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Data Categories */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("dataCategories")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('dataCategories')} disabled={!documentData.title} source="dataCategories" />
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-6">
-                        {Object.entries(documentData.categories.dataCategories).filter(([key]) => key !== 'other' || key === 'other').map(([categoryKey, categoryValue]) => (
-                            <div key={categoryKey} className="space-y-3">
-                                <h4 className="font-medium capitalize">{getTranslatedCategoryHeader(categoryKey)}</h4>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-4">
-                                    {Object.entries(categoryValue).filter(([subKey]) => subKey !== 'other').map(([subKey, subValue]) => (
-                                        <div key={subKey} className="flex items-center space-x-2">
-                                            <Checkbox
-                                                id={`${categoryKey}-${subKey}`}
-                                                checked={subValue as boolean}
-                                                onCheckedChange={(checked) => handleDataCategoryChange(categoryKey, subKey, checked === true)}
-                                                disabled={isGenerating || isAnyAiSuggestLoading}
-                                            />
-                                            <Label htmlFor={`${categoryKey}-${subKey}`} className="cursor-pointer">
-                                                {getTranslatedLabel(categoryKey, subKey)}
-                                            </Label>
-                                        </div>
-                                    ))}
-                                </div>
-                                {categoryKey === 'other' && (
-                                    <div className="pl-4 space-y-2">
-                                        <Label htmlFor="dataCategoriesOther">{t("otherDataCategories")}</Label>
-                                        <Input
-                                            id="dataCategoriesOther"
-                                            placeholder={t("otherDataCategoriesPlaceholder")}
-                                            value={documentData.categories.dataCategories.other.other}
-                                            onChange={(e) => handleDataCategoryOtherChange(e.target.value)}
-                                            disabled={isGenerating || isAnyAiSuggestLoading}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Person Categories */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("personCategories")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('personCategories')} disabled={!documentData.title} source="personCategories" />
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-6">
-                        {Object.entries(documentData.categories.persons).filter(([key]) => key !== 'other').map(([categoryKey, categoryValue]) => (
-                                <div key={categoryKey} className="space-y-3">
-                                    <h4 className="font-medium capitalize">{getTranslatedCategoryHeader(categoryKey)}</h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-4">
-                                        {Object.entries(categoryValue).map(([subKey, subValue]) => (
-                                            <div key={subKey} className="flex items-center space-x-2">
-                                                <Checkbox
-                                                    id={`${categoryKey}-${subKey}`}
-                                                    checked={subValue as boolean}
-                                                    onCheckedChange={(checked) => handlePersonCategoryChange(categoryKey, subKey, checked === true)}
-                                                    disabled={isGenerating || isAnyAiSuggestLoading}
-                                                />
-                                                <Label htmlFor={`${categoryKey}-${subKey}`} className="cursor-pointer">
-                                                    {getTranslatedLabel(categoryKey, subKey)}
-                                                </Label>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        <div className="space-y-2">
-                            <Label htmlFor="personCategoriesOther">{t("otherPersonCategories")}</Label>
-                            <Input
-                                id="personCategoriesOther"
-                                placeholder={t("otherPersonCategoriesPlaceholder")}
-                                value={documentData.categories.persons.other}
-                                onChange={(e) => handlePersonCategoryOtherChange(e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
-                            />
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Retention Periods */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("retentionPeriods")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('retentionPeriods')} disabled={!documentData.title} source="retentionPeriods" />
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {Object.entries(documentData.retentionPeriods).filter(([key]) => key !== 'deletionTime').map(([key, value]) => (
-                                <div key={key} className="flex items-center space-x-2">
-                                    <Checkbox
-                                        id={key}
-                                        checked={value as boolean}
-                                        onCheckedChange={(checked) => handleRetentionPeriodChange(key, checked === true)}
-                                        disabled={isGenerating || isAnyAiSuggestLoading}
-                                    />
-                                    <Label htmlFor={key} className="cursor-pointer">
-                                        {getTranslatedLabel('retentionPeriods', key)}
-                                    </Label>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="deletionTime">{t("deletionTime")}</Label>
-                            <Input
-                                id="deletionTime"
-                                placeholder={t("deletionTimePlaceholder")}
-                                value={documentData.retentionPeriods.deletionTime}
-                                onChange={(e) => handleRetentionPeriodChange('deletionTime', e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
-                            />
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Additional Information */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("additionalInfo")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('additionalInfo')} disabled={!documentData.title} source="additionalInfo" />
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <Textarea
-                                id="additionalInfo"
-                                placeholder={t("additionalInfoPlaceholder")}
-                                className="min-h-[150px]"
-                                value={documentData.additionalInfo}
-                                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleAdditionalInfoChange(e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
-                            />
-                        </div>
-
-                        <div className="w-full flex items-center justify-between">
-                            <div className="">
-                                <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isGenerating || isAnyAiSuggestLoading}>
-                                    <SelectTrigger id="model-select">
-                                        <SelectValue placeholder="AI model"/>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {availableModels.map((model) => (
-                                            <SelectItem key={model.name} value={model.name}>
-                                                {model.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading} className="w-auto flex items-center gap-2">
-                                {isGenerating ? (
-                                    <>
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        {t("generating")}
-                                    </>
-                                ) : (
-                                    t("generateButton")
-                                )}
-                            </Button>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
         </div>
     )
 }
