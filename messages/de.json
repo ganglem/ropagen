@@ -21,6 +21,8 @@
     "info": "Dokumentinformationen",
     "infoTitle": "Dokumenttitel",
     "infoPlaceholder": "z.B. Mitarbeiterdatenverarbeitung, Kundenverwaltung, Marketingaktivitäten",
+    "aiSuggest": "KI-Vorschlag",
+    "aiSuggestTooltip": "Bitte geben Sie einen Dokumenttitel ein, bevor Sie KI-Vorschläge verwenden",
     "categories": "Dokumentkategorien",
     "additionalInfo": "Zusätzliche Informationen",
     "additionalInfoPlaceholder": "z.B. Besondere Sicherheitsmaßnahmen, Auftragsverarbeiter, internationale Übermittlungen...",

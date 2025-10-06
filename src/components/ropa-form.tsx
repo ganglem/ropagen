@@ -19,7 +19,6 @@ import { Sparkles } from "lucide-react";
 export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
     const t = useTranslations('Generate');
-
     const [documentData, setDocumentData] = useState<DocumentData>({
         id: "",
         title: "",
@@ -497,20 +496,28 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
 
     function AISuggestButton({ onClick, disabled, source }: { onClick: () => void, disabled: boolean, source: string }) {
         const isLoading = aiSuggestLoading[source];
+        const isTitleMissing = !documentData.title.trim();
+        const isButtonDisabled = disabled || isLoading || isAnyAiSuggestLoading;
+
         return (
-            <Button
-                variant="outline"
-                onClick={onClick}
-                disabled={disabled || isLoading || isAnyAiSuggestLoading}
-                className="flex items-center gap-2 ml-2"
+            <div
+                className="relative inline-block"
+                title={isButtonDisabled && isTitleMissing ? t("aiSuggestTooltip") : ""}
             >
-                {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                    <Sparkles className="w-4 h-4" />
-                )}
-                AI Suggest
-            </Button>
+                <Button
+                    variant="outline"
+                    onClick={onClick}
+                    disabled={isButtonDisabled}
+                    className="flex items-center gap-2 ml-2"
+                >
+                    {isLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                        <Sparkles className="w-4 h-4" />
+                    )}
+                    {t("aiSuggest")}
+                </Button>
+            </div>
         );
     }
 
