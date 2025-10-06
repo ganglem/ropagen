@@ -19,6 +19,8 @@
     "info": "Document Information",
     "infoTitle": "Document Title",
     "infoPlaceholder": "e.g., Employee Data Processing, Customer Management, Marketing Activities",
+    "aiSuggest": "AI Suggest",
+    "aiSuggestTooltip": "Please enter a document title before using AI suggestions",
     "categories": "Document Categories",
     "additionalInfo": "Additional Information",
     "additionalInfoPlaceholder": "e.g., Special security measures, third-party processors, international transfers...",
