@@ -23,6 +23,8 @@
     "infoPlaceholder": "z.B. Mitarbeiterdatenverarbeitung, Kundenverwaltung, Marketingaktivitäten",
     "aiSuggest": "KI-Vorschlag",
     "aiSuggestTooltip": "Bitte geben Sie einen Dokumenttitel ein, bevor Sie KI-Vorschläge verwenden",
+    "askAI": "KI Fragen",
+    "askAIPlaceholder": "Stellen Sie eine spezifische Frage zu diesem Abschnitt...",
     "categories": "Dokumentkategorien",
     "additionalInfo": "Zusätzliche Informationen",
     "additionalInfoPlaceholder": "z.B. Besondere Sicherheitsmaßnahmen, Auftragsverarbeiter, internationale Übermittlungen...",
