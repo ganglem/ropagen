@@ -4,17 +4,14 @@ import {ChangeEvent, useState} from "react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "./ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {callLLMapi, callLLMapiForSuggestion} from "@/actions/actions";
-import { Loader2 } from "lucide-react"
+import { Loader2, Send } from "lucide-react"
 import RopaTemplateSelector from "./ropa-template-selector";
 import {useTranslations} from "next-intl";
 import { availableModels, defaultModel } from "@/config/models";
 import { DocumentData } from "@/models/DocumentData";
-import { Sparkles } from "lucide-react";
 
 export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
@@ -221,6 +218,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
     const [selectedModel, setSelectedModel] = useState<string>(defaultModel);
     const [isGenerating, setIsGenerating] = useState<boolean>(false);
     const [aiSuggestLoading, setAiSuggestLoading] = useState<Record<string, boolean>>({});
+    const [askAiQuestions, setAskAiQuestions] = useState<Record<string, string>>({});
 
     // Check if any AI suggest is currently loading
     const isAnyAiSuggestLoading = Object.values(aiSuggestLoading).some(loading => loading);
@@ -492,30 +490,121 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         }
     }
 
-    function AISuggestButton({ onClick, disabled, source }: { onClick: () => void, disabled: boolean, source: string }) {
+    function AskAISection({ source }: { source: string }) {
         const isLoading = aiSuggestLoading[source];
-        const isTitleMissing = !documentData.title.trim();
-        const isButtonDisabled = disabled || isLoading || isAnyAiSuggestLoading;
+        const question = askAiQuestions[source] || '';
+
+        const handleQuestionChange = (value: string) => {
+            setAskAiQuestions({...askAiQuestions, [source]: value});
+        };
+
+        const handleAskAI = async () => {
+            if (!question.trim()) return;
+
+            setAiSuggestLoading({...aiSuggestLoading, [source]: true});
+            try {
+                const suggestion = await callLLMapiForSuggestion(documentData, t("locale"), source, selectedModel);
+
+                // Apply the suggestion based on the source
+                switch (source) {
+                    case 'purposeOfDataProcessing':
+                        if (suggestion.purposeOfDataProcessing) {
+                            setDocumentData({...documentData, purposeOfDataProcessing: suggestion.purposeOfDataProcessing});
+                        }
+                        break;
+                    case 'technicalOrganizationalMeasures':
+                        if (suggestion.technicalOrganizationalMeasures) {
+                            setDocumentData({...documentData, technicalOrganizationalMeasures: suggestion.technicalOrganizationalMeasures});
+                        }
+                        break;
+                    case 'legalBasis':
+                        if (suggestion.legalBasis) {
+                            setDocumentData({...documentData, legalBasis: suggestion.legalBasis});
+                        }
+                        break;
+                    case 'dataSources':
+                        if (suggestion.dataSources) {
+                            setDocumentData({
+                                ...documentData,
+                                categories: {
+                                    ...documentData.categories,
+                                    dataSources: suggestion.dataSources
+                                }
+                            });
+                        }
+                        break;
+                    case 'dataCategories':
+                        if (suggestion.dataCategories) {
+                            setDocumentData({
+                                ...documentData,
+                                categories: {
+                                    ...documentData.categories,
+                                    dataCategories: suggestion.dataCategories
+                                }
+                            });
+                        }
+                        break;
+                    case 'personCategories':
+                        if (suggestion.persons) {
+                            setDocumentData({
+                                ...documentData,
+                                categories: {
+                                    ...documentData.categories,
+                                    persons: suggestion.persons
+                                }
+                            });
+                        }
+                        break;
+                    case 'retentionPeriods':
+                        if (suggestion.retentionPeriods) {
+                            setDocumentData({...documentData, retentionPeriods: suggestion.retentionPeriods});
+                        }
+                        break;
+                    case 'additionalInfo':
+                        if (suggestion.additionalInfo) {
+                            setDocumentData({...documentData, additionalInfo: suggestion.additionalInfo});
+                        }
+                        break;
+                }
+
+                // Clear the question after successful submission
+                setAskAiQuestions({...askAiQuestions, [source]: ''});
+            } catch (error) {
+                console.error('AI question failed:', error);
+            } finally {
+                setAiSuggestLoading({...aiSuggestLoading, [source]: false});
+            }
+        };
 
         return (
-            <div
-                className="relative inline-block"
-                title={isButtonDisabled && isTitleMissing ? t("aiSuggestTooltip") : ""}
-            >
-                <Button
-                    variant="outline"
-                    onClick={onClick}
-                    disabled={isButtonDisabled}
-                    className="flex items-center gap-2 ml-2"
-                >
-                    {isLoading ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                        <Sparkles className="w-4 h-4" />
-                    )}
-                    {t("aiSuggest")}
-                </Button>
-            </div>
+            <CardContent>
+                <div className="flex gap-2">
+                    <Input
+                        placeholder={t("askAIPlaceholder")}
+                        value={question}
+                        onChange={(e) => handleQuestionChange(e.target.value)}
+                        disabled={isAnyAiSuggestLoading || !documentData.title}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault();
+                                handleAskAI();
+                            }
+                        }}
+                    />
+                    <Button
+                        onClick={handleAskAI}
+                        disabled={isAnyAiSuggestLoading || !question.trim() || !documentData.title}
+                        className="flex items-center gap-2 whitespace-nowrap"
+                    >
+                        {isLoading ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                            <Send className="w-4 h-4" />
+                        )}
+                        {t("askAI")}
+                    </Button>
+                </div>
+            </CardContent>
         );
     }
 
@@ -523,8 +612,9 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         setDocumentData(template);
     }
 
-    return(
+    return (
         <div className="space-y-6 w-full">
+            <RopaTemplateSelector onSelect={handleTemplateSelect}></RopaTemplateSelector>
 
             {/* Title Card (excluded) */}
             <Card>
@@ -623,6 +713,100 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
+            {/* Purpose of Data Processing */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("purposeOfDataProcessing")}</CardTitle>
+                </CardHeader>
+                <AskAISection source="purposeOfDataProcessing" />
+            </Card>
+
+            {/* Technical and Organizational Measures */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("technicalOrganizationalMeasures")}</CardTitle>
+                </CardHeader>
+                <AskAISection source="technicalOrganizationalMeasures" />
+            </Card>
+
+            {/* Legal Basis */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("legalBasis")}</CardTitle>
+                </CardHeader>
+                <AskAISection source="legalBasis" />
+            </Card>
+
+            {/* Data Sources */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("dataSources")}</CardTitle>
+                </CardHeader>
+                <AskAISection source="dataSources" />
+            </Card>
+
+            {/* Data Categories */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("dataCategories")}</CardTitle>
+                </CardHeader>
+                <AskAISection source="dataCategories" />
+            </Card>
+
+            {/* Person Categories */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("personCategories")}</CardTitle>
+                </CardHeader>
+                <AskAISection source="personCategories" />
+            </Card>
+
+            {/* Retention Periods */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("retentionPeriods")}</CardTitle>
+                </CardHeader>
+                <AskAISection source="retentionPeriods" />
+            </Card>
+
+            {/* Additional Information */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("additionalInfo")}</CardTitle>
+                </CardHeader>
+                <AskAISection source="additionalInfo" />
+                <CardContent>
+                    <div className="space-y-4">
+                        <div className="w-full flex items-center justify-between">
+                            <div className="">
+                                <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isAnyAiSuggestLoading}>
+                                    <SelectTrigger id="model-select">
+                                        <SelectValue placeholder="AI model"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {availableModels.map((model) => (
+                                            <SelectItem key={model.name} value={model.name}>
+                                                {model.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading} className="w-auto flex items-center gap-2">
+                                {isGenerating ? (
+                                    <>
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                        {t("generating")}
+                                    </>
+                                ) : (
+                                    t("generateButton")
+                                )}
+                            </Button>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     )
 }
