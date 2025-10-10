@@ -124,21 +124,6 @@ export async function callLLMapiForSuggestion(data: DocumentData, locale: string
 
 async function generatePromptFromData(documentData: DocumentData, locale: string, source: string = 'finalropa'): Promise<string> {
 
-    // Process data sources
-    const selectedDataSources = formatCheckboxData(documentData.categories.dataSources);
-
-    // Process data categories
-    const selectedDataCategories = formatNestedCheckboxData(documentData.categories.dataCategories);
-
-    // Process person categories
-    const selectedPersonCategories = formatNestedCheckboxData(documentData.categories.persons, true);
-
-    // Process legal basis
-    const selectedLegalBasis = formatCheckboxData(documentData.legalBasis);
-
-    // Process retention periods
-    const retentionInfo = formatCheckboxData(documentData.retentionPeriods, 'deletionTime');
-
     const promptTemplate = await import(`../../data/prompt.json`).then(mod => mod.default);
 
     let basePrompt: string;
@@ -183,19 +168,19 @@ async function generatePromptFromData(documentData: DocumentData, locale: string
     ${documentData.technicalOrganizationalMeasures || 'No measures specified.'}
     
     Legal Basis for Processing:
-    ${selectedLegalBasis || 'No legal basis specified.'}
+    ${JSON.stringify(documentData.legalBasis, null, 2)}
     
     Data Sources:
-    ${selectedDataSources || 'No data sources specified.'}
+    ${JSON.stringify(documentData.categories.dataSources, null, 2)}
     
     Data Categories:
-    ${selectedDataCategories || 'No data categories specified.'}
+    ${JSON.stringify(documentData.categories.dataCategories, null, 2)}
     
     Person Categories:
-    ${selectedPersonCategories || 'No person categories specified.'}
+    ${JSON.stringify(documentData.categories.persons, null, 2)}
     
     Retention Periods:
-    ${retentionInfo || 'No retention periods specified.'}
+    ${JSON.stringify(documentData.retentionPeriods, null, 2)}
     
     Additional Information:
     ${documentData.additionalInfo || 'No additional information provided.'}
@@ -206,53 +191,4 @@ async function generatePromptFromData(documentData: DocumentData, locale: string
 
     console.log(prompt)
     return prompt;
-}
-
-// Generic function to format simple checkbox data (flat objects)
-function formatCheckboxData(data: any, specialTextField?: string): string {
-    const entries = Object.entries(data);
-
-    return entries
-        .map(([key, value]) => {
-            if (typeof value === 'string') {
-                if (key === specialTextField) {
-                    return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value || 'Not specified'}`;
-                }
-                return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
-            }
-            if (typeof value === 'boolean') {
-                return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
-            }
-            return `- ${key.replace(/([A-Z])/g, ' $1').trim()}`;
-        })
-        .join('\n');
-}
-
-// Generic function to format nested checkbox data (objects containing objects)
-function formatNestedCheckboxData(data: any, hasOtherField: boolean = false): string {
-    return Object.entries(data)
-        .map(([categoryKey, categoryData]) => {
-            // Handle special 'other' field for person categories
-            if (hasOtherField && categoryKey === 'other') {
-                return `Other: ${categoryData || 'Not specified'}`;
-            }
-
-            const subEntries = Object.entries(categoryData as any);
-
-            const selectedSubCategories = subEntries
-                .map(([subKey, value]) => {
-                    if (typeof value === 'string' && value.trim() !== '') {
-                        return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
-                    }
-                    if (typeof value === 'boolean') {
-                        return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
-                    }
-                    return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`;
-                })
-                .join('\n');
-
-            return `${categoryKey.replace(/([A-Z])/g, ' $1').trim()}:\n${selectedSubCategories}`;
-        })
-        .filter(Boolean)
-        .join('\n\n');
 }
