@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {callAPI, callLLMapiForSuggestion} from "@/actions/actions";
+import {callAPI} from "@/actions/actions";
 import { Loader2 } from "lucide-react"
 import RopaTemplateSelector from "./ropa-template-selector";
 import {useTranslations} from "next-intl";
@@ -415,7 +415,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
 
     async function handleGenerateDocument() {
         setIsGenerating(true);
-        const generatedDocument = await callAPI(documentData, t("locale"), selectedModel);
+        const generatedDocument = await callAPI(documentData, t("locale"), 'finalropa', selectedModel);
         setIsGenerating(false);
         setGeneratedDocument(generatedDocument)
     }

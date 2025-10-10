@@ -16,8 +16,6 @@ export async function callAPI(data: DocumentData, locale: string, source: string
     try {
         const prompt = await generatePromptFromData(data, locale, source);
 
-        //TODO this is hardcoded, make it more flexible in the future
-
         let llmResponse = "";
 
         const modelEndpoint = availableModels.find(model => model.name == selectedModel)?.endpoint
