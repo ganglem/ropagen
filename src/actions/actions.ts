@@ -125,95 +125,19 @@ export async function callLLMapiForSuggestion(data: DocumentData, locale: string
 async function generatePromptFromData(documentData: DocumentData, locale: string, source: string = 'finalropa'): Promise<string> {
 
     // Process data sources
-    const selectedDataSources = Object.entries(documentData.categories.dataSources)
-        .filter(([key, value]) => {
-            if (typeof value === 'boolean') return value;
-            if (typeof value === 'string') return value.trim() !== '';
-            return false;
-        })
-        .map(([key, value]) => {
-            if (typeof value === 'string' && value.trim() !== '') {
-                return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
-            }
-            return `- ${key.replace(/([A-Z])/g, ' $1').trim()}`;
-        })
-        .join('\n');
+    const selectedDataSources = formatCheckboxData(documentData.categories.dataSources);
 
     // Process data categories
-    const selectedDataCategories = Object.entries(documentData.categories.dataCategories)
-        .map(([categoryKey, categoryData]) => {
-            const selectedSubCategories = Object.entries(categoryData)
-                .filter(([subKey, value]) => {
-                    if (typeof value === 'boolean') return value;
-                    if (typeof value === 'string') return value.trim() !== '';
-                    return false;
-                })
-                .map(([subKey, value]) => {
-                    if (typeof value === 'string' && value.trim() !== '') {
-                        return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
-                    }
-                    return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`;
-                })
-                .join('\n');
-
-            if (selectedSubCategories) {
-                return `${categoryKey.replace(/([A-Z])/g, ' $1').trim()}:\n${selectedSubCategories}`;
-            }
-            return null;
-        })
-        .filter(Boolean)
-        .join('\n\n');
+    const selectedDataCategories = formatNestedCheckboxData(documentData.categories.dataCategories);
 
     // Process person categories
-    const selectedPersonCategories = Object.entries(documentData.categories.persons)
-        .map(([categoryKey, categoryData]) => {
-            if (categoryKey === 'other') {
-                // Handle the 'other' field which is a string
-                if (typeof categoryData === 'string' && categoryData.trim() !== '') {
-                    return `Other Person Categories: ${categoryData}`;
-                }
-                return null;
-            }
-
-            const selectedSubCategories = Object.entries(categoryData)
-                .filter(([_, isSelected]) => isSelected)
-                .map(([subKey]) => `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`)
-                .join('\n');
-
-            if (selectedSubCategories) {
-                return `${categoryKey.replace(/([A-Z])/g, ' $1').trim()}:\n${selectedSubCategories}`;
-            }
-            return null;
-        })
-        .filter(Boolean)
-        .join('\n\n');
+    const selectedPersonCategories = formatNestedCheckboxData(documentData.categories.persons, true);
 
     // Process legal basis
-    const selectedLegalBasis = Object.entries(documentData.legalBasis)
-        .filter(([key, value]) => {
-            if (typeof value === 'boolean') return value;
-            if (typeof value === 'string') return value.trim() !== '';
-            return false;
-        })
-        .map(([key, value]) => {
-            if (typeof value === 'string' && value.trim() !== '') {
-                return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
-            }
-            return `- ${key.replace(/([A-Z])/g, ' $1').trim()}`;
-        })
-        .join('\n');
+    const selectedLegalBasis = formatCheckboxData(documentData.legalBasis);
 
     // Process retention periods
-    const retentionInfo = Object.entries(documentData.retentionPeriods)
-        .filter(([key, value]) => {
-            if (key === 'deletionTime') return value && value.trim() !== '';
-            return value === true;
-        })
-        .map(([key, value]) => {
-            if (key === 'deletionTime') return `- Deletion Time: ${value}`;
-            return `- ${key.replace(/([A-Z])/g, ' $1').trim()}`;
-        })
-        .join('\n');
+    const retentionInfo = formatCheckboxData(documentData.retentionPeriods, 'deletionTime');
 
     const promptTemplate = await import(`../../data/prompt.json`).then(mod => mod.default);
 
@@ -282,4 +206,53 @@ async function generatePromptFromData(documentData: DocumentData, locale: string
 
     console.log(prompt)
     return prompt;
+}
+
+// Generic function to format simple checkbox data (flat objects)
+function formatCheckboxData(data: any, specialTextField?: string): string {
+    const entries = Object.entries(data);
+
+    return entries
+        .map(([key, value]) => {
+            if (typeof value === 'string') {
+                if (key === specialTextField) {
+                    return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value || 'Not specified'}`;
+                }
+                return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
+            }
+            if (typeof value === 'boolean') {
+                return `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
+            }
+            return `- ${key.replace(/([A-Z])/g, ' $1').trim()}`;
+        })
+        .join('\n');
+}
+
+// Generic function to format nested checkbox data (objects containing objects)
+function formatNestedCheckboxData(data: any, hasOtherField: boolean = false): string {
+    return Object.entries(data)
+        .map(([categoryKey, categoryData]) => {
+            // Handle special 'other' field for person categories
+            if (hasOtherField && categoryKey === 'other') {
+                return `Other: ${categoryData || 'Not specified'}`;
+            }
+
+            const subEntries = Object.entries(categoryData as any);
+
+            const selectedSubCategories = subEntries
+                .map(([subKey, value]) => {
+                    if (typeof value === 'string' && value.trim() !== '') {
+                        return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
+                    }
+                    if (typeof value === 'boolean') {
+                        return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}: ${value}`;
+                    }
+                    return `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`;
+                })
+                .join('\n');
+
+            return `${categoryKey.replace(/([A-Z])/g, ' $1').trim()}:\n${selectedSubCategories}`;
+        })
+        .filter(Boolean)
+        .join('\n\n');
 }
