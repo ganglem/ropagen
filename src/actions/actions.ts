@@ -12,9 +12,9 @@ export async function fetchMockTemplates(locale: string = "en"): Promise<Templat
     return templates as unknown as Template[];
 }
 
-export async function callLLMapi(data: DocumentData, locale: string, selectedModel: string = 'gpt-4o'): Promise<string> {
+export async function callAPI(data: DocumentData, locale: string, source: string, selectedModel: string = 'gpt-4o'): Promise<any> {
     try {
-        const prompt = await generatePromptFromData(data, locale);
+        const prompt = await generatePromptFromData(data, locale, source);
 
         //TODO this is hardcoded, make it more flexible in the future
 
@@ -54,62 +54,17 @@ export async function callLLMapi(data: DocumentData, locale: string, selectedMod
             console.log(response)
         }
 
-        // Ensure we always return a string
-        return typeof llmResponse === 'string' ? llmResponse : String(llmResponse);
-
-    } catch (error) {
-        console.error('API call error:', error);
-        throw new Error('API call failed.');
-    }
-}
-
-export async function callLLMapiForSuggestion(data: DocumentData, locale: string, source: string, selectedModel: string = 'gpt-4o'): Promise<any> {
-    try {
-        const prompt = await generatePromptFromData(data, locale, source);
-
-        let llmResponse = "";
-
-        const modelEndpoint = availableModels.find(model => model.name == selectedModel)?.endpoint
-
-        if (modelEndpoint == "mistral") {
-            const mistralApiKey = process.env.MISTRAL_API_KEY;
-
-            const client = new Mistral({apiKey: mistralApiKey});
-
-            const response = await client.chat.complete({
-                model: selectedModel,
-                messages: [
-                    {
-                        role: 'user',
-                        content: prompt,
-                    },
-                ],
-            })
-
-            const content = response.choices[0]?.message?.content;
-            llmResponse = typeof content === 'string' ? content : String(content || '');
-
-            console.log(response)
-
-        } else if (modelEndpoint == "openai") {
-            const response = await generateText({
-                model: openai(selectedModel),
-                prompt: prompt,
-                temperature: 0.3,
-            });
-            llmResponse = response.text || '';
-
-            console.log(response)
-        }
-
-        // Parse the JSON response
         try {
-            const jsonMatch = llmResponse.match(/```json\n([\s\S]*?)\n```/);
-            if (jsonMatch) {
-                return JSON.parse(jsonMatch[1]);
+            if (source == "finalropa") {
+                return typeof llmResponse === 'string' ? llmResponse : String(llmResponse);
+            } else {
+                const jsonMatch = llmResponse.match(/```json\n([\s\S]*?)\n```/);
+                if (jsonMatch) {
+                    return JSON.parse(jsonMatch[1]);
+                }
+                // Try to parse directly if no code block
+                return JSON.parse(llmResponse);
             }
-            // Try to parse directly if no code block
-            return JSON.parse(llmResponse);
         } catch (parseError) {
             console.error('Failed to parse LLM response as JSON:', parseError);
             console.log('Raw response:', llmResponse);

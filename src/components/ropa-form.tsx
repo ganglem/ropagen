@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {callLLMapi, callLLMapiForSuggestion} from "@/actions/actions";
+import {callAPI, callLLMapiForSuggestion} from "@/actions/actions";
 import { Loader2 } from "lucide-react"
 import RopaTemplateSelector from "./ropa-template-selector";
 import {useTranslations} from "next-intl";
@@ -415,7 +415,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
 
     async function handleGenerateDocument() {
         setIsGenerating(true);
-        const generatedDocument = await callLLMapi(documentData, t("locale"), selectedModel);
+        const generatedDocument = await callAPI(documentData, t("locale"), selectedModel);
         setIsGenerating(false);
         setGeneratedDocument(generatedDocument)
     }
@@ -423,7 +423,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
     async function handleAiSuggest(source: string) {
         setAiSuggestLoading({...aiSuggestLoading, [source]: true});
         try {
-            const suggestion = await callLLMapiForSuggestion(documentData, t("locale"), source, selectedModel);
+            const suggestion = await callAPI(documentData, t("locale"), source, selectedModel);
 
             // Apply the suggestion based on the source
             switch (source) {
