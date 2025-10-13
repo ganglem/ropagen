@@ -31,6 +31,7 @@
     "categories": "Document Categories",
     "additionalInfo": "Additional Information",
     "additionalInfoPlaceholder": "e.g., Special security measures, third-party processors, international transfers...",
+    "generateDocument": "Generate Document",
     "generateButton": "Generate ROPA",
     "generating": "Generating ROPA...",
     "organization": "Organization",
