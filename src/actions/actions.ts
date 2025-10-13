@@ -12,9 +12,20 @@ export async function fetchMockTemplates(locale: string = "en"): Promise<Templat
     return templates as unknown as Template[];
 }
 
-export async function callAPI(data: DocumentData, locale: string, source: string, selectedModel: string = 'gpt-4o'): Promise<any> {
+interface ChatMessage {
+    role: "user" | "assistant";
+    content: string;
+}
+
+export async function callAPI(
+    data: DocumentData,
+    locale: string,
+    source: string,
+    selectedModel: string = 'gpt-4o',
+    messages?: ChatMessage[]
+): Promise<any> {
     try {
-        const prompt = await generatePromptFromData(data, locale, source);
+        const prompt = await generatePromptFromData(data, locale, source, messages);
 
         let llmResponse = "";
 
@@ -22,30 +33,54 @@ export async function callAPI(data: DocumentData, locale: string, source: string
 
         if (modelEndpoint == "mistral") {
             const mistralApiKey = process.env.MISTRAL_API_KEY;
-
             const client = new Mistral({apiKey: mistralApiKey});
 
-            const response = await client.chat.complete({
-                model: selectedModel,
-                messages: [
-                    {
-                        role: 'user',
-                        content: prompt,
-                    },
-                ],
-            })
+            let response;
+            // If messages are provided, use chat format
+            if (messages && messages.length > 0) {
+                response = await client.chat.complete({
+                    model: selectedModel,
+                    messages: [
+                        { role: 'system', content: prompt },
+                        ...messages.map(msg => ({
+                            role: msg.role,
+                            content: msg.content
+                        })) as any
+                    ],
+                });
 
-            // Fix: Correctly access the Mistral response content with safety checks
-            const content = response.choices[0]?.message?.content;
-            llmResponse = typeof content === 'string' ? content : String(content || '');
+                const content = response.choices[0]?.message?.content;
+                llmResponse = typeof content === 'string' ? content : String(content || '');
+            } else {
+                // Single prompt format for AI suggestions
+                response = await client.chat.complete({
+                    model: selectedModel,
+                    messages: [
+                        {
+                            role: 'user',
+                            content: prompt,
+                        },
+                    ],
+                })
+
+                const content = response.choices[0]?.message?.content;
+                llmResponse = typeof content === 'string' ? content : String(content || '');
+            }
 
             console.log(response)
 
         } else if (modelEndpoint == "openai") {
+            // If messages are provided, include conversation in prompt
+            let fullPrompt = prompt;
+            if (messages && messages.length > 0) {
+                const conversationText = messages.map(m => `${m.role}: ${m.content}`).join('\n');
+                fullPrompt = `${prompt}\n\nConversation:\n${conversationText}\n\nassistant:`;
+            }
+
             const response = await generateText({
                 model: openai(selectedModel),
-                prompt: prompt,
-                temperature: 0,
+                prompt: fullPrompt,
+                temperature: messages && messages.length > 0 ? 0.7 : 0,
             });
             llmResponse = response.text || '';
 
@@ -55,7 +90,16 @@ export async function callAPI(data: DocumentData, locale: string, source: string
         try {
             if (source == "finalropa") {
                 return typeof llmResponse === 'string' ? llmResponse : String(llmResponse);
+            } else if (messages && messages.length > 0) {
+                // Chat mode: return both message and structured data
+                const { message, updatedData } = parseChatResponse(llmResponse);
+
+                return {
+                    message: message,
+                    updatedData: updatedData
+                };
             } else {
+                // AI suggestion mode: return parsed JSON
                 const jsonMatch = llmResponse.match(/```json\n([\s\S]*?)\n```/);
                 if (jsonMatch) {
                     return JSON.parse(jsonMatch[1]);
@@ -75,30 +119,89 @@ export async function callAPI(data: DocumentData, locale: string, source: string
     }
 }
 
-async function generatePromptFromData(documentData: DocumentData, locale: string, source: string = 'finalropa'): Promise<string> {
+function parseChatResponse(response: string): { message: string; updatedData: any | null } {
+    let updatedData: any | null = null;
+    let cleanMessage = response;
+
+    try {
+        // Look for DATA_UPDATE marker and JSON block
+        const dataUpdateMatch = response.match(/DATA_UPDATE:\s*```json\s*([\s\S]*?)\s*```/);
+        if (dataUpdateMatch) {
+            updatedData = JSON.parse(dataUpdateMatch[1]);
+            // Remove the DATA_UPDATE section from the message
+            cleanMessage = response.replace(/DATA_UPDATE:\s*```json[\s\S]*?```/g, '').trim();
+        } else {
+            // Fallback: try to find any JSON block in the response
+            const jsonMatch = response.match(/```json\s*([\s\S]*?)\s*```/);
+            if (jsonMatch) {
+                updatedData = JSON.parse(jsonMatch[1]);
+                // Remove the JSON block from the message
+                cleanMessage = response.replace(/```json[\s\S]*?```/g, '').trim();
+            }
+        }
+    } catch (error) {
+        console.error('Failed to extract structured data from chat:', error);
+        // If parsing fails, just return the original message with no data update
+        updatedData = null;
+    }
+
+    return {
+        message: cleanMessage,
+        updatedData: updatedData
+    };
+}
+
+async function generatePromptFromData(
+    documentData: DocumentData,
+    locale: string,
+    source: string = 'finalropa',
+    messages?: ChatMessage[]
+): Promise<string> {
 
     const promptTemplate = await import(`../../data/prompt.json`).then(mod => mod.default);
 
     let basePrompt: string;
-    switch (source) {
-        case 'purposeOfDataProcessing':
-        case 'technicalOrganizationalMeasures':
-        case 'legalBasis':
-        case 'dataSources':
-        case 'dataCategories':
-        case 'personCategories':
-        case 'retentionPeriods':
-        case 'additionalInfo':
-            basePrompt = promptTemplate[source];
-            break;
-        case 'finalropa':
-        default:
-            basePrompt = promptTemplate.finalropa;
-            break;
+
+    // Determine if this is a chat request or AI suggestion
+    const isChat = messages && messages.length > 0;
+
+    if (isChat) {
+        // Chat mode: use chat prompts
+        basePrompt = promptTemplate.chatBase || '';
+        const sectionPromptKey = `chat${source.charAt(0).toUpperCase() + source.slice(1)}`;
+        const sectionPrompt = (promptTemplate as any)[sectionPromptKey] || '';
+        basePrompt = `${basePrompt}\n\n${sectionPrompt}`;
+    } else {
+        // AI suggestion mode: use regular prompts
+        switch (source) {
+            case 'purposeOfDataProcessing':
+            case 'technicalOrganizationalMeasures':
+            case 'legalBasis':
+            case 'dataSources':
+            case 'dataCategories':
+            case 'personCategories':
+            case 'retentionPeriods':
+            case 'additionalInfo':
+                basePrompt = promptTemplate[source];
+                break;
+            case 'finalropa':
+            default:
+                basePrompt = promptTemplate.finalropa;
+                break;
+        }
     }
 
-    // For suggestion prompts, add context data
-    const contextData = `
+    // Build context data
+    const contextData = isChat ? `
+
+Language: ${locale}
+
+Current Document Context:
+- Title: ${documentData.title || 'Not specified'}
+- Organization: ${documentData.organization.name || 'Not specified'}
+- Purpose: ${documentData.purposeOfDataProcessing || 'Not specified'}
+- Technical Measures: ${documentData.technicalOrganizationalMeasures || 'Not specified'}
+    `.trim() : `
 
     Language: ${locale}
     
