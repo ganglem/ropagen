@@ -18,6 +18,18 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
 
     const t = useTranslations('Generate');
 
+    // Define sections configuration
+    const sections = [
+        'purposeOfDataProcessing',
+        'technicalOrganizationalMeasures',
+        'legalBasis',
+        'dataSources',
+        'dataCategories',
+        'personCategories',
+        'retentionPeriods',
+        'additionalInfo'
+    ];
+
     const [documentData, setDocumentData] = useState<DocumentData>({
         id: "",
         title: "",
@@ -326,7 +338,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
 
     return (
         <div className="space-y-6 w-full">
-            <RopaTemplateSelector onSelect={handleTemplateSelect}></RopaTemplateSelector>
 
             {/* Title Card */}
             <Card>
@@ -433,145 +444,51 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
-            {/* Purpose of Data Processing */}
+            {/* Dynamic Section Cards */}
+            {sections.map((section) => (
+                <Card key={section}>
+                    <CardHeader>
+                        <CardTitle>{t(section as any)}</CardTitle>
+                    </CardHeader>
+                    <SectionChat
+                        source={section}
+                        documentData={documentData}
+                        onDataUpdate={(data) => handleDataUpdate(section, data)}
+                        selectedModel={selectedModel}
+                        disabled={isGenerating || isAnyAiSuggestLoading}
+                    />
+                </Card>
+            ))}
+
+            {/* Final Card with Model Selection and Generate Button */}
             <Card>
                 <CardHeader>
-                    <CardTitle>{t("purposeOfDataProcessing")}</CardTitle>
+                    <CardTitle>{t("generateDocument")}</CardTitle>
                 </CardHeader>
-                <SectionChat
-                    source="purposeOfDataProcessing"
-                    documentData={documentData}
-                    onDataUpdate={(data) => handleDataUpdate('purposeOfDataProcessing', data)}
-                    selectedModel={selectedModel}
-                    disabled={isGenerating || isAnyAiSuggestLoading}
-                />
-            </Card>
-
-            {/* Technical and Organizational Measures */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("technicalOrganizationalMeasures")}</CardTitle>
-                </CardHeader>
-                <SectionChat
-                    source="technicalOrganizationalMeasures"
-                    documentData={documentData}
-                    onDataUpdate={(data) => handleDataUpdate('technicalOrganizationalMeasures', data)}
-                    selectedModel={selectedModel}
-                    disabled={isGenerating || isAnyAiSuggestLoading}
-                />
-            </Card>
-
-            {/* Legal Basis */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("legalBasis")}</CardTitle>
-                </CardHeader>
-                <SectionChat
-                    source="legalBasis"
-                    documentData={documentData}
-                    onDataUpdate={(data) => handleDataUpdate('legalBasis', data)}
-                    selectedModel={selectedModel}
-                    disabled={isGenerating || isAnyAiSuggestLoading}
-                />
-            </Card>
-
-            {/* Data Sources */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("dataSources")}</CardTitle>
-                </CardHeader>
-                <SectionChat
-                    source="dataSources"
-                    documentData={documentData}
-                    onDataUpdate={(data) => handleDataUpdate('dataSources', data)}
-                    selectedModel={selectedModel}
-                    disabled={isGenerating || isAnyAiSuggestLoading}
-                />
-            </Card>
-
-            {/* Data Categories */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("dataCategories")}</CardTitle>
-                </CardHeader>
-                <SectionChat
-                    source="dataCategories"
-                    documentData={documentData}
-                    onDataUpdate={(data) => handleDataUpdate('dataCategories', data)}
-                    selectedModel={selectedModel}
-                    disabled={isGenerating || isAnyAiSuggestLoading}
-                />
-            </Card>
-
-            {/* Person Categories */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("personCategories")}</CardTitle>
-                </CardHeader>
-                <SectionChat
-                    source="personCategories"
-                    documentData={documentData}
-                    onDataUpdate={(data) => handleDataUpdate('personCategories', data)}
-                    selectedModel={selectedModel}
-                    disabled={isGenerating || isAnyAiSuggestLoading}
-                />
-            </Card>
-
-            {/* Retention Periods */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("retentionPeriods")}</CardTitle>
-                </CardHeader>
-                <SectionChat
-                    source="retentionPeriods"
-                    documentData={documentData}
-                    onDataUpdate={(data) => handleDataUpdate('retentionPeriods', data)}
-                    selectedModel={selectedModel}
-                    disabled={isGenerating || isAnyAiSuggestLoading}
-                />
-            </Card>
-
-            {/* Additional Information */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("additionalInfo")}</CardTitle>
-                </CardHeader>
-                <SectionChat
-                    source="additionalInfo"
-                    documentData={documentData}
-                    onDataUpdate={(data) => handleDataUpdate('additionalInfo', data)}
-                    selectedModel={selectedModel}
-                    disabled={isGenerating || isAnyAiSuggestLoading}
-                />
-                <CardContent>
-                    <div className="space-y-4">
-                        <div className="w-full flex items-center justify-between">
-                            <div className="">
-                                <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isAnyAiSuggestLoading || isGenerating}>
-                                    <SelectTrigger id="model-select">
-                                        <SelectValue placeholder="AI model"/>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {availableModels.map((model) => (
-                                            <SelectItem key={model.name} value={model.name}>
-                                                {model.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading} className="w-auto flex items-center gap-2">
-                                {isGenerating ? (
-                                    <>
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        {t("generating")}
-                                    </>
-                                ) : (
-                                    t("generateButton")
-                                )}
-                            </Button>
-                        </div>
+                <CardContent className="pt-6">
+                    <div className="w-full flex items-center justify-between">
+                        <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isAnyAiSuggestLoading || isGenerating}>
+                            <SelectTrigger id="model-select">
+                                <SelectValue placeholder="AI model"/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {availableModels.map((model) => (
+                                    <SelectItem key={model.name} value={model.name}>
+                                        {model.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading} className="w-auto flex items-center gap-2">
+                            {isGenerating ? (
+                                <>
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    {t("generating")}
+                                </>
+                            ) : (
+                                t("generateButton")
+                            )}
+                        </Button>
                     </div>
                 </CardContent>
             </Card>

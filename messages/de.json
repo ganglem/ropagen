@@ -33,6 +33,7 @@
     "categories": "Dokumentkategorien",
     "additionalInfo": "Zusätzliche Informationen",
     "additionalInfoPlaceholder": "z.B. Besondere Sicherheitsmaßnahmen, Auftragsverarbeiter, internationale Übermittlungen...",
+    "generateDocument": "Dokument erstellen",
     "generateButton": "ROPA erstellen",
     "generating": "ROPA wird erstellt...",
     "organization": "Organisation",

@@ -882,33 +882,42 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             />
                         </div>
 
-                        <div className="w-full flex items-center justify-between">
-                            <div className="">
-                                <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isGenerating || isAnyAiSuggestLoading}>
-                                    <SelectTrigger id="model-select">
-                                        <SelectValue placeholder="AI model"/>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {availableModels.map((model) => (
-                                            <SelectItem key={model.name} value={model.name}>
-                                                {model.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                    </div>
+                </CardContent>
+            </Card>
 
-                            <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading} className="w-auto flex items-center gap-2">
-                                {isGenerating ? (
-                                    <>
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        {t("generating")}
-                                    </>
-                                ) : (
-                                    t("generateButton")
-                                )}
-                            </Button>
+            {/* Final Card with Model Selection and Generate Button */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("generateDocument")}</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6">
+                    <div className="w-full flex items-center justify-between">
+                        <div className="">
+                            <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isGenerating || isAnyAiSuggestLoading}>
+                                <SelectTrigger id="model-select">
+                                    <SelectValue placeholder="AI model"/>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {availableModels.map((model) => (
+                                        <SelectItem key={model.name} value={model.name}>
+                                            {model.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
+
+                        <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading} className="w-auto flex items-center gap-2">
+                            {isGenerating ? (
+                                <>
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    {t("generating")}
+                                </>
+                            ) : (
+                                t("generateButton")
+                            )}
+                        </Button>
                     </div>
                 </CardContent>
             </Card>
