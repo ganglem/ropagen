@@ -12,6 +12,7 @@ import RopaTemplateSelector from "./ropa-template-selector";
 import {useTranslations} from "next-intl";
 import { availableModels, defaultModel } from "@/config/models";
 import { DocumentData } from "@/models/DocumentData";
+import SectionChat from "./section-chat";
 
 export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
@@ -218,7 +219,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
     const [selectedModel, setSelectedModel] = useState<string>(defaultModel);
     const [isGenerating, setIsGenerating] = useState<boolean>(false);
     const [aiSuggestLoading, setAiSuggestLoading] = useState<Record<string, boolean>>({});
-    const [askAiQuestions, setAskAiQuestions] = useState<Record<string, string>>({});
 
     // Check if any AI suggest is currently loading
     const isAnyAiSuggestLoading = Object.values(aiSuggestLoading).some(loading => loading);
@@ -490,20 +490,76 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         }
     }
 
+    function handleDataUpdate(source: string, updatedData: any) {
+        switch (source) {
+            case 'purposeOfDataProcessing':
+                if (updatedData.purposeOfDataProcessing) {
+                    setDocumentData({...documentData, purposeOfDataProcessing: updatedData.purposeOfDataProcessing});
+                }
+                break;
+            case 'technicalOrganizationalMeasures':
+                if (updatedData.technicalOrganizationalMeasures) {
+                    setDocumentData({...documentData, technicalOrganizationalMeasures: updatedData.technicalOrganizationalMeasures});
+                }
+                break;
+            case 'legalBasis':
+                if (updatedData.legalBasis) {
+                    setDocumentData({...documentData, legalBasis: updatedData.legalBasis});
+                }
+                break;
+            case 'dataSources':
+                if (updatedData.dataSources) {
+                    setDocumentData({
+                        ...documentData,
+                        categories: {
+                            ...documentData.categories,
+                            dataSources: updatedData.dataSources
+                        }
+                    });
+                }
+                break;
+            case 'dataCategories':
+                if (updatedData.dataCategories) {
+                    setDocumentData({
+                        ...documentData,
+                        categories: {
+                            ...documentData.categories,
+                            dataCategories: updatedData.dataCategories
+                        }
+                    });
+                }
+                break;
+            case 'personCategories':
+                if (updatedData.persons) {
+                    setDocumentData({
+                        ...documentData,
+                        categories: {
+                            ...documentData.categories,
+                            persons: updatedData.persons
+                        }
+                    });
+                }
+                break;
+            case 'retentionPeriods':
+                if (updatedData.retentionPeriods) {
+                    setDocumentData({...documentData, retentionPeriods: updatedData.retentionPeriods});
+                }
+                break;
+            case 'additionalInfo':
+                if (updatedData.additionalInfo) {
+                    setDocumentData({...documentData, additionalInfo: updatedData.additionalInfo});
+                }
+                break;
+        }
+    }
+
     function AskAISection({ source }: { source: string }) {
         const isLoading = aiSuggestLoading[source];
-        const question = askAiQuestions[source] || '';
-
-        const handleQuestionChange = (value: string) => {
-            setAskAiQuestions({...askAiQuestions, [source]: value});
-        };
 
         const handleAskAI = async () => {
-            if (!question.trim()) return;
-
             setAiSuggestLoading({...aiSuggestLoading, [source]: true});
             try {
-                const suggestion = await callLLMapiForSuggestion(documentData, t("locale"), source, selectedModel);
+                const suggestion = await callAPI(documentData, t("locale"), source, selectedModel);
 
                 // Apply the suggestion based on the source
                 switch (source) {
@@ -566,9 +622,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                         }
                         break;
                 }
-
-                // Clear the question after successful submission
-                setAskAiQuestions({...askAiQuestions, [source]: ''});
             } catch (error) {
                 console.error('AI question failed:', error);
             } finally {
@@ -579,21 +632,9 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         return (
             <CardContent>
                 <div className="flex gap-2">
-                    <Input
-                        placeholder={t("askAIPlaceholder")}
-                        value={question}
-                        onChange={(e) => handleQuestionChange(e.target.value)}
-                        disabled={isAnyAiSuggestLoading || !documentData.title}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' && !e.shiftKey) {
-                                e.preventDefault();
-                                handleAskAI();
-                            }
-                        }}
-                    />
                     <Button
                         onClick={handleAskAI}
-                        disabled={isAnyAiSuggestLoading || !question.trim() || !documentData.title}
+                        disabled={isAnyAiSuggestLoading || !documentData.title}
                         className="flex items-center gap-2 whitespace-nowrap"
                     >
                         {isLoading ? (
@@ -616,7 +657,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         <div className="space-y-6 w-full">
             <RopaTemplateSelector onSelect={handleTemplateSelect}></RopaTemplateSelector>
 
-            {/* Title Card (excluded) */}
+            {/* Title Card */}
             <Card>
                 <CardHeader>
                     <CardTitle>{t("info")}</CardTitle>
@@ -630,13 +671,14 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("infoPlaceholder")}
                                 value={documentData.title}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleTitleChange(e.target.value)}
+                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                     </div>
                 </CardContent>
             </Card>
 
-            {/* Organization Card (excluded) */}
+            {/* Organization Card */}
             <Card>
                 <CardHeader>
                     <CardTitle>{t("organization")}</CardTitle>
@@ -650,6 +692,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationNamePlaceholder")}
                                 value={documentData.organization.name}
                                 onChange={(e) => handleOrganizationChange('name', e.target.value)}
+                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                         <div className="space-y-2">
@@ -659,6 +702,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationRolePlaceholder")}
                                 value={documentData.organization.role}
                                 onChange={(e) => handleOrganizationChange('role', e.target.value)}
+                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -669,6 +713,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     placeholder={t("organizationAddressPlaceholder")}
                                     value={documentData.organization.contact.address}
                                     onChange={(e) => handleOrganizationContactChange('address', e.target.value)}
+                                    disabled={isGenerating || isAnyAiSuggestLoading}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -679,6 +724,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     placeholder={t("organizationEmailPlaceholder")}
                                     value={documentData.organization.contact.email}
                                     onChange={(e) => handleOrganizationContactChange('email', e.target.value)}
+                                    disabled={isGenerating || isAnyAiSuggestLoading}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -688,6 +734,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     placeholder={t("organizationPhonePlaceholder")}
                                     value={documentData.organization.contact.phone}
                                     onChange={(e) => handleOrganizationContactChange('phone', e.target.value)}
+                                    disabled={isGenerating || isAnyAiSuggestLoading}
                                 />
                             </div>
                         </div>
@@ -698,6 +745,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationRepresentativePlaceholder")}
                                 value={documentData.organization.representative}
                                 onChange={(e) => handleOrganizationChange('representative', e.target.value)}
+                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                         <div className="space-y-2">
@@ -707,6 +755,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationDpoPlaceholder")}
                                 value={documentData.organization.dpo}
                                 onChange={(e) => handleOrganizationChange('dpo', e.target.value)}
+                                disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
                     </div>
@@ -718,7 +767,13 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 <CardHeader>
                     <CardTitle>{t("purposeOfDataProcessing")}</CardTitle>
                 </CardHeader>
-                <AskAISection source="purposeOfDataProcessing" />
+                <SectionChat
+                    source="purposeOfDataProcessing"
+                    documentData={documentData}
+                    onDataUpdate={(data) => handleDataUpdate('purposeOfDataProcessing', data)}
+                    selectedModel={selectedModel}
+                    disabled={isGenerating || isAnyAiSuggestLoading}
+                />
             </Card>
 
             {/* Technical and Organizational Measures */}
@@ -726,7 +781,13 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 <CardHeader>
                     <CardTitle>{t("technicalOrganizationalMeasures")}</CardTitle>
                 </CardHeader>
-                <AskAISection source="technicalOrganizationalMeasures" />
+                <SectionChat
+                    source="technicalOrganizationalMeasures"
+                    documentData={documentData}
+                    onDataUpdate={(data) => handleDataUpdate('technicalOrganizationalMeasures', data)}
+                    selectedModel={selectedModel}
+                    disabled={isGenerating || isAnyAiSuggestLoading}
+                />
             </Card>
 
             {/* Legal Basis */}
@@ -734,7 +795,13 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 <CardHeader>
                     <CardTitle>{t("legalBasis")}</CardTitle>
                 </CardHeader>
-                <AskAISection source="legalBasis" />
+                <SectionChat
+                    source="legalBasis"
+                    documentData={documentData}
+                    onDataUpdate={(data) => handleDataUpdate('legalBasis', data)}
+                    selectedModel={selectedModel}
+                    disabled={isGenerating || isAnyAiSuggestLoading}
+                />
             </Card>
 
             {/* Data Sources */}
@@ -742,7 +809,13 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 <CardHeader>
                     <CardTitle>{t("dataSources")}</CardTitle>
                 </CardHeader>
-                <AskAISection source="dataSources" />
+                <SectionChat
+                    source="dataSources"
+                    documentData={documentData}
+                    onDataUpdate={(data) => handleDataUpdate('dataSources', data)}
+                    selectedModel={selectedModel}
+                    disabled={isGenerating || isAnyAiSuggestLoading}
+                />
             </Card>
 
             {/* Data Categories */}
@@ -750,7 +823,13 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 <CardHeader>
                     <CardTitle>{t("dataCategories")}</CardTitle>
                 </CardHeader>
-                <AskAISection source="dataCategories" />
+                <SectionChat
+                    source="dataCategories"
+                    documentData={documentData}
+                    onDataUpdate={(data) => handleDataUpdate('dataCategories', data)}
+                    selectedModel={selectedModel}
+                    disabled={isGenerating || isAnyAiSuggestLoading}
+                />
             </Card>
 
             {/* Person Categories */}
@@ -758,7 +837,13 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 <CardHeader>
                     <CardTitle>{t("personCategories")}</CardTitle>
                 </CardHeader>
-                <AskAISection source="personCategories" />
+                <SectionChat
+                    source="personCategories"
+                    documentData={documentData}
+                    onDataUpdate={(data) => handleDataUpdate('personCategories', data)}
+                    selectedModel={selectedModel}
+                    disabled={isGenerating || isAnyAiSuggestLoading}
+                />
             </Card>
 
             {/* Retention Periods */}
@@ -766,7 +851,13 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 <CardHeader>
                     <CardTitle>{t("retentionPeriods")}</CardTitle>
                 </CardHeader>
-                <AskAISection source="retentionPeriods" />
+                <SectionChat
+                    source="retentionPeriods"
+                    documentData={documentData}
+                    onDataUpdate={(data) => handleDataUpdate('retentionPeriods', data)}
+                    selectedModel={selectedModel}
+                    disabled={isGenerating || isAnyAiSuggestLoading}
+                />
             </Card>
 
             {/* Additional Information */}
@@ -774,12 +865,18 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 <CardHeader>
                     <CardTitle>{t("additionalInfo")}</CardTitle>
                 </CardHeader>
-                <AskAISection source="additionalInfo" />
+                <SectionChat
+                    source="additionalInfo"
+                    documentData={documentData}
+                    onDataUpdate={(data) => handleDataUpdate('additionalInfo', data)}
+                    selectedModel={selectedModel}
+                    disabled={isGenerating || isAnyAiSuggestLoading}
+                />
                 <CardContent>
                     <div className="space-y-4">
                         <div className="w-full flex items-center justify-between">
                             <div className="">
-                                <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isAnyAiSuggestLoading}>
+                                <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isAnyAiSuggestLoading || isGenerating}>
                                     <SelectTrigger id="model-select">
                                         <SelectValue placeholder="AI model"/>
                                     </SelectTrigger>
