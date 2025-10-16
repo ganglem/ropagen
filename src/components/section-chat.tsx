@@ -19,6 +19,7 @@ interface SectionChatProps {
     onDataUpdate: (updatedData: any) => void;
     selectedModel: string;
     disabled?: boolean;
+    onChatStateChange?: (section: string, isActive: boolean) => void;
 }
 
 export default function SectionChat({
@@ -26,7 +27,8 @@ export default function SectionChat({
     documentData,
     onDataUpdate,
     selectedModel,
-    disabled = false
+    disabled = false,
+    onChatStateChange
 }: SectionChatProps) {
     const t = useTranslations('Generate');
     const [isOpen, setIsOpen] = useState(false);
@@ -34,14 +36,19 @@ export default function SectionChat({
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const onChatStateChangeRef = useRef(onChatStateChange);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
+    // Update ref when callback changes
     useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
+        onChatStateChangeRef.current = onChatStateChange;
+    }, [onChatStateChange]);
+
+    // Notify parent when chat state changes
+    useEffect(() => {
+        if (onChatStateChangeRef.current) {
+            onChatStateChangeRef.current(source, isLoading);
+        }
+    }, [isLoading, source]);
 
     // Send initial message when chat is opened
     useEffect(() => {
