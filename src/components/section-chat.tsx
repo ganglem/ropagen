@@ -191,14 +191,10 @@ export default function SectionChat({
 
     return (
         <CardContent>
-            <div className="border rounded-lg overflow-hidden">
+            <div className="rounded-xl overflow-hidden">
                 {/* Chat Header */}
-                <div className="bg-muted p-3 flex items-center justify-between">
+                <div className="bg-background backdrop-blur-[2px] p-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <MessageSquare className="w-4 h-4" />
-                        <span className="text-sm font-medium">
-                            {t("chatAbout") || "Chat about"}: {getSectionTitle(source)}
-                        </span>
                     </div>
                     <Button
                         variant="ghost"
@@ -227,7 +223,7 @@ export default function SectionChat({
                             className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                         >
                             <div
-                                className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                                className={`max-w-[80%] rounded-xl px-4 py-2 ${
                                     message.role === "user"
                                         ? "bg-primary text-primary-foreground"
                                         : "bg-muted"
@@ -239,7 +235,7 @@ export default function SectionChat({
                     ))}
                     {isLoading && (
                         <div className="flex justify-start">
-                            <div className="bg-muted rounded-lg px-4 py-2">
+                            <div className="bg-muted rounded-xl px-4 py-2">
                                 <Loader2 className="w-4 h-4 animate-spin" />
                             </div>
                         </div>
@@ -248,8 +244,8 @@ export default function SectionChat({
                 </div>
 
                 {/* Input */}
-                <div className="p-3 border-t bg-muted/30">
-                    <div className="flex gap-2">
+                <div className="p-3 bg-background backdrop-blur-[2px]">
+                    <div className="flex gap-2 ">
                         <Input
                             placeholder={t("chatPlaceholder") || "Type your message..."}
                             value={input}
