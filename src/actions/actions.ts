@@ -22,10 +22,11 @@ export async function callAPI(
     locale: string,
     source: string,
     selectedModel: string = 'gpt-4o',
-    messages?: ChatMessage[]
+    messages?: ChatMessage[],
+    isInitial?: boolean
 ): Promise<any> {
     try {
-        const prompt = await generatePromptFromData(data, locale, source, messages);
+        const prompt = await generatePromptFromData(data, locale, source, messages, isInitial);
 
         let llmResponse = "";
 
@@ -90,8 +91,8 @@ export async function callAPI(
         try {
             if (source == "finalropa") {
                 return typeof llmResponse === 'string' ? llmResponse : String(llmResponse);
-            } else if (messages && messages.length > 0) {
-                // Chat mode: return both message and structured data
+            } else if (messages !== undefined) {
+                // Chat mode (including initial message): return both message and structured data
                 const { message, updatedData } = parseChatResponse(llmResponse);
 
                 return {
@@ -145,6 +146,9 @@ function parseChatResponse(response: string): { message: string; updatedData: an
         updatedData = null;
     }
 
+    // Clean up excessive blank lines - replace multiple consecutive newlines with max 2 (one blank line)
+    cleanMessage = cleanMessage.replace(/\n{3,}/g, '\n\n').trim();
+
     return {
         message: cleanMessage,
         updatedData: updatedData
@@ -155,7 +159,8 @@ async function generatePromptFromData(
     documentData: DocumentData,
     locale: string,
     source: string = 'finalropa',
-    messages?: ChatMessage[]
+    messages?: ChatMessage[],
+    isInitial?: boolean
 ): Promise<string> {
 
     const promptTemplate = await import(`../../data/prompt.json`).then(mod => mod.default);
@@ -163,7 +168,7 @@ async function generatePromptFromData(
     let basePrompt: string;
 
     // Determine if this is a chat request or AI suggestion
-    const isChat = messages && messages.length > 0;
+    const isChat = messages !== undefined; // Can be empty array for initial message
 
     if (isChat) {
         // Chat mode: use chat prompts
@@ -171,6 +176,11 @@ async function generatePromptFromData(
         const sectionPromptKey = `chat${source.charAt(0).toUpperCase() + source.slice(1)}`;
         const sectionPrompt = (promptTemplate as any)[sectionPromptKey] || '';
         basePrompt = `${basePrompt}\n\n${sectionPrompt}`;
+
+        // Add initial message instructions
+        if (isInitial) {
+            basePrompt += '\n\nThis is the FIRST message in the conversation. Greet the user, explain what this section is about, analyze the current document context, and immediately provide specific suggestions based on what they have already filled out. Be proactive and suggest concrete data that would fit well with their existing information.';
+        }
     } else {
         // AI suggestion mode: use regular prompts
         switch (source) {
@@ -199,8 +209,38 @@ Language: ${locale}
 Current Document Context:
 - Title: ${documentData.title || 'Not specified'}
 - Organization: ${documentData.organization.name || 'Not specified'}
-- Purpose: ${documentData.purposeOfDataProcessing || 'Not specified'}
-- Technical Measures: ${documentData.technicalOrganizationalMeasures || 'Not specified'}
+- Organization Role: ${documentData.organization.role || 'Not specified'}
+- Organization Address: ${documentData.organization.contact.address || 'Not specified'}
+- Organization Email: ${documentData.organization.contact.email || 'Not specified'}
+- Organization Phone: ${documentData.organization.contact.phone || 'Not specified'}
+- Representative: ${documentData.organization.representative || 'Not specified'}
+- Data Protection Officer: ${documentData.organization.dpo || 'Not specified'}
+
+Purpose of Data Processing:
+${documentData.purposeOfDataProcessing || 'Not specified'}
+
+Technical and Organizational Measures:
+${documentData.technicalOrganizationalMeasures || 'Not specified'}
+
+Legal Basis:
+${JSON.stringify(documentData.legalBasis, null, 2)}
+
+Data Sources:
+${JSON.stringify(documentData.categories.dataSources, null, 2)}
+
+Data Categories:
+${JSON.stringify(documentData.categories.dataCategories, null, 2)}
+
+Person Categories:
+${JSON.stringify(documentData.categories.persons, null, 2)}
+
+Retention Periods:
+${JSON.stringify(documentData.retentionPeriods, null, 2)}
+
+Additional Information:
+${documentData.additionalInfo || 'Not specified'}
+
+Use all this context to provide relevant and specific suggestions for the ${source} section.
     `.trim() : `
 
     Language: ${locale}

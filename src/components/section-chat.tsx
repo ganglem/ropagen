@@ -43,6 +43,57 @@ export default function SectionChat({
         scrollToBottom();
     }, [messages]);
 
+    // Send initial message when chat is opened
+    useEffect(() => {
+        if (isOpen && messages.length === 0 && !isLoading) {
+            sendInitialMessage();
+        }
+    }, [isOpen]);
+
+    const sendInitialMessage = async () => {
+        setIsLoading(true);
+
+        try {
+            // Call the API with empty messages to get initial greeting and suggestions
+            const response = await fetch("/api/section-chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    source,
+                    documentData,
+                    messages: [],
+                    locale: t("locale"),
+                    selectedModel,
+                    isInitial: true // Flag to indicate this is the initial message
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to get AI response");
+            }
+
+            const data = await response.json();
+
+            // Add assistant message
+            const assistantMessage: Message = {
+                role: "assistant",
+                content: data.message
+            };
+            setMessages([assistantMessage]);
+
+            // Update the document data if the AI provided structured data
+            if (data.updatedData) {
+                onDataUpdate(data.updatedData);
+            }
+        } catch (error) {
+            console.error("Initial chat error:", error);
+            // Don't show error for initial message, just start with empty state
+            setMessages([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const getSectionTitle = (source: string): string => {
         const titleMap: Record<string, string> = {
             purposeOfDataProcessing: t("purposeOfDataProcessing"),
