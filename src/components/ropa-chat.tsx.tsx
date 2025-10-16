@@ -232,12 +232,23 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
     const [selectedModel, setSelectedModel] = useState<string>(defaultModel);
     const [isGenerating, setIsGenerating] = useState<boolean>(false);
     const [aiSuggestLoading, setAiSuggestLoading] = useState<Record<string, boolean>>({});
+    const [activeChatStates, setActiveChatStates] = useState<Record<string, boolean>>({});
 
     // Check if any AI suggest is currently loading
     const isAnyAiSuggestLoading = Object.values(aiSuggestLoading).some(loading => loading);
 
+    // Check if any chat is currently active
+    const isAnyChatActive = Object.values(activeChatStates).some(active => active);
+
     function handleTitleChange(title: string) {
         setDocumentData({...documentData, title});
+    }
+
+    function handleChatStateChange(section: string, isActive: boolean) {
+        setActiveChatStates(prev => ({
+            ...prev,
+            [section]: isActive
+        }));
     }
 
     function handleOrganizationChange(field: string, value: string) {
@@ -353,7 +364,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("infoPlaceholder")}
                                 value={documentData.title}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleTitleChange(e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
+                                disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             />
                         </div>
                     </div>
@@ -374,7 +385,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationNamePlaceholder")}
                                 value={documentData.organization.name}
                                 onChange={(e) => handleOrganizationChange('name', e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
+                                disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             />
                         </div>
                         <div className="space-y-2">
@@ -384,7 +395,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationRolePlaceholder")}
                                 value={documentData.organization.role}
                                 onChange={(e) => handleOrganizationChange('role', e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
+                                disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -395,7 +406,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     placeholder={t("organizationAddressPlaceholder")}
                                     value={documentData.organization.contact.address}
                                     onChange={(e) => handleOrganizationContactChange('address', e.target.value)}
-                                    disabled={isGenerating || isAnyAiSuggestLoading}
+                                    disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -406,7 +417,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     placeholder={t("organizationEmailPlaceholder")}
                                     value={documentData.organization.contact.email}
                                     onChange={(e) => handleOrganizationContactChange('email', e.target.value)}
-                                    disabled={isGenerating || isAnyAiSuggestLoading}
+                                    disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -416,7 +427,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                     placeholder={t("organizationPhonePlaceholder")}
                                     value={documentData.organization.contact.phone}
                                     onChange={(e) => handleOrganizationContactChange('phone', e.target.value)}
-                                    disabled={isGenerating || isAnyAiSuggestLoading}
+                                    disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                                 />
                             </div>
                         </div>
@@ -427,7 +438,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationRepresentativePlaceholder")}
                                 value={documentData.organization.representative}
                                 onChange={(e) => handleOrganizationChange('representative', e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
+                                disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             />
                         </div>
                         <div className="space-y-2">
@@ -437,7 +448,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 placeholder={t("organizationDpoPlaceholder")}
                                 value={documentData.organization.dpo}
                                 onChange={(e) => handleOrganizationChange('dpo', e.target.value)}
-                                disabled={isGenerating || isAnyAiSuggestLoading}
+                                disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             />
                         </div>
                     </div>
@@ -455,7 +466,8 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                         documentData={documentData}
                         onDataUpdate={(data) => handleDataUpdate(section, data)}
                         selectedModel={selectedModel}
-                        disabled={isGenerating || isAnyAiSuggestLoading}
+                        disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
+                        onChatStateChange={handleChatStateChange}
                     />
                 </Card>
             ))}
@@ -467,7 +479,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardHeader>
                 <CardContent className="pt-6">
                     <div className="w-full flex items-center justify-between">
-                        <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isAnyAiSuggestLoading || isGenerating}>
+                        <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isAnyAiSuggestLoading || isGenerating || isAnyChatActive}>
                             <SelectTrigger id="model-select">
                                 <SelectValue placeholder="AI model"/>
                             </SelectTrigger>
@@ -479,7 +491,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 ))}
                             </SelectContent>
                         </Select>
-                        <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading} className="w-auto flex items-center gap-2">
+                        <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive} className="w-auto flex items-center gap-2">
                             {isGenerating ? (
                                 <>
                                     <Loader2 className="h-4 w-4 animate-spin" />
