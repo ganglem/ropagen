@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Send, MessageSquare, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { DocumentData } from "@/models/DocumentData";
+import ShinyText from "@/components/ShinyText";
 
 interface Message {
     role: "user" | "assistant";
@@ -235,8 +236,9 @@ export default function SectionChat({
                     ))}
                     {isLoading && (
                         <div className="flex justify-start">
-                            <div className="bg-muted rounded-xl px-4 py-2">
-                                <Loader2 className="w-4 h-4 animate-spin" />
+                            <div className="bg-muted rounded-xl px-4 py-2 flex items-center gap-2">
+                                <ShinyText text="🧠" className="text-sm" />
+                                <ShinyText text={t("thinking") || "Thinking"} className="text-sm" />
                             </div>
                         </div>
                     )}
