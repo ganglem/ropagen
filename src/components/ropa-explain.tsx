@@ -14,7 +14,7 @@ import { availableModels, defaultModel } from "@/config/models";
 import { DocumentData } from "@/models/DocumentData";
 import SectionChat from "./section-chat";
 
-export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
+export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
     const t = useTranslations('Generate');
 
@@ -470,6 +470,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             onChatStateChange={handleChatStateChange}
                         />
+                        <Input
+                            className={"mt-4"}
+                        />
+
                     </CardContent>
                 </Card>
             ))}

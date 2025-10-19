@@ -176,7 +176,7 @@ export default function SectionChat({
 
     if (!isOpen) {
         return (
-            <CardContent>
+
                 <Button
                     onClick={() => setIsOpen(true)}
                     disabled={disabled || !documentData.title}
@@ -186,12 +186,12 @@ export default function SectionChat({
                     <MessageSquare className="w-4 h-4" />
                     {t("chatWithAI") || "Chat with AI"}
                 </Button>
-            </CardContent>
+
         );
     }
 
     return (
-        <CardContent>
+
             <div className="rounded-xl overflow-hidden">
                 {/* Chat Header */}
                 <div className="bg-background backdrop-blur-[2px] p-3 flex items-center justify-between">
@@ -270,6 +270,6 @@ export default function SectionChat({
                     </div>
                 </div>
             </div>
-        </CardContent>
+
     );
 }
