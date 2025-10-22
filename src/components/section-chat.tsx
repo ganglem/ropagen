@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Send, MessageSquare, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { DocumentData } from "@/models/DocumentData";
-import ShinyText from "@/components/ShinyText";
+import ShinyText from "@/components/ui/ShinyText";
 
 interface Message {
     role: "user" | "assistant";
@@ -17,7 +17,7 @@ interface Message {
 interface SectionChatProps {
     source: string;
     documentData: DocumentData;
-    onDataUpdate: (updatedData: any) => void;
+    onDataUpdate?: (updatedData: any) => void;
     selectedModel: string;
     disabled?: boolean;
     onChatStateChange?: (section: string, isActive: boolean) => void;
@@ -90,7 +90,7 @@ export default function SectionChat({
             setMessages([assistantMessage]);
 
             // Update the document data if the AI provided structured data
-            if (data.updatedData) {
+            if (data.updatedData && onDataUpdate) {
                 onDataUpdate(data.updatedData);
             }
         } catch (error) {
@@ -152,7 +152,7 @@ export default function SectionChat({
             setMessages(prev => [...prev, assistantMessage]);
 
             // Update the document data if the AI provided structured data
-            if (data.updatedData) {
+            if (data.updatedData && onDataUpdate) {
                 onDataUpdate(data.updatedData);
             }
         } catch (error) {
