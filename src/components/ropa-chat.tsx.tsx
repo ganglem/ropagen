@@ -14,7 +14,7 @@ import { availableModels, defaultModel } from "@/config/models";
 import { DocumentData } from "@/models/DocumentData";
 import SectionChat from "./section-chat";
 
-export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
+export default function RopaChat({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
     const t = useTranslations('Generate');
 
