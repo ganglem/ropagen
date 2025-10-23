@@ -16,6 +16,9 @@
 
   "Generate": {
     "locale": "Deutsch",
+    "tabForm": "Formular",
+    "tabExplain": "Erklären",
+    "tabChat": "Chat",
     "templateInfo": "Template auswählen",
     "templatePlaceholder": "Wählen Sie ein Template aus",
     "info": "Dokumentinformationen",

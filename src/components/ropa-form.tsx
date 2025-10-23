@@ -881,7 +881,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 documentData={documentData}
                                 onChange={handleSectionChange}
                                 disabled={isGenerating || isAnyAiSuggestLoading}
-                                className="min-h-[150px]"
                             />
                         </div>
                     </div>
