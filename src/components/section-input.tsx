@@ -14,9 +14,6 @@ interface SectionInputProps {
 export default function SectionInput({ section, documentData, onChange, disabled, className }: SectionInputProps) {
     const t = useTranslations('Generate');
 
-    // Sections that should use Textarea instead of Input
-    const textareaSections = ['purposeOfDataProcessing', 'technicalOrganizationalMeasures', 'additionalInfo'];
-
     function getSectionInputValue(section: string): string {
         if (section === 'retentionPeriods') {
             return documentData.retentionPeriods.deletionTime;
@@ -56,21 +53,9 @@ export default function SectionInput({ section, documentData, onChange, disabled
         }
     }
 
-    const isTextarea = textareaSections.includes(section);
     const value = getSectionInputValue(section);
     const placeholder = getSectionPlaceholder(section);
 
-    if (isTextarea) {
-        return (
-            <Textarea
-                className={className || "min-h-[100px]"}
-                value={value}
-                onChange={(e) => onChange(section, e.target.value)}
-                placeholder={placeholder}
-                disabled={disabled}
-            />
-        );
-    }
 
     return (
         <Input
