@@ -244,6 +244,85 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
         setDocumentData({...documentData, title});
     }
 
+    function handleSectionInputChange(section: string, value: string) {
+        if (section === 'retentionPeriods') {
+            setDocumentData({
+                ...documentData,
+                retentionPeriods: {
+                    ...documentData.retentionPeriods,
+                    deletionTime: value
+                }
+            });
+        } else if (section === 'legalBasis') {
+            setDocumentData({
+                ...documentData,
+                legalBasis: {
+                    ...documentData.legalBasis,
+                    other: value
+                }
+            });
+        } else if (section === 'dataSources') {
+            setDocumentData({
+                ...documentData,
+                categories: {
+                    ...documentData.categories,
+                    dataSources: {
+                        ...documentData.categories.dataSources,
+                        other: value
+                    }
+                }
+            });
+        } else if (section === 'dataCategories') {
+            setDocumentData({
+                ...documentData,
+                categories: {
+                    ...documentData.categories,
+                    dataCategories: {
+                        ...documentData.categories.dataCategories,
+                        other: {
+                            ...documentData.categories.dataCategories.other,
+                            other: value
+                        }
+                    }
+                }
+            });
+        } else if (section === 'personCategories') {
+            setDocumentData({
+                ...documentData,
+                categories: {
+                    ...documentData.categories,
+                    persons: {
+                        ...documentData.categories.persons,
+                        other: value
+                    }
+                }
+            });
+        } else {
+            // For simple string fields like purposeOfDataProcessing, technicalOrganizationalMeasures, additionalInfo
+            setDocumentData({
+                ...documentData,
+                [section]: value
+            });
+        }
+    }
+
+    function getSectionInputValue(section: string): string {
+        if (section === 'retentionPeriods') {
+            return documentData.retentionPeriods.deletionTime;
+        } else if (section === 'legalBasis') {
+            return documentData.legalBasis.other;
+        } else if (section === 'dataSources') {
+            return documentData.categories.dataSources.other;
+        } else if (section === 'dataCategories') {
+            return documentData.categories.dataCategories.other.other;
+        } else if (section === 'personCategories') {
+            return documentData.categories.persons.other;
+        } else {
+            // For simple string fields
+            return (documentData as any)[section] || '';
+        }
+    }
+
     function handleChatStateChange(section: string, isActive: boolean) {
         setActiveChatStates(prev => ({
             ...prev,
@@ -406,6 +485,9 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
                         />
                         <Input
                             className={"mt-4"}
+                            value={getSectionInputValue(section)}
+                            onChange={(e) => handleSectionInputChange(section, e.target.value)}
+                            disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                         />
 
                     </CardContent>
