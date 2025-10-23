@@ -7,12 +7,12 @@ import { Input } from "./ui/input";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {callAPI} from "@/actions/actions";
-import { Loader2, Send } from "lucide-react"
-import RopaTemplateSelector from "./ropa-template-selector";
+import { Loader2 } from "lucide-react"
 import {useTranslations} from "next-intl";
 import { availableModels, defaultModel } from "@/config/models";
 import { DocumentData } from "@/models/DocumentData";
 import SectionChat from "./section-chat";
+import SectionInput from "./section-input";
 
 export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
@@ -306,53 +306,14 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
         }
     }
 
-    function getSectionInputValue(section: string): string {
-        if (section === 'retentionPeriods') {
-            return documentData.retentionPeriods.deletionTime;
-        } else if (section === 'legalBasis') {
-            return documentData.legalBasis.other;
-        } else if (section === 'dataSources') {
-            return documentData.categories.dataSources.other;
-        } else if (section === 'dataCategories') {
-            return documentData.categories.dataCategories.other.other;
-        } else if (section === 'personCategories') {
-            return documentData.categories.persons.other;
-        } else {
-            // For simple string fields
-            return (documentData as any)[section] || '';
-        }
-    }
-
-    function getSectionPlaceholder(section: string): string {
-        if (section === 'retentionPeriods') {
-            return t('deletionTimePlaceholder');
-        } else if (section === 'legalBasis') {
-            return t('otherLegalBasisPlaceholder');
-        } else if (section === 'dataSources') {
-            return t('otherDataSourcesPlaceholder');
-        } else if (section === 'dataCategories') {
-            return t('otherDataCategoriesPlaceholder');
-        } else if (section === 'personCategories') {
-            return t('otherPersonCategoriesPlaceholder');
-        } else if (section === 'purposeOfDataProcessing') {
-            return t('purposeOfDataProcessingPlaceholder');
-        } else if (section === 'technicalOrganizationalMeasures') {
-            return t('technicalOrganizationalMeasuresPlaceholder');
-        } else if (section === 'additionalInfo') {
-            return t('additionalInfoPlaceholder');
-        } else {
-            return '';
-        }
-    }
-
-    function handleChatStateChange(section: string, isActive: boolean) {
+    const handleChatStateChange = (section: string, isActive: boolean) => {
         setActiveChatStates(prev => ({
             ...prev,
             [section]: isActive
         }));
     }
 
-    function handleOrganizationChange(field: string, value: string) {
+    const handleOrganizationChange = (field: string, value: string) => {
         setDocumentData({
             ...documentData,
             organization: {
@@ -362,7 +323,7 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
         });
     }
 
-    function handleOrganizationContactChange(field: string, value: string) {
+    const handleOrganizationContactChange = (field: string, value: string) => {
         setDocumentData({
             ...documentData,
             organization: {
@@ -505,14 +466,13 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
                             disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             onChatStateChange={handleChatStateChange}
                         />
-                        <Input
-                            className={"mt-4"}
-                            value={getSectionInputValue(section)}
-                            onChange={(e) => handleSectionInputChange(section, e.target.value)}
-                            placeholder={getSectionPlaceholder(section)}
+                        <SectionInput
+                            className="mt-4"
+                            section={section}
+                            documentData={documentData}
+                            onChange={handleSectionInputChange}
                             disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                         />
-
                     </CardContent>
                 </Card>
             ))}

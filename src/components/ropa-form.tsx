@@ -5,7 +5,6 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "./ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {callAPI} from "@/actions/actions";
@@ -15,6 +14,7 @@ import {useTranslations} from "next-intl";
 import { availableModels, defaultModel } from "@/config/models";
 import { DocumentData } from "@/models/DocumentData";
 import { Sparkles } from "lucide-react";
+import SectionInput from "./section-input";
 
 export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
@@ -252,12 +252,66 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         });
     }
 
-    function handlePurposeChange(purpose: string) {
-        setDocumentData({...documentData, purposeOfDataProcessing: purpose});
-    }
-
-    function handleTechnicalMeasuresChange(measures: string) {
-        setDocumentData({...documentData, technicalOrganizationalMeasures: measures});
+    function handleSectionChange(section: string, value: string) {
+        if (section === 'purposeOfDataProcessing') {
+            setDocumentData({...documentData, purposeOfDataProcessing: value});
+        } else if (section === 'technicalOrganizationalMeasures') {
+            setDocumentData({...documentData, technicalOrganizationalMeasures: value});
+        } else if (section === 'additionalInfo') {
+            setDocumentData({...documentData, additionalInfo: value});
+        } else if (section === 'legalBasis') {
+            setDocumentData({
+                ...documentData,
+                legalBasis: {
+                    ...documentData.legalBasis,
+                    other: value
+                }
+            });
+        } else if (section === 'dataSources') {
+            setDocumentData({
+                ...documentData,
+                categories: {
+                    ...documentData.categories,
+                    dataSources: {
+                        ...documentData.categories.dataSources,
+                        other: value
+                    }
+                }
+            });
+        } else if (section === 'dataCategories') {
+            setDocumentData({
+                ...documentData,
+                categories: {
+                    ...documentData.categories,
+                    dataCategories: {
+                        ...documentData.categories.dataCategories,
+                        other: {
+                            ...documentData.categories.dataCategories.other,
+                            other: value
+                        }
+                    }
+                }
+            });
+        } else if (section === 'personCategories') {
+            setDocumentData({
+                ...documentData,
+                categories: {
+                    ...documentData.categories,
+                    persons: {
+                        ...documentData.categories.persons,
+                        other: value
+                    }
+                }
+            });
+        } else if (section === 'retentionPeriods') {
+            setDocumentData({
+                ...documentData,
+                retentionPeriods: {
+                    ...documentData.retentionPeriods,
+                    deletionTime: value
+                }
+            });
+        }
     }
 
     function handleLegalBasisChange(basis: string, value: boolean | string) {
@@ -299,22 +353,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         });
     }
 
-    function handleDataCategoryOtherChange(value: string) {
-        setDocumentData({
-            ...documentData,
-            categories: {
-                ...documentData.categories,
-                dataCategories: {
-                    ...documentData.categories.dataCategories,
-                    other: {
-                        ...documentData.categories.dataCategories.other,
-                        other: value
-                    }
-                }
-            }
-        });
-    }
-
     function handlePersonCategoryChange(category: string, subcategory: string, checked: boolean) {
         if (category === 'other') {
             // Handle the 'other' field which is a string, not an object
@@ -336,19 +374,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         });
     }
 
-    function handlePersonCategoryOtherChange(value: string) {
-        setDocumentData({
-            ...documentData,
-            categories: {
-                ...documentData.categories,
-                persons: {
-                    ...documentData.categories.persons,
-                    other: value
-                }
-            }
-        });
-    }
-
     function handleRetentionPeriodChange(field: string, value: string | boolean) {
         setDocumentData({
             ...documentData,
@@ -357,10 +382,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 [field]: value
             }
         });
-    }
-
-    function handleAdditionalInfoChange(additionalInfo: string) {
-        setDocumentData({...documentData, additionalInfo});
     }
 
     function getTranslatedLabel(category: string, key: string): string {
@@ -523,11 +544,17 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         setDocumentData(template);
     }
 
+    // Define sections for map-based rendering
+    const textSections = [
+        { key: 'purposeOfDataProcessing', title: t("purposeOfDataProcessing") },
+        { key: 'technicalOrganizationalMeasures', title: t("technicalOrganizationalMeasures") },
+    ];
+
     return (
         <div className="space-y-6 w-full">
             <RopaTemplateSelector onSelect={handleTemplateSelect}></RopaTemplateSelector>
 
-            {/* Title Card (excluded) */}
+            {/* Title Card */}
             <Card>
                 <CardHeader>
                     <CardTitle>{t("info")}</CardTitle>
@@ -548,7 +575,7 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
-            {/* Organization Card (excluded) */}
+            {/* Organization Card */}
             <Card>
                 <CardHeader>
                     <CardTitle>{t("organization")}</CardTitle>
@@ -632,43 +659,25 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 </CardContent>
             </Card>
 
-            {/* Purpose of Data Processing */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("purposeOfDataProcessing")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('purposeOfDataProcessing')} disabled={!documentData.title} source="purposeOfDataProcessing" />
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-2">
-                        <Textarea
-                            placeholder={t("purposeOfDataProcessingPlaceholder")}
-                            className="min-h-[100px]"
-                            value={documentData.purposeOfDataProcessing}
-                            onChange={(e) => handlePurposeChange(e.target.value)}
-                            disabled={isGenerating || isAnyAiSuggestLoading}
-                        />
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* Technical and Organizational Measures */}
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("technicalOrganizationalMeasures")}</CardTitle>
-                    <AISuggestButton onClick={() => handleAiSuggest('technicalOrganizationalMeasures')} disabled={!documentData.title} source="technicalOrganizationalMeasures" />
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-2">
-                        <Textarea
-                            placeholder={t("technicalOrganizationalMeasuresPlaceholder")}
-                            className="min-h-[100px]"
-                            value={documentData.technicalOrganizationalMeasures}
-                            onChange={(e) => handleTechnicalMeasuresChange(e.target.value)}
-                            disabled={isGenerating || isAnyAiSuggestLoading}
-                        />
-                    </div>
-                </CardContent>
-            </Card>
+            {/* Text sections using map */}
+            {textSections.map(section => (
+                <Card key={section.key}>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle>{section.title}</CardTitle>
+                        <AISuggestButton onClick={() => handleAiSuggest(section.key)} disabled={!documentData.title} source={section.key} />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-2">
+                            <SectionInput
+                                section={section.key}
+                                documentData={documentData}
+                                onChange={handleSectionChange}
+                                disabled={isGenerating || isAnyAiSuggestLoading}
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+            ))}
 
             {/* Legal Basis */}
             <Card>
@@ -694,11 +703,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                     </div>
                     <div className="mt-4 space-y-2">
                         <Label htmlFor="legalBasisOther">{t("otherLegalBasis")}</Label>
-                        <Input
-                            id="legalBasisOther"
-                            placeholder={t("otherLegalBasisPlaceholder")}
-                            value={documentData.legalBasis.other}
-                            onChange={(e) => handleLegalBasisChange('other', e.target.value)}
+                        <SectionInput
+                            section="legalBasis"
+                            documentData={documentData}
+                            onChange={handleSectionChange}
                             disabled={isGenerating || isAnyAiSuggestLoading}
                         />
                     </div>
@@ -729,11 +737,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                     </div>
                     <div className="mt-4 space-y-2">
                         <Label htmlFor="dataSourcesOther">{t("otherDataSources")}</Label>
-                        <Input
-                            id="dataSourcesOther"
-                            placeholder={t("otherDataSourcesPlaceholder")}
-                            value={documentData.categories.dataSources.other}
-                            onChange={(e) => handleDataSourceChange('other', e.target.value)}
+                        <SectionInput
+                            section="dataSources"
+                            documentData={documentData}
+                            onChange={handleSectionChange}
                             disabled={isGenerating || isAnyAiSuggestLoading}
                         />
                     </div>
@@ -769,11 +776,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                                 {categoryKey === 'other' && (
                                     <div className="pl-4 space-y-2">
                                         <Label htmlFor="dataCategoriesOther">{t("otherDataCategories")}</Label>
-                                        <Input
-                                            id="dataCategoriesOther"
-                                            placeholder={t("otherDataCategoriesPlaceholder")}
-                                            value={documentData.categories.dataCategories.other.other}
-                                            onChange={(e) => handleDataCategoryOtherChange(e.target.value)}
+                                        <SectionInput
+                                            section="dataCategories"
+                                            documentData={documentData}
+                                            onChange={handleSectionChange}
                                             disabled={isGenerating || isAnyAiSuggestLoading}
                                         />
                                     </div>
@@ -814,11 +820,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             ))}
                         <div className="space-y-2">
                             <Label htmlFor="personCategoriesOther">{t("otherPersonCategories")}</Label>
-                            <Input
-                                id="personCategoriesOther"
-                                placeholder={t("otherPersonCategoriesPlaceholder")}
-                                value={documentData.categories.persons.other}
-                                onChange={(e) => handlePersonCategoryOtherChange(e.target.value)}
+                            <SectionInput
+                                section="personCategories"
+                                documentData={documentData}
+                                onChange={handleSectionChange}
                                 disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
@@ -851,11 +856,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="deletionTime">{t("deletionTime")}</Label>
-                            <Input
-                                id="deletionTime"
-                                placeholder={t("deletionTimePlaceholder")}
-                                value={documentData.retentionPeriods.deletionTime}
-                                onChange={(e) => handleRetentionPeriodChange('deletionTime', e.target.value)}
+                            <SectionInput
+                                section="retentionPeriods"
+                                documentData={documentData}
+                                onChange={handleSectionChange}
                                 disabled={isGenerating || isAnyAiSuggestLoading}
                             />
                         </div>
@@ -872,16 +876,14 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                 <CardContent>
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <Textarea
-                                id="additionalInfo"
-                                placeholder={t("additionalInfoPlaceholder")}
-                                className="min-h-[150px]"
-                                value={documentData.additionalInfo}
-                                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleAdditionalInfoChange(e.target.value)}
+                            <SectionInput
+                                section="additionalInfo"
+                                documentData={documentData}
+                                onChange={handleSectionChange}
                                 disabled={isGenerating || isAnyAiSuggestLoading}
+                                className="min-h-[150px]"
                             />
                         </div>
-
                     </div>
                 </CardContent>
             </Card>
