@@ -467,6 +467,7 @@ export default function RopaChat({setGeneratedDocument}: {setGeneratedDocument: 
                             documentData={documentData}
                             onDataUpdate={(data) => handleDataUpdate(section, data)}
                             selectedModel={selectedModel}
+                            chatMode={"chat"}
                             disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             onChatStateChange={handleChatStateChange}
                         />

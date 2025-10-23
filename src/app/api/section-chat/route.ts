@@ -13,13 +13,14 @@ interface ChatRequest {
     messages: Message[];
     locale: string;
     selectedModel: string;
+    chatMode: string;
     isInitial?: boolean;
 }
 
 export async function POST(request: NextRequest) {
     try {
         const body: ChatRequest = await request.json();
-        const { source, documentData, messages, locale, selectedModel, isInitial } = body;
+        const { source, documentData, messages, locale, selectedModel, chatMode, isInitial } = body;
 
         // Call the unified API function with messages parameter
         const result = await callAPI(
@@ -27,6 +28,7 @@ export async function POST(request: NextRequest) {
             locale,
             source,
             selectedModel,
+            chatMode,
             messages,
             isInitial
         );

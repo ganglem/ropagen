@@ -281,72 +281,6 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
         setGeneratedDocument(generatedDocument)
     }
 
-    function handleDataUpdate(source: string, updatedData: any) {
-        switch (source) {
-            case 'purposeOfDataProcessing':
-                if (updatedData.purposeOfDataProcessing) {
-                    setDocumentData({...documentData, purposeOfDataProcessing: updatedData.purposeOfDataProcessing});
-                }
-                break;
-            case 'technicalOrganizationalMeasures':
-                if (updatedData.technicalOrganizationalMeasures) {
-                    setDocumentData({...documentData, technicalOrganizationalMeasures: updatedData.technicalOrganizationalMeasures});
-                }
-                break;
-            case 'legalBasis':
-                if (updatedData.legalBasis) {
-                    setDocumentData({...documentData, legalBasis: updatedData.legalBasis});
-                }
-                break;
-            case 'dataSources':
-                if (updatedData.dataSources) {
-                    setDocumentData({
-                        ...documentData,
-                        categories: {
-                            ...documentData.categories,
-                            dataSources: updatedData.dataSources
-                        }
-                    });
-                }
-                break;
-            case 'dataCategories':
-                if (updatedData.dataCategories) {
-                    setDocumentData({
-                        ...documentData,
-                        categories: {
-                            ...documentData.categories,
-                            dataCategories: updatedData.dataCategories
-                        }
-                    });
-                }
-                break;
-            case 'personCategories':
-                if (updatedData.persons) {
-                    setDocumentData({
-                        ...documentData,
-                        categories: {
-                            ...documentData.categories,
-                            persons: updatedData.persons
-                        }
-                    });
-                }
-                break;
-            case 'retentionPeriods':
-                if (updatedData.retentionPeriods) {
-                    setDocumentData({...documentData, retentionPeriods: updatedData.retentionPeriods});
-                }
-                break;
-            case 'additionalInfo':
-                if (updatedData.additionalInfo) {
-                    setDocumentData({...documentData, additionalInfo: updatedData.additionalInfo});
-                }
-                break;
-        }
-    }
-    function handleTemplateSelect(template: DocumentData) {
-        setDocumentData(template);
-    }
-
     return (
         <div className="space-y-6 w-full">
 
@@ -465,8 +399,8 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
                         <SectionChat
                             source={section}
                             documentData={documentData}
-                            onDataUpdate={(data) => handleDataUpdate(section, data)}
                             selectedModel={selectedModel}
+                            chatMode={"explain"}
                             disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             onChatStateChange={handleChatStateChange}
                         />
