@@ -19,6 +19,7 @@ interface SectionChatProps {
     documentData: DocumentData;
     onDataUpdate?: (updatedData: any) => void;
     selectedModel: string;
+    chatMode: string;
     disabled?: boolean;
     onChatStateChange?: (section: string, isActive: boolean) => void;
 }
@@ -28,6 +29,7 @@ export default function SectionChat({
     documentData,
     onDataUpdate,
     selectedModel,
+    chatMode,
     disabled = false,
     onChatStateChange
 }: SectionChatProps) {
@@ -72,6 +74,7 @@ export default function SectionChat({
                     messages: [],
                     locale: t("locale"),
                     selectedModel,
+                    chatMode,
                     isInitial: true // Flag to indicate this is the initial message
                 })
             });
@@ -102,20 +105,6 @@ export default function SectionChat({
         }
     };
 
-    const getSectionTitle = (source: string): string => {
-        const titleMap: Record<string, string> = {
-            purposeOfDataProcessing: t("purposeOfDataProcessing"),
-            technicalOrganizationalMeasures: t("technicalOrganizationalMeasures"),
-            legalBasis: t("legalBasis"),
-            dataSources: t("dataSources"),
-            dataCategories: t("dataCategories"),
-            personCategories: t("personCategories"),
-            retentionPeriods: t("retentionPeriods"),
-            additionalInfo: t("additionalInfo")
-        };
-        return titleMap[source] || source;
-    };
-
     const handleSendMessage = async () => {
         if (!input.trim() || isLoading) return;
 
@@ -134,6 +123,7 @@ export default function SectionChat({
                     documentData,
                     messages: [...messages, userMessage],
                     locale: t("locale"),
+                    chatMode,
                     selectedModel
                 })
             });

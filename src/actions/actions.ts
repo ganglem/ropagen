@@ -22,11 +22,12 @@ export async function callAPI(
     locale: string,
     source: string,
     selectedModel: string = 'gpt-4o',
+    chatMode: string = "",
     messages?: ChatMessage[],
-    isInitial?: boolean
+    isInitial?: boolean,
 ): Promise<any> {
     try {
-        const prompt = await generatePromptFromData(data, locale, source, messages, isInitial);
+        const prompt = await generatePromptFromData(data, locale, source, chatMode, messages, isInitial);
 
         let llmResponse = "";
 
@@ -159,6 +160,7 @@ async function generatePromptFromData(
     documentData: DocumentData,
     locale: string,
     source: string = 'finalropa',
+    chatMode: string,
     messages?: ChatMessage[],
     isInitial?: boolean
 ): Promise<string> {
@@ -170,7 +172,7 @@ async function generatePromptFromData(
     // Determine if this is a chat request or AI suggestion
     const isChat = messages !== undefined; // Can be empty array for initial message
 
-    if (isChat) {
+    if (chatMode === "chat" && isChat) {
         // Chat mode: use chat prompts
         basePrompt = promptTemplate.chatBase || '';
         const sectionPromptKey = `chat${source.charAt(0).toUpperCase() + source.slice(1)}`;
@@ -180,6 +182,17 @@ async function generatePromptFromData(
         // Add initial message instructions
         if (isInitial) {
             basePrompt += '\n\nThis is the FIRST message in the conversation. Greet the user, explain what this section is about, analyze the current document context, and immediately provide specific suggestions based on what they have already filled out. Be proactive and suggest concrete data that would fit well with their existing information.';
+        }
+    } else if (chatMode == "explain" && isChat) {
+        // Explain mode: use explain prompts
+        basePrompt = promptTemplate.explainBase || '';
+        const sectionPromptKey = `explain${source.charAt(0).toUpperCase() + source.slice(1)}`;
+        const sectionPrompt = (promptTemplate as any)[sectionPromptKey] || '';
+        basePrompt = `${basePrompt}\n\n${sectionPrompt}`;
+
+        // Add initial message instructions
+        if (isInitial) {
+            basePrompt += '\n\nThis is the FIRST message in the conversation. Greet the user, explain what this section is about, analyze the current document context, and provide a clear and concise explanation of how to fill out this section effectively. Be proactive and suggest concrete data that would fit well with their existing information.';
         }
     } else {
         // AI suggestion mode: use regular prompts
