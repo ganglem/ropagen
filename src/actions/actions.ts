@@ -91,7 +91,7 @@ export async function callAPI(
 
         try {
             if (source == "finalropa") {
-                return typeof llmResponse === 'string' ? llmResponse : String(llmResponse);
+                return true ? llmResponse : String(llmResponse);
             } else if (messages !== undefined) {
                 // Chat mode (including initial message): return both message and structured data
                 const { message, updatedData } = parseChatResponse(llmResponse);
@@ -255,6 +255,7 @@ ${documentData.additionalInfo || 'Not specified'}
 
 Use all this context to provide relevant and specific suggestions for the ${source} section.
     `.trim() : `
+    
 
     Language: ${locale}
     
