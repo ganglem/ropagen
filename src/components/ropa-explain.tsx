@@ -323,6 +323,28 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
         }
     }
 
+    function getSectionPlaceholder(section: string): string {
+        if (section === 'retentionPeriods') {
+            return t('deletionTimePlaceholder');
+        } else if (section === 'legalBasis') {
+            return t('otherLegalBasisPlaceholder');
+        } else if (section === 'dataSources') {
+            return t('otherDataSourcesPlaceholder');
+        } else if (section === 'dataCategories') {
+            return t('otherDataCategoriesPlaceholder');
+        } else if (section === 'personCategories') {
+            return t('otherPersonCategoriesPlaceholder');
+        } else if (section === 'purposeOfDataProcessing') {
+            return t('purposeOfDataProcessingPlaceholder');
+        } else if (section === 'technicalOrganizationalMeasures') {
+            return t('technicalOrganizationalMeasuresPlaceholder');
+        } else if (section === 'additionalInfo') {
+            return t('additionalInfoPlaceholder');
+        } else {
+            return '';
+        }
+    }
+
     function handleChatStateChange(section: string, isActive: boolean) {
         setActiveChatStates(prev => ({
             ...prev,
@@ -487,6 +509,7 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
                             className={"mt-4"}
                             value={getSectionInputValue(section)}
                             onChange={(e) => handleSectionInputChange(section, e.target.value)}
+                            placeholder={getSectionPlaceholder(section)}
                             disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                         />
 
