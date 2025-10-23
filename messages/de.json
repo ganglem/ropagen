@@ -254,6 +254,19 @@
       "externalRecipientCategoriesEU": "Externe Empfänger (EU)",
       "externalRecipientCategoriesThirdCountry": "Externe Empfänger (Drittland)",
       "authorizedPersons": "Berechtigte Personen"
+    },
+    "tooltips": {
+      "info": "Geben Sie den Titel und grundlegende Informationen für Ihr VVT-Dokument ein. Dies hilft bei der Identifizierung der spezifischen Verarbeitungstätigkeit, die Sie dokumentieren.",
+      "organization": "Geben Sie Details zu Ihrer Organisation an, einschließlich Name, Kontaktinformationen, Rolle (Verantwortlicher/Auftragsverarbeiter), gesetzlicher Vertreter und Kontaktdaten des Datenschutzbeauftragten.",
+      "purposeOfDataProcessing": "Beschreiben Sie, warum Sie personenbezogene Daten verarbeiten. Dies sollte die spezifischen Zwecke und Ziele der Datenverarbeitungstätigkeit erklären, wie z.B. Mitarbeiterverwaltung oder Kundenverwaltung.",
+      "technicalOrganizationalMeasures": "Dokumentieren Sie die Sicherheitsmaßnahmen zum Schutz personenbezogener Daten. Dazu gehören technische Schutzmaßnahmen (Verschlüsselung, Zugriffskontrollen) und organisatorische Maßnahmen (Mitarbeiterschulungen, Richtlinien).",
+      "legalBasis": "Wählen Sie die Rechtsgrundlagen aus, die Ihre Datenverarbeitung gemäß DSGVO Art. 6 rechtfertigen. Sie können mehrere Grundlagen wählen, wie Einwilligung, Vertragserfüllung oder berechtigte Interessen.",
+      "dataSources": "Identifizieren Sie, woher Sie die personenbezogenen Daten sammeln oder beziehen. Dazu gehören Softwaresysteme, Plattformen, Datenbanken und externe Quellen, die in Ihren Verarbeitungstätigkeiten verwendet werden.",
+      "dataCategories": "Geben Sie an, welche Arten personenbezogener Daten Sie verarbeiten. Kategorisieren Sie Daten in Gruppen wie persönliche Informationen, Beschäftigungsunterlagen, Finanzdaten, Gesundheitsdaten oder Verhaltensinformationen.",
+      "personCategories": "Definieren Sie, wer die betroffenen Personen sind und wer Zugriff auf deren Daten hat. Dazu gehören betroffene Personen, interne Empfänger, externe Empfänger und autorisiertes Personal, das die Daten verarbeitet.",
+      "retentionPeriods": "Geben Sie an, wie lange Sie personenbezogene Daten vor der Löschung aufbewahren. Definieren Sie Aufbewahrungsfristen basierend auf gesetzlichen Anforderungen, Geschäftsbedürfnissen oder bis zum Widerruf der Einwilligung.",
+      "additionalInfo": "Fügen Sie zusätzliche Informationen hinzu, die für diese Verarbeitungstätigkeit relevant sind, wie besondere Sicherheitsmaßnahmen, Drittanbieter-Verarbeiter, internationale Datentransfers oder spezifische Compliance-Hinweise.",
+      "generateDocument": "Wählen Sie Ihr KI-Modell und generieren Sie das finale VVT-Dokument. Das System erstellt aus allen bereitgestellten Informationen ein umfassendes, DSGVO-konformes Verzeichnis von Verarbeitungstätigkeiten."
     }
   },
 

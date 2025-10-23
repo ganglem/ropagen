@@ -252,6 +252,19 @@
       "externalRecipientCategoriesEU": "External Recipients (EU)",
       "externalRecipientCategoriesThirdCountry": "External Recipients (Third Country)",
       "authorizedPersons": "Authorized Persons"
+    },
+    "tooltips": {
+      "info": "Enter the title and basic information for your ROPA document. This helps identify the specific processing activity you're documenting.",
+      "organization": "Provide details about your organization including name, contact information, role (controller/processor), legal representative, and Data Protection Officer contact information.",
+      "purposeOfDataProcessing": "Describe why you process personal data. This should explain the specific purposes and objectives of the data processing activity, such as employee administration or customer management.",
+      "technicalOrganizationalMeasures": "Document the security measures in place to protect personal data. Include technical safeguards (encryption, access controls) and organizational measures (staff training, policies).",
+      "legalBasis": "Select the legal grounds that justify your data processing under GDPR Article 6. You can choose multiple bases such as consent, contract fulfillment, or legitimate interests.",
+      "dataSources": "Identify where you collect or obtain the personal data from. This includes software systems, platforms, databases, and any external sources used in your processing activities.",
+      "dataCategories": "Specify what types of personal data you process. Categorize data into groups like personal information, employment records, financial data, health data, or behavioral information.",
+      "personCategories": "Define who the data subjects are and who has access to their data. Include affected persons, internal recipients, external recipients, and authorized personnel who process the data.",
+      "retentionPeriods": "Specify how long you keep personal data before deletion. Define retention periods based on legal requirements, business needs, or until consent is withdrawn.",
+      "additionalInfo": "Add any extra information relevant to this processing activity, such as special security measures, third-party processors, international data transfers, or specific compliance notes.",
+      "generateDocument": "Choose your AI model and generate the final ROPA document. The system will compile all provided information into a comprehensive, GDPR-compliant record of processing activities."
     }
   },
   "Preview": {

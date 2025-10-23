@@ -8,13 +8,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {callAPI} from "@/actions/actions";
-import { Loader2 } from "lucide-react"
+import { Loader2, Info } from "lucide-react"
 import RopaTemplateSelector from "./ropa-template-selector";
 import {useTranslations} from "next-intl";
 import { availableModels, defaultModel } from "@/config/models";
 import { DocumentData } from "@/models/DocumentData";
 import { Sparkles } from "lucide-react";
 import SectionInput from "./section-input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
@@ -544,6 +545,25 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         setDocumentData(template);
     }
 
+    // Info button component with tooltip
+    function InfoTooltip({ tooltipKey }: { tooltipKey: string }) {
+        return (
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <button
+                        className="inline-flex items-center justify-center w-5 h-5 rounded-full ml-2 hover:bg-accent transition-colors"
+                        type="button"
+                    >
+                        <Info className="w-full h-full" />
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="max-w-xs">
+                    <p>{t(`tooltips.${tooltipKey}`)}</p>
+                </TooltipContent>
+            </Tooltip>
+        );
+    }
+
     // Define sections for map-based rendering
     const textSections = [
         { key: 'purposeOfDataProcessing', title: t("purposeOfDataProcessing") },
@@ -557,7 +577,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {/* Title Card */}
             <Card>
                 <CardHeader>
-                    <CardTitle>{t("info")}</CardTitle>
+                    <CardTitle className="flex items-center">
+                        {t("info")}
+                        <InfoTooltip tooltipKey="info" />
+                    </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-8">
@@ -578,7 +601,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {/* Organization Card */}
             <Card>
                 <CardHeader>
-                    <CardTitle>{t("organization")}</CardTitle>
+                    <CardTitle className="flex items-center">
+                        {t("organization")}
+                        <InfoTooltip tooltipKey="organization" />
+                    </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
@@ -663,7 +689,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {textSections.map(section => (
                 <Card key={section.key}>
                     <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>{section.title}</CardTitle>
+                        <div className="flex items-center">
+                            <CardTitle>{section.title}</CardTitle>
+                            <InfoTooltip tooltipKey={section.key} />
+                        </div>
                         <AISuggestButton onClick={() => handleAiSuggest(section.key)} disabled={!documentData.title} source={section.key} />
                     </CardHeader>
                     <CardContent>
@@ -682,7 +711,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {/* Legal Basis */}
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("legalBasis")}</CardTitle>
+                    <div className="flex items-center">
+                        <CardTitle>{t("legalBasis")}</CardTitle>
+                        <InfoTooltip tooltipKey="legalBasis" />
+                    </div>
                     <AISuggestButton onClick={() => handleAiSuggest('legalBasis')} disabled={!documentData.title} source="legalBasis" />
                 </CardHeader>
                 <CardContent>
@@ -716,7 +748,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {/* Data Sources */}
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("dataSources")}</CardTitle>
+                    <div className="flex items-center">
+                        <CardTitle>{t("dataSources")}</CardTitle>
+                        <InfoTooltip tooltipKey="dataSources" />
+                    </div>
                     <AISuggestButton onClick={() => handleAiSuggest('dataSources')} disabled={!documentData.title} source="dataSources" />
                 </CardHeader>
                 <CardContent>
@@ -750,7 +785,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {/* Data Categories */}
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("dataCategories")}</CardTitle>
+                    <div className="flex items-center">
+                        <CardTitle>{t("dataCategories")}</CardTitle>
+                        <InfoTooltip tooltipKey="dataCategories" />
+                    </div>
                     <AISuggestButton onClick={() => handleAiSuggest('dataCategories')} disabled={!documentData.title} source="dataCategories" />
                 </CardHeader>
                 <CardContent>
@@ -793,7 +831,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {/* Person Categories */}
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("personCategories")}</CardTitle>
+                    <div className="flex items-center">
+                        <CardTitle>{t("personCategories")}</CardTitle>
+                        <InfoTooltip tooltipKey="personCategories" />
+                    </div>
                     <AISuggestButton onClick={() => handleAiSuggest('personCategories')} disabled={!documentData.title} source="personCategories" />
                 </CardHeader>
                 <CardContent>
@@ -834,7 +875,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {/* Retention Periods */}
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("retentionPeriods")}</CardTitle>
+                    <div className="flex items-center">
+                        <CardTitle>{t("retentionPeriods")}</CardTitle>
+                        <InfoTooltip tooltipKey="retentionPeriods" />
+                    </div>
                     <AISuggestButton onClick={() => handleAiSuggest('retentionPeriods')} disabled={!documentData.title} source="retentionPeriods" />
                 </CardHeader>
                 <CardContent>
@@ -870,7 +914,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {/* Additional Information */}
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>{t("additionalInfo")}</CardTitle>
+                    <div className="flex items-center">
+                        <CardTitle>{t("additionalInfo")}</CardTitle>
+                        <InfoTooltip tooltipKey="additionalInfo" />
+                    </div>
                     <AISuggestButton onClick={() => handleAiSuggest('additionalInfo')} disabled={!documentData.title} source="additionalInfo" />
                 </CardHeader>
                 <CardContent>
@@ -891,7 +938,10 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
             {/* Final Card with Model Selection and Generate Button */}
             <Card>
                 <CardHeader>
-                    <CardTitle>{t("generateDocument")}</CardTitle>
+                    <CardTitle className="flex items-center">
+                        {t("generateDocument")}
+                        <InfoTooltip tooltipKey="generateDocument" />
+                    </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
                     <div className="w-full flex items-center justify-between">
