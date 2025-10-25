@@ -8,6 +8,7 @@ import { Loader2, Send, MessageSquare, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { DocumentData } from "@/models/DocumentData";
 import ShinyText from "@/components/ui/ShinyText";
+import { marked } from "marked";
 
 interface Message {
     role: "user" | "assistant";
@@ -40,6 +41,14 @@ export default function SectionChat({
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const onChatStateChangeRef = useRef(onChatStateChange);
+
+    // Configure marked for inline parsing
+    useEffect(() => {
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+        });
+    }, []);
 
     // Update ref when callback changes
     useEffect(() => {
@@ -164,6 +173,16 @@ export default function SectionChat({
         }
     };
 
+    const parseMarkdown = (text: string) => {
+        try {
+            const html = marked.parse(text, { async: false }) as string;
+            return html;
+        } catch (error) {
+            console.error("Markdown parsing error:", error);
+            return text;
+        }
+    };
+
     if (!isOpen) {
         return (
 
@@ -220,7 +239,10 @@ export default function SectionChat({
                                         : "bg-muted"
                                 }`}
                             >
-                                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                                <div
+                                    className="text-sm prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-2"
+                                    dangerouslySetInnerHTML={{ __html: parseMarkdown(message.content) }}
+                                />
                             </div>
                         </div>
                     ))}
