@@ -53,14 +53,14 @@ function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimi
             ref={listRef}
             data-slot="tabs-list"
             className={cn(
-                "bg-muted text-muted-foreground relative inline-flex h-9 w-fit items-center justify-center rounded-xl p-[5px]",
+                "bg-muted text-muted-foreground relative inline-flex h-9 w-fit items-center justify-center rounded-full p-[5px]",
                 className,
             )}
             {...props}
         >
             {activeTabBounds && (
                 <motion.div
-                    className="bg-background dark:border-input dark:bg-input/30 absolute rounded-xl border border-transparent shadow-sm"
+                    className="bg-background dark:border-input dark:bg-input/30 absolute rounded-full border border-transparent shadow-sm"
                     initial={false}
                     animate={{
                         left: activeTabBounds.left,
@@ -88,7 +88,7 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
         <TabsPrimitive.Trigger
             data-slot="tabs-trigger"
             className={cn(
-                "data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-foreground dark:text-muted-foreground relative z-10 inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-xl  p-[10px] text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+                "data-[state=active]:text-primary dark:data-[state=active]:text-primary focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-foreground dark:text-foreground relative z-10 inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-full  p-[10px] text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
                 className,
             )}
             {...props}
