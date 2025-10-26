@@ -174,9 +174,9 @@ async function generatePromptFromData(
 
     if (chatMode === "chat" && isChat) {
         // Chat mode: use chat prompts
-        basePrompt = promptTemplate.chatBase || '';
-        const sectionPromptKey = `chat${source.charAt(0).toUpperCase() + source.slice(1)}`;
-        const sectionPrompt = (promptTemplate as any)[sectionPromptKey] || '';
+        basePrompt = promptTemplate.chat.base || '';
+        const sectionPromptKey = source.charAt(0).toUpperCase() + source.slice(1);
+        const sectionPrompt = promptTemplate.chat[sectionPromptKey] || promptTemplate.chat[source] || '';
         basePrompt = `${basePrompt}\n\n${sectionPrompt}`;
 
         // Add initial message instructions
@@ -185,9 +185,9 @@ async function generatePromptFromData(
         }
     } else if (chatMode == "explain" && isChat) {
         // Explain mode: use explain prompts
-        basePrompt = promptTemplate.explainBase || '';
-        const sectionPromptKey = `explain${source.charAt(0).toUpperCase() + source.slice(1)}`;
-        const sectionPrompt = (promptTemplate as any)[sectionPromptKey] || '';
+        basePrompt = promptTemplate.explain.base || '';
+        const sectionPromptKey = source.charAt(0).toUpperCase() + source.slice(1);
+        const sectionPrompt = promptTemplate.explain[sectionPromptKey] || promptTemplate.explain[source] || '';
         basePrompt = `${basePrompt}\n\n${sectionPrompt}`;
 
         // Add initial message instructions
@@ -205,7 +205,7 @@ async function generatePromptFromData(
             case 'personCategories':
             case 'retentionPeriods':
             case 'additionalInfo':
-                basePrompt = promptTemplate[source];
+                basePrompt = promptTemplate.form[source];
                 break;
             case 'finalropa':
             default:
