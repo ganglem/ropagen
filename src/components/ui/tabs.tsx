@@ -106,14 +106,12 @@ function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPr
                 {...props}
             >
                 <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     transition={{
-                        type: "spring",
-                        bounce: 0.5,
-                        duration: 0.6,
-                        damping: 15,
+                        duration: 0.5,
+                        ease: "easeInOut",
                     }}
                 >
                     {props.children}
