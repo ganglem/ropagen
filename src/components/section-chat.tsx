@@ -8,10 +8,12 @@ import { Loader2, Send, MessageSquare, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { DocumentData } from "@/models/DocumentData";
 import ShinyText from "@/components/ui/ShinyText";
+import { marked } from "marked";
 
 interface Message {
     role: "user" | "assistant";
     content: string;
+    isStreaming?: boolean;
 }
 
 interface SectionChatProps {
@@ -38,8 +40,18 @@ export default function SectionChat({
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [streamingContent, setStreamingContent] = useState("");
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const onChatStateChangeRef = useRef(onChatStateChange);
+    const streamingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Configure marked for inline parsing
+    useEffect(() => {
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+        });
+    }, []);
 
     // Update ref when callback changes
     useEffect(() => {
@@ -53,12 +65,88 @@ export default function SectionChat({
         }
     }, [isLoading, source]);
 
+    // Cleanup streaming interval on unmount
+    useEffect(() => {
+        return () => {
+            if (streamingIntervalRef.current) {
+                clearInterval(streamingIntervalRef.current);
+            }
+        };
+    }, []);
+
     // Send initial message when chat is opened
     useEffect(() => {
         if (isOpen && messages.length === 0 && !isLoading) {
             sendInitialMessage();
         }
     }, [isOpen]);
+
+    const streamText = (text: string, callback: (updatedData: any) => void) => {
+        let currentIndex = 0;
+        setStreamingContent("");
+
+        // Clear any existing interval
+        if (streamingIntervalRef.current) {
+            clearInterval(streamingIntervalRef.current);
+        }
+
+        // Add a placeholder message that will be updated
+        const placeholderMessage: Message = {
+            role: "assistant",
+            content: "",
+            isStreaming: true
+        };
+        setMessages(prev => [...prev, placeholderMessage]);
+
+        streamingIntervalRef.current = setInterval(() => {
+            if (currentIndex < text.length) {
+                // Stream 2-3 characters at a time for a faster, more natural feel
+                const charsToAdd = Math.min(3, text.length - currentIndex);
+                const newContent = text.slice(0, currentIndex + charsToAdd);
+                currentIndex += charsToAdd;
+
+                setStreamingContent(newContent);
+
+                // Update the last message with the current streamed content
+                setMessages(prev => {
+                    const updated = [...prev];
+                    if (updated[updated.length - 1]?.isStreaming) {
+                        updated[updated.length - 1] = {
+                            role: "assistant",
+                            content: newContent,
+                            isStreaming: true
+                        };
+                    }
+                    return updated;
+                });
+            } else {
+                // Streaming complete
+                if (streamingIntervalRef.current) {
+                    clearInterval(streamingIntervalRef.current);
+                    streamingIntervalRef.current = null;
+                }
+
+                // Finalize the message
+                setMessages(prev => {
+                    const updated = [...prev];
+                    if (updated[updated.length - 1]?.isStreaming) {
+                        updated[updated.length - 1] = {
+                            role: "assistant",
+                            content: text,
+                            isStreaming: false
+                        };
+                    }
+                    return updated;
+                });
+
+                setStreamingContent("");
+                setIsLoading(false);
+
+                // Call the callback after streaming is complete
+                callback(null);
+            }
+        }, 20); // 20ms delay between character chunks for smooth streaming
+    };
 
     const sendInitialMessage = async () => {
         setIsLoading(true);
@@ -85,22 +173,17 @@ export default function SectionChat({
 
             const data = await response.json();
 
-            // Add assistant message
-            const assistantMessage: Message = {
-                role: "assistant",
-                content: data.message
-            };
-            setMessages([assistantMessage]);
-
-            // Update the document data if the AI provided structured data
-            if (data.updatedData && onDataUpdate) {
-                onDataUpdate(data.updatedData);
-            }
+            // Stream the assistant message
+            streamText(data.message, (error) => {
+                // Update the document data if the AI provided structured data
+                if (data.updatedData && onDataUpdate) {
+                    onDataUpdate(data.updatedData);
+                }
+            });
         } catch (error) {
             console.error("Initial chat error:", error);
             // Don't show error for initial message, just start with empty state
             setMessages([]);
-        } finally {
             setIsLoading(false);
         }
     };
@@ -134,17 +217,13 @@ export default function SectionChat({
 
             const data = await response.json();
 
-            // Add assistant message
-            const assistantMessage: Message = {
-                role: "assistant",
-                content: data.message
-            };
-            setMessages(prev => [...prev, assistantMessage]);
-
-            // Update the document data if the AI provided structured data
-            if (data.updatedData && onDataUpdate) {
-                onDataUpdate(data.updatedData);
-            }
+            // Stream the assistant message
+            streamText(data.message, (error) => {
+                // Update the document data if the AI provided structured data
+                if (data.updatedData && onDataUpdate) {
+                    onDataUpdate(data.updatedData);
+                }
+            });
         } catch (error) {
             console.error("Chat error:", error);
             const errorMessage: Message = {
@@ -152,7 +231,6 @@ export default function SectionChat({
                 content: "Sorry, I encountered an error. Please try again."
             };
             setMessages(prev => [...prev, errorMessage]);
-        } finally {
             setIsLoading(false);
         }
     };
@@ -161,6 +239,16 @@ export default function SectionChat({
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             handleSendMessage();
+        }
+    };
+
+    const parseMarkdown = (text: string) => {
+        try {
+            const html = marked.parse(text, { async: false }) as string;
+            return html;
+        } catch (error) {
+            console.error("Markdown parsing error:", error);
+            return text;
         }
     };
 
@@ -199,7 +287,7 @@ export default function SectionChat({
 
                 {/* Messages */}
                 <div className="h-[400px] overflow-y-auto p-4 space-y-4 bg-background">
-                    {messages.length === 0 && (
+                    {messages.length === 0 && !isLoading && (
                         <div className="text-center text-muted-foreground text-sm py-8">
                             <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
                             <p>{t("chatWelcome") || "Ask me anything about this section!"}</p>
@@ -208,7 +296,7 @@ export default function SectionChat({
                             </p>
                         </div>
                     )}
-                    {messages.map((message, index) => (
+                    {messages.filter(msg => !msg.isStreaming || msg.content.length > 0).map((message, index) => (
                         <div
                             key={index}
                             className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
@@ -220,11 +308,14 @@ export default function SectionChat({
                                         : "bg-muted"
                                 }`}
                             >
-                                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                                <div
+                                    className="text-sm prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-2"
+                                    dangerouslySetInnerHTML={{ __html: parseMarkdown(message.content) }}
+                                />
                             </div>
                         </div>
                     ))}
-                    {isLoading && (
+                    {isLoading && messages[messages.length - 1]?.isStreaming !== true && (
                         <div className="flex justify-start">
                             <div className="bg-muted rounded-xl px-4 py-2 flex items-center gap-2">
                                 <ShinyText text="🧠" className="text-sm" />
