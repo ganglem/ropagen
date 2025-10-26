@@ -133,7 +133,7 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                         initial={{ left: 0, width: 0, opacity: 0 }}
                         animate={pillPos}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="absolute z-[1] inset-y-1 rounded-full bg-accent"
+                        className="absolute z-[1] inset-y-1 rounded-4xl bg-accent"
                         style={{ left: pillPos.left, width: pillPos.width }}
                     />
                 )}
@@ -146,7 +146,7 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                 className="md:hidden pointer-events-auto relative"
             >
                 <div
-                    className={`relative flex items-center justify-between w-fit min-w-[200px] ${isMobileMenuOpen ? "rounded-4xl" : "rounded-full"} overflow-visible border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] h-12 px-3 transition-all duration-300`}
+                    className={`relative flex items-center justify-between w-fit min-w-[200px] ${isMobileMenuOpen ? "rounded-4xl" : "rounded-4xl"} overflow-visible border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] h-12 px-3 transition-all duration-300`}
                 >
                     <ShineBorder
                         borderWidth={0.3}
