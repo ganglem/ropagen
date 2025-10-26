@@ -53,14 +53,14 @@ function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimi
             ref={listRef}
             data-slot="tabs-list"
             className={cn(
-                "bg-muted text-muted-foreground relative inline-flex h-9 w-fit items-center justify-center rounded-full p-[5px]",
+                "shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] border border-white/50 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] text-muted-foreground relative inline-flex h-9 w-fit items-center justify-center rounded-full p-[5px]",
                 className,
             )}
             {...props}
         >
             {activeTabBounds && (
                 <motion.div
-                    className="bg-background dark:border-input dark:bg-input/30 absolute rounded-full border border-transparent shadow-sm"
+                    className="shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] border-white/50 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] absolute rounded-full border shadow-sm"
                     initial={false}
                     animate={{
                         left: activeTabBounds.left,
