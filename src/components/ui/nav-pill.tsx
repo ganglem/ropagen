@@ -214,9 +214,19 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                                             <Link
                                                 href={href}
                                                 onClick={() => setIsMobileMenuOpen(false)}
-                                                className="text-foreground hover:text-accent transition-colors text-base py-2 block"
+                                                className="text-base py-2 block"
                                             >
-                                                {name}
+                                                {hoverVariant === "slide" ? (
+                                                    <SlideHoverLink text={name} />
+                                                ) : hoverVariant === "color" ? (
+                                                    <span className="group inline-block">
+                                                        <span className="transition-colors duration-200 group-hover:text-accent">{name}</span>
+                                                    </span>
+                                                ) : (
+                                                    <span className="transition-colors duration-200 hover:text-accent-foreground">
+                                                        {name}
+                                                    </span>
+                                                )}
                                             </Link>
                                         </motion.div>
                                     ))}
