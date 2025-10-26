@@ -1,28 +1,37 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes";
 
 export default function Themetoggle() {
-    const [isDark, setIsDark] = useState(() => {
-        if (typeof window !== "undefined") {
-            const stored = localStorage.getItem("theme");
-            return stored ? stored === "dark" : true;
-        }
-        return true;
-    });
+    const { setTheme, resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    // Avoid hydration mismatch
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const isDark = mounted ? (resolvedTheme === "dark") : true;
 
     const circleSize = 24; // Fixed circle diameter
     const toggleX = 36; // Fixed slide distance
 
-    useEffect(() => {
-        document.documentElement.classList.toggle("dark", isDark);
-        localStorage.setItem("theme", isDark ? "dark" : "light");
-    }, [isDark]);
+    const handleToggle = () => {
+        setTheme(isDark ? "light" : "dark");
+    };
+
+    // Prevent hydration mismatch by not rendering until mounted
+    if (!mounted) {
+        return (
+            <div className="relative w-[68px] flex-shrink-0 h-8 rounded-full shadow-lg overflow-hidden flex items-center p-1 bg-gradient-to-b from-indigo-600 to-indigo-400" />
+        );
+    }
 
     return (
         <motion.button
-            onClick={() => setIsDark((prev) => !prev)}
+            onClick={handleToggle}
             className="relative w-[68px] flex-shrink-0 h-8 rounded-full shadow-lg overflow-hidden flex items-center p-1"
             animate={{
                 background: isDark
