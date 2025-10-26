@@ -54,9 +54,9 @@ export default async function RootLayout({
 
 
                     {/* HEADER */}
-                    <header className="sticky top-0 py-2 z-50 pointer-events-none">
-                      <div className="relative pointer-events-none flex items-center justify-end h-12">
-                        <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2">
+                    <header className="sticky top-0 z-50 pointer-events-none">
+                      <div className="relative pointer-events-none flex items-center justify-end h-16 px-4">
+                        <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2 top-2">
                           <NavPill
                             logoSrc="/star.svg"
                             brandName="ROPAgen"
@@ -73,7 +73,7 @@ export default async function RootLayout({
                     </header>
 
                     {/* MAIN CONTENT */}
-                    <main className="flex-grow pt-16">{children}</main>
+                    <main className="flex-grow">{children}</main>
                   </div>
 
                   {/* FOOTER - conditionally rendered, hidden on docs pages */}

@@ -146,8 +146,15 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                 transition={{ duration: 0.3 }}
                 className="md:hidden pointer-events-auto relative"
             >
-                <div
-                    className={`relative flex items-center justify-between w-fit ${isMobileMenuOpen ? "rounded-4xl" : "rounded-4xl"} overflow-visible border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] h-12 px-3 transition-all duration-300`}
+                <motion.div
+                    animate={{
+                        borderRadius: isMobileMenuOpen ? "24px" : "24px",
+                    }}
+                    transition={{
+                        duration: isMobileMenuOpen ? 0.05 : 0.3,
+                        ease: "easeOut",
+                    }}
+                    className="relative overflow-hidden border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)]"
                 >
                     <ShineBorder
                         borderWidth={0.3}
@@ -156,51 +163,53 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                         className="z-0 opacity-80 dark:opacity-60"
                     />
 
-                    {/* Logo + Brand */}
-                    <Link href="/" className="flex items-center gap-2 relative z-10">
-                        <Image src={logoSrc || "/placeholder.svg"} alt={brandName} width={30} height={30} className="h-6 w-6" />
-                        <span className="font-bold text-lg text-foreground">{brandName}</span>
-                    </Link>
+                    {/* Header row with logo and hamburger */}
+                    <div className="flex items-center justify-between h-12 px-3">
+                        {/* Logo + Brand */}
+                        <Link href="/" className="flex items-center gap-2 relative z-10">
+                            <Image src={logoSrc || "/placeholder.svg"} alt={brandName} width={30} height={30} className="h-6 w-6" />
+                            <span className="font-bold text-lg text-foreground">{brandName}</span>
+                        </Link>
 
-                    {/* Right side: Hamburger - expand and float in like desktop */}
-                    {isExpanded && (
-                        <motion.div
-                            initial={{ width: 0, opacity: 0 }}
-                            animate={{ width: "auto", opacity: 1 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            className="flex items-center gap-3 relative z-10 ml-4"
-                        >
-                            <motion.button
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: showGenerate ? 1 : 0, scale: showGenerate ? 1 : 0.8 }}
-                                transition={{ duration: 0.5 }}
-                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                className="text-foreground hover:text-accent transition-colors p-1"
-                                aria-label="Toggle menu"
+                        {/* Right side: Hamburger - expand and float in like desktop */}
+                        {isExpanded && (
+                            <motion.div
+                                initial={{ width: 0, opacity: 0 }}
+                                animate={{ width: "auto", opacity: 1 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                className="flex items-center gap-3 relative z-10 ml-4"
                             >
-                                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-                            </motion.button>
-                        </motion.div>
-                    )}
+                                <motion.button
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: showGenerate ? 1 : 0, scale: showGenerate ? 1 : 0.8 }}
+                                    transition={{ duration: 0.5 }}
+                                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                    className="text-foreground hover:text-accent transition-colors p-1"
+                                    aria-label="Toggle menu"
+                                >
+                                    {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                                </motion.button>
+                            </motion.div>
+                        )}
+                    </div>
 
-                    {/* Mobile menu dropdown */}
-                    <AnimatePresence>
+                    <AnimatePresence initial={false}>
                         {isMobileMenuOpen && (
                             <motion.div
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: "auto", opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className="absolute top-full left-0 right-0 mt-2 overflow-hidden"
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                className="overflow-hidden"
                             >
-                                <div className="flex flex-col items-end gap-2 py-3 px-4">
+                                <div className="flex flex-col items-end gap-2 py-3 px-4 relative z-10">
                                     {links.map(({ name, href }, idx) => (
                                         <motion.div
                                             key={idx}
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: 20 }}
-                                            transition={{ delay: idx * 0.05 }}
+                                            transition={{ delay: idx * 0.05, duration: 0.2 }}
                                         >
                                             <Link
                                                 href={href}
@@ -216,7 +225,7 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: 20 }}
-                                        transition={{ delay: links.length * 0.05 }}
+                                        transition={{ delay: links.length * 0.05, duration: 0.2 }}
                                         className="py-2"
                                     >
                                         <ThemeToggle />
@@ -225,7 +234,7 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                             </motion.div>
                         )}
                     </AnimatePresence>
-                </div>
+                </motion.div>
             </motion.div>
         </div>
     )
