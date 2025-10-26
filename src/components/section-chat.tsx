@@ -270,87 +270,87 @@ export default function SectionChat({
 
     return (
 
-            <div className="rounded-xl overflow-hidden">
-                {/* Chat Header */}
-                <div className="bg-background backdrop-blur-[2px] p-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                    </div>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setIsOpen(false)}
-                        className="h-6 w-6 p-0"
-                    >
-                        <X className="w-4 h-4" />
-                    </Button>
+        <div className="rounded-xl overflow-hidden">
+            {/* Chat Header */}
+            <div className="bg-background backdrop-blur-[2px] p-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
                 </div>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsOpen(false)}
+                    className="h-6 w-6 p-0"
+                >
+                    <X className="w-4 h-4" />
+                </Button>
+            </div>
 
-                {/* Messages */}
-                <div className="h-[400px] overflow-y-auto p-4 space-y-4 bg-background">
-                    {messages.length === 0 && !isLoading && (
-                        <div className="text-center text-muted-foreground text-sm py-8">
-                            <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                            <p>{t("chatWelcome") || "Ask me anything about this section!"}</p>
-                            <p className="mt-2 text-xs">
-                                {t("chatHint") || "I can help you understand what information is needed and fill it out based on your answers."}
-                            </p>
-                        </div>
-                    )}
-                    {messages.filter(msg => !msg.isStreaming || msg.content.length > 0).map((message, index) => (
+            {/* Messages */}
+            <div className="h-[400px] overflow-y-auto p-4 space-y-4 bg-background">
+                {messages.length === 0 && !isLoading && (
+                    <div className="text-center text-muted-foreground text-sm py-8">
+                        <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                        <p>{t("chatWelcome") || "Ask me anything about this section!"}</p>
+                        <p className="mt-2 text-xs">
+                            {t("chatHint") || "I can help you understand what information is needed and fill it out based on your answers."}
+                        </p>
+                    </div>
+                )}
+                {messages.filter(msg => !msg.isStreaming || msg.content.length > 0).map((message, index) => (
+                    <div
+                        key={index}
+                        className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                    >
                         <div
-                            key={index}
-                            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                            className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                                message.role === "user"
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-muted"
+                            }`}
                         >
                             <div
-                                className={`max-w-[80%] rounded-xl px-4 py-2 ${
-                                    message.role === "user"
-                                        ? "bg-primary text-primary-foreground"
-                                        : "bg-muted"
-                                }`}
-                            >
-                                <div
-                                    className="text-sm prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-2"
-                                    dangerouslySetInnerHTML={{ __html: parseMarkdown(message.content) }}
-                                />
-                            </div>
+                                className="text-sm prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-2"
+                                dangerouslySetInnerHTML={{ __html: parseMarkdown(message.content) }}
+                            />
                         </div>
-                    ))}
-                    {isLoading && messages[messages.length - 1]?.isStreaming !== true && (
-                        <div className="flex justify-start">
-                            <div className="bg-muted rounded-xl px-4 py-2 flex items-center gap-2">
-                                <ShinyText text="🧠" className="text-sm" />
-                                <ShinyText text={t("thinking") || "Thinking"} className="text-sm" />
-                            </div>
-                        </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-
-                {/* Input */}
-                <div className="p-3 bg-background backdrop-blur-[2px]">
-                    <div className="flex gap-2 ">
-                        <Input
-                            placeholder={t("chatPlaceholder") || "Type your message..."}
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            disabled={isLoading || disabled}
-                            className="flex-1"
-                        />
-                        <Button
-                            onClick={handleSendMessage}
-                            disabled={isLoading || !input.trim() || disabled}
-                            size="icon"
-                        >
-                            {isLoading ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                            ) : (
-                                <Send className="w-4 h-4" />
-                            )}
-                        </Button>
                     </div>
+                ))}
+                {isLoading && messages[messages.length - 1]?.isStreaming !== true && (
+                    <div className="flex justify-start">
+                        <div className="bg-muted rounded-full px-4 py-2 flex items-center gap-2">
+                            <ShinyText text="🧠" className="text-sm" />
+                            <ShinyText text={t("thinking") || "Thinking"} className="text-sm" />
+                        </div>
+                    </div>
+                )}
+                <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input */}
+            <div className="p-3 bg-background backdrop-blur-[2px]">
+                <div className="flex gap-2 ">
+                    <Input
+                        placeholder={t("chatPlaceholder") || "Type your message..."}
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        disabled={isLoading || disabled}
+                        className="flex-1"
+                    />
+                    <Button
+                        onClick={handleSendMessage}
+                        disabled={isLoading || !input.trim() || disabled}
+                        size="icon"
+                    >
+                        {isLoading ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                            <Send className="w-4 h-4" />
+                        )}
+                    </Button>
                 </div>
             </div>
+        </div>
 
     );
 }
