@@ -139,6 +139,7 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                 )}
             </motion.ul>
 
+            {/* Mobile nav */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -146,7 +147,7 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                 className="md:hidden pointer-events-auto relative"
             >
                 <div
-                    className={`relative flex items-center justify-between w-fit min-w-[200px] ${isMobileMenuOpen ? "rounded-4xl" : "rounded-4xl"} overflow-visible border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] h-12 px-3 transition-all duration-300`}
+                    className={`relative flex items-center justify-between w-fit ${isMobileMenuOpen ? "rounded-4xl" : "rounded-4xl"} overflow-visible border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] h-12 px-3 transition-all duration-300`}
                 >
                     <ShineBorder
                         borderWidth={0.3}
@@ -161,16 +162,26 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                         <span className="font-bold text-lg text-foreground">{brandName}</span>
                     </Link>
 
-                    {/* Right side: Hamburger only */}
-                    <div className="flex items-center gap-3 relative z-10">
-                        <button
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="text-foreground hover:text-accent transition-colors p-1"
-                            aria-label="Toggle menu"
+                    {/* Right side: Hamburger - expand and float in like desktop */}
+                    {isExpanded && (
+                        <motion.div
+                            initial={{ width: 0, opacity: 0 }}
+                            animate={{ width: "auto", opacity: 1 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                            className="flex items-center gap-3 relative z-10 ml-4"
                         >
-                            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-                        </button>
-                    </div>
+                            <motion.button
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: showGenerate ? 1 : 0, scale: showGenerate ? 1 : 0.8 }}
+                                transition={{ duration: 0.5 }}
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                className="text-foreground hover:text-accent transition-colors p-1"
+                                aria-label="Toggle menu"
+                            >
+                                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                            </motion.button>
+                        </motion.div>
+                    )}
 
                     {/* Mobile menu dropdown */}
                     <AnimatePresence>
