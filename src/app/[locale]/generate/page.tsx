@@ -19,9 +19,13 @@ export default function Generate() {
         setIsLoaded(true);
     }, []);
 
+    const handleTabChange = (value: string) => {
+        setGeneratedDocument("");
+    };
+
     return (
         <main className="container mx-auto py-10 relative space-y-6 w-full">
-            <Tabs defaultValue="mode1" className="w-full">
+            <Tabs defaultValue="mode1" className="w-full" onValueChange={handleTabChange}>
                 <TabsList className={`mb-4 flex w-fit mx-auto transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
                     <TabsTrigger value="mode1">{t("tabForm")}</TabsTrigger>
                     <TabsTrigger value="mode2">{t("tabExplain")}</TabsTrigger>
