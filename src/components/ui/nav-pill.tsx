@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import SlideHoverLink from "@/components/ui/slide-hover-link"
 import ThemeToggle from "@/components/ui/themetoggle"
+import LocaleSwitch from "@/components/ui/locale-switch"
 import { ShineBorder } from "@/components/ui/shine-border"
 import { Menu, X } from "lucide-react"
 
@@ -14,9 +15,10 @@ interface NavPillProps {
     brandName: string
     links: { name: string; href: string }[]
     hoverVariant?: "slide" | "color" | "pill"
+    locale: string
 }
 
-export default function NavPill({ logoSrc, brandName, links, hoverVariant = "slide" }: NavPillProps) {
+export default function NavPill({ logoSrc, brandName, links, hoverVariant = "slide", locale }: NavPillProps) {
     const [isExpanded, setIsExpanded] = useState(false)
     const [showGenerate, setShowGenerate] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -48,7 +50,7 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
-                className={`pointer-events-auto relative md:flex hidden mx-auto items-center justify-center w-fit rounded-full overflow-hidden border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] h-12 px-3`}
+                className={`pointer-events-auto relative md:flex hidden mx-auto items-center justify-center w-fit rounded-4xl overflow-hidden border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)] h-12 px-3`}
                 style={{ gap: 24 }}
             >
                 {/* Animated border shimmer like SpotlightCard */}
@@ -115,11 +117,21 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                             </motion.div>
                         ))}
 
-                        {/* ThemeToggle */}
+                        {/* LocaleSwitch */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: showGenerate ? 1 : 0 }}
                             transition={{ duration: 0.5, delay: showGenerate ? links.length * 0.1 : 0 }}
+                            className="flex items-center"
+                        >
+                            <LocaleSwitch currentLocale={locale} />
+                        </motion.div>
+
+                        {/* ThemeToggle */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: showGenerate ? 1 : 0 }}
+                            transition={{ duration: 0.5, delay: showGenerate ? (links.length + 1) * 0.1 : 0 }}
                             className="flex items-center"
                         >
                             <ThemeToggle />
@@ -147,14 +159,7 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                 className="md:hidden pointer-events-auto relative"
             >
                 <motion.div
-                    animate={{
-                        borderRadius: isMobileMenuOpen ? "24px" : "24px",
-                    }}
-                    transition={{
-                        duration: isMobileMenuOpen ? 0.05 : 0.3,
-                        ease: "easeOut",
-                    }}
-                    className="relative overflow-hidden border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)]"
+                    className="relative overflow-hidden rounded-[24px] border border-white/70 dark:border-white/30 bg-white/10 dark:bg-white/5 backdrop-blur-[2px] shadow-[inset_0_0_6px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.55)]"
                 >
                     <ShineBorder
                         borderWidth={0.3}
@@ -230,12 +235,22 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                                             </Link>
                                         </motion.div>
                                     ))}
-                                    {/* Theme Toggle as last item */}
+                                    {/* Locale Switch */}
                                     <motion.div
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: 20 }}
                                         transition={{ delay: links.length * 0.05, duration: 0.2 }}
+                                        className="py-2"
+                                    >
+                                        <LocaleSwitch currentLocale={locale} />
+                                    </motion.div>
+                                    {/* Theme Toggle as last item */}
+                                    <motion.div
+                                        initial={{ opacity: 0, x: 20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: 20 }}
+                                        transition={{ delay: (links.length + 1) * 0.05, duration: 0.2 }}
                                         className="py-2"
                                     >
                                         <ThemeToggle />

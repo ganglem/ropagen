@@ -7,7 +7,6 @@ import {NextIntlClientProvider, hasLocale} from 'next-intl';
 import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
 import {getTranslations} from 'next-intl/server';
-import LocaleSwitch from "@/components/ui/locale-switch";
 import ConditionalFooter from "@/components/ui/conditional-footer";
 
 export const metadata: Metadata = {
@@ -55,7 +54,7 @@ export default async function RootLayout({
 
                     {/* HEADER */}
                     <header className="sticky top-0 z-50 pointer-events-none">
-                      <div className="relative pointer-events-none flex items-center justify-end h-16 px-4">
+                      <div className="relative pointer-events-none flex items-center justify-center h-16 px-4">
                         <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2 top-2">
                           <NavPill
                             logoSrc="/star.svg"
@@ -63,11 +62,8 @@ export default async function RootLayout({
                             links={[
                               {name: t("generate"), href: "/generate"}
                             ]}
+                            locale={locale}
                           />
-                        </div>
-                        {/* Right-aligned Locale Switch */}
-                        <div className="pointer-events-auto">
-                          <LocaleSwitch currentLocale={locale} />
                         </div>
                       </div>
                     </header>
