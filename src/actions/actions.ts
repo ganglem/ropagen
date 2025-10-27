@@ -176,7 +176,7 @@ async function generatePromptFromData(
         // Chat mode: use chat prompts
         basePrompt = promptTemplate.chat.base || '';
         const sectionPromptKey = source.charAt(0).toUpperCase() + source.slice(1);
-        const sectionPrompt = promptTemplate.chat[sectionPromptKey] || promptTemplate.chat[source] || '';
+        const sectionPrompt = (promptTemplate.chat as any)[sectionPromptKey] || (promptTemplate.chat as any)[source] || '';
         basePrompt = `${basePrompt}\n\n${sectionPrompt}`;
 
         // Add initial message instructions
@@ -187,7 +187,7 @@ async function generatePromptFromData(
         // Explain mode: use explain prompts
         basePrompt = promptTemplate.explain.base || '';
         const sectionPromptKey = source.charAt(0).toUpperCase() + source.slice(1);
-        const sectionPrompt = promptTemplate.explain[sectionPromptKey] || promptTemplate.explain[source] || '';
+        const sectionPrompt = (promptTemplate.explain as any)[sectionPromptKey] || (promptTemplate.explain as any)[source] || '';
         basePrompt = `${basePrompt}\n\n${sectionPrompt}`;
 
         // Add initial message instructions
