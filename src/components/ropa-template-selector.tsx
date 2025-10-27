@@ -9,7 +9,7 @@ import {useTranslations, useLocale} from "next-intl";
 
 
 export default function RopaTemplateSelector({onSelect}: {
-    onSelect: (template: DocumentData | null) => void }){
+    onSelect: (template: DocumentData) => void }){
 
     const t = useTranslations('Generate');
     const locale = useLocale();
