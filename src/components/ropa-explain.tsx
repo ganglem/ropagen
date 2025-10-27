@@ -466,8 +466,14 @@ export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocumen
                             disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             onChatStateChange={handleChatStateChange}
                         />
+
+                        {/* Divider */}
+                        <div className="px-2 pt-2">
+                            <div className="h-px bg-border"></div>
+                        </div>
+
                         <SectionInput
-                            className="mt-4"
+                            className="mt-2"
                             section={section}
                             documentData={documentData}
                             onChange={handleSectionInputChange}

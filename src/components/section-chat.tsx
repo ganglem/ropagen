@@ -286,7 +286,7 @@ export default function SectionChat({
             </div>
 
             {/* Messages */}
-            <div className="h-[400px] overflow-y-auto p-4 space-y-4 bg-background">
+            <div className="h-[400px] overflow-y-auto p-4 space-y-4 bg-background border border-border rounded-xl">
                 {messages.length === 0 && !isLoading && (
                     <div className="text-center text-muted-foreground text-sm py-8">
                         <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
@@ -325,6 +325,7 @@ export default function SectionChat({
                 )}
                 <div ref={messagesEndRef} />
             </div>
+
 
             {/* Input */}
             <div className="p-3 bg-background backdrop-blur-[2px]">
