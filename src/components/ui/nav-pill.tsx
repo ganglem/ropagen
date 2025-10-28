@@ -9,6 +9,7 @@ import ThemeToggle from "@/components/ui/themetoggle"
 import LocaleSwitch from "@/components/ui/locale-switch"
 import { ShineBorder } from "@/components/ui/shine-border"
 import { Menu, X } from "lucide-react"
+import { AuthButtonClient } from "@/components/auth-button-client"
 
 interface NavPillProps {
     logoSrc: string
@@ -136,6 +137,16 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                         >
                             <ThemeToggle />
                         </motion.div>
+
+                        {/* AuthButton - ganz rechts */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: showGenerate ? 1 : 0 }}
+                            transition={{ duration: 0.5, delay: showGenerate ? (links.length + 2) * 0.1 : 0 }}
+                            className="flex items-center"
+                        >
+                            <AuthButtonClient locale={locale} />
+                        </motion.div>
                     </motion.div>
                 )}
 
@@ -254,6 +265,17 @@ export default function NavPill({ logoSrc, brandName, links, hoverVariant = "sli
                                         className="py-2"
                                     >
                                         <ThemeToggle />
+                                    </motion.div>
+
+                                    {/* AuthButton im Mobile Menu */}
+                                    <motion.div
+                                        initial={{ opacity: 0, x: 20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: 20 }}
+                                        transition={{ delay: (links.length + 2) * 0.05, duration: 0.2 }}
+                                        className="py-2"
+                                    >
+                                        <AuthButtonClient locale={locale} />
                                     </motion.div>
                                 </div>
                             </motion.div>
