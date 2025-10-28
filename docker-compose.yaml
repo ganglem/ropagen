@@ -14,8 +14,6 @@ services:
       - traefik.http.routers.ganglem-ropagen.tls=true
       - traefik.http.routers.ganglem-ropagen.tls.certresolver=lets-encrypt
       - traefik.docker.network=web
-      - traefik.http.routers.ganglem-ropagen.middlewares=ganglem-ropagen-auth
-      - traefik.http.middlewares.ganglem-ropagen-auth.basicauth.users=emilija:$$2y$$05$$tDhbeNaYAP68YA2UTeAvZuiPF2cyQf0VG2UDA8vpTTck7r0TPVdhW,magda:$$2y$$05$$1//kBHPKl/.Lt/plc7i/GeJZ5YoQ0reTuGolUXcXZ2Cr3mtYXbDgG,shmolbean:$$2y$$05$$Lxtapqyq58mqpT1WgzsLOOEu74PxnRdEjvTlj4zxJ621xZiccXS.q
       - com.centurylinklabs.watchtower.enable=true
 
   dev:
@@ -33,8 +31,6 @@ services:
       - traefik.http.routers.ganglem-ropagen-dev.tls=true
       - traefik.http.routers.ganglem-ropagen-dev.tls.certresolver=lets-encrypt
       - traefik.docker.network=web
-      - traefik.http.routers.ganglem-ropagen-dev.middlewares=ganglem-ropagen-dev-auth
-      - traefik.http.middlewares.ganglem-ropagen-dev-auth.basicauth.users=emilija:$$2y$$05$$tDhbeNaYAP68YA2UTeAvZuiPF2cyQf0VG2UDA8vpTTck7r0TPVdhW,magda:$$2y$$05$$1//kBHPKl/.Lt/plc7i/GeJZ5YoQ0reTuGolUXcXZ2Cr3mtYXbDgG,shmolbean:$$2y$$05$$Lxtapqyq58mqpT1WgzsLOOEu74PxnRdEjvTlj4zxJ621xZiccXS.q
       - com.centurylinklabs.watchtower.enable=true
 
 
