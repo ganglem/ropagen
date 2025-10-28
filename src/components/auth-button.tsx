@@ -11,24 +11,22 @@ export async function AuthButton({ locale }: AuthButtonProps) {
 
   const supabase = await createClient();
 
-  // You can also use getUser() which will be slower.
-  const { data } = await supabase.auth.getClaims();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  const user = data?.claims;
-
+  // Get user's first and last name from metadata
+  const firstName = user?.user_metadata?.first_name;
+  const lastName = user?.user_metadata?.last_name;
+  const fullName = firstName && lastName ? `${firstName} ${lastName}` : user?.email;
 
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
+      Hey, {fullName}!
       <LogoutButton />
     </div>
   ) : (
     <div className="flex gap-2">
       <Button asChild size="sm" variant={"outline"}>
         <Link href={`/${locale}/auth/login`}>Sign in</Link>
-      </Button>
-      <Button asChild size="sm" variant={"default"}>
-        <Link href={`/${locale}/auth/sign-up`}>Sign up</Link>
       </Button>
     </div>
   );
