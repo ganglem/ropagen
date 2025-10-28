@@ -2,6 +2,7 @@
 
 import {DocumentData, Template} from "@/models/DocumentData";
 import { generateText } from "ai";
+import type { LanguageModel } from "ai";
 import {openai} from '@ai-sdk/openai';
 import {Mistral} from "@mistralai/mistralai";
 import {availableModels} from "@/config/models";
@@ -80,7 +81,9 @@ export async function callAPI(
             }
 
             const response = await generateText({
-                model: openai(selectedModel),
+                // The SDK's `openai(...)` returns a v1 model object; `generateText` expects a v2 `LanguageModel`.
+                // Cast via `unknown` to satisfy TypeScript while keeping runtime behavior identical.
+                model: openai(selectedModel) as unknown as LanguageModel,
                 prompt: fullPrompt,
                 temperature: messages && messages.length > 0 ? 0.7 : 0,
             });
@@ -91,7 +94,8 @@ export async function callAPI(
 
         try {
             if (source == "finalropa") {
-                return true ? llmResponse : String(llmResponse);
+                // Simplified: the ternary always returns llmResponse. Keep runtime type as string.
+                return llmResponse;
             } else if (messages !== undefined) {
                 // Chat mode (including initial message): return both message and structured data
                 const { message, updatedData } = parseChatResponse(llmResponse);
