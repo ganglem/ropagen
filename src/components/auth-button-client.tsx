@@ -6,12 +6,14 @@ import { LogoutButton } from "./logout-button";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js"
+import { useTranslations } from "next-intl";
 
 interface AuthButtonProps {
     locale: string;
 }
 
 export function AuthButtonClient({ locale }: AuthButtonProps) {
+    const t = useTranslations("Authentication");
     const [user, setUser] = useState<User | null>(null);
     const supabase = createClient();
 
@@ -39,13 +41,16 @@ export function AuthButtonClient({ locale }: AuthButtonProps) {
 
     return user ? (
         <div className="flex items-center gap-4">
-            Hey, {fullName}!
+            {t("greeting")}, {fullName}!
             <LogoutButton />
         </div>
     ) : (
         <div className="flex gap-2">
             <Button asChild size="sm" variant={"outline"}>
-                <Link href={`/${locale}/auth/login`}>Sign in</Link>
+                <Link href={`/${locale}/auth/login`}>{t("signIn")}</Link>
+            </Button>
+            <Button asChild size="sm" variant={"default"}>
+                <Link href={`/${locale}/auth/sign-up`}>{t("signUp")}</Link>
             </Button>
         </div>
     );
