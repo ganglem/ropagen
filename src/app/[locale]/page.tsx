@@ -25,7 +25,7 @@ export default async function Home({ params }: HomeProps) {
         <>
             {/* Hero Section */}
             <section
-                className="h-[calc(100vh-6rem)] container overflow-hidden md:flex md:flex-col md:justify-center md:items-start md:pb-10"
+                className="h-[calc(100vh)] container overflow-hidden md:flex md:flex-col md:justify-center md:items-start md:pb-10"
             >
 
                 <div className="fixed right-8 bottom-8 z-50">
@@ -66,7 +66,7 @@ export default async function Home({ params }: HomeProps) {
                 </div>
             </section>
 
-            <div className="-mx-2 md:-mx-4 w-screen ">
+            <div className="w-full overflow-hidden">
                 <MovingBanner locale={locale} />
             </div>
 
