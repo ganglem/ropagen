@@ -1,13 +1,22 @@
 <p>
  <img src="public/star.svg" width="60" align="left" hspace="5">
  <p>
-   <h1><a href="https://ganglem.space">ROPAgen</a></h1>
+   <h1><a href="https://gropagen.eu">ROPAgen</a></h1>
  </p>
 </p>
 
 Software project at Ulm University at the DBIS institute for generating GDPR-compliant ROPA documents for companies using LLMs.
 
-🪐 This is a Next.js project and is deployed on [ganglem.space](https://ganglem.space)
+🪐 Generate your next ROPA at [ropagen.eu](https://ropagen.eu)
+
+## 🪢 What is ROPAgen?
+Creating ROPA documents is too tedious and time-consuming? ROPAgen is here to help! Our application leverages the power of Large Language Models (LLMs) to assist you in generating comprehensive Records of Processing Activities (ROPA) documents with ease.
+
+## 📎 Modes
+
+- **📝 Form**: Fill out a guided form to generate a ROPA document step-by-step. The LLM will assist you in filling out the form.
+- **💬 Explain**: Chat with the LLM about your ROPA document and get explanations for each section.
+- **🔮️ Chat**: Still no idea how to ROPA? Just chat with the LLM and get a generated ROPA document based on your inputs.
 
 
 ## 🥞 Tech Stack
@@ -22,28 +31,30 @@ Software project at Ulm University at the DBIS institute for generating GDPR-com
 - [Tailwind CSS](https://tailwindcss.com/) (UI Styling)
 
 
+## ⚙️ Installation
 
-## ⚙️ Getting Started Locally
+To get started with ROPAgen, follow these steps:
 
-If you need to install the dependencies, please use 
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/ropagen.git
+   cd ropagen
+   ```
 
-```bash
-npx pnpm install
-```
-or
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```bash
-npm install --force
-```
+3. Set up environment variables (see `.env.example` if available).
 
-Run the development server:
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm run dev
-```
+Open [http://localhost:3000](http://localhost:3000) in your browser to start using the application.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📜 License
 
-## 🏞️ .env
-Please create a local .env with an OPENAI_API_KEY variable..
-
+TBD.
