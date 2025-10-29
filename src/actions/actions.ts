@@ -257,7 +257,7 @@ Use all this context to provide relevant and specific suggestions for the ${sour
     `.trim() : `
     
 
-    Language: ${locale}
+    Language: IMPORTANT: You must use ${locale}.
     
     Document Title:
     ${documentData.title || 'No title provided.'}
