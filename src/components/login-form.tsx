@@ -39,11 +39,40 @@ export function LoginForm({
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-      if (error) throw error;
+
+      if (signInError) {
+        // Map Supabase error to a user-facing message and stop further execution.
+        let errorMessage = t("errors.generalError");
+
+        if (signInError.message?.includes("Invalid login credentials")) {
+          errorMessage = t("errors.invalidCredentials");
+        } else if (signInError.message?.includes("Email not confirmed")) {
+          errorMessage = t("errors.emailNotConfirmed");
+        } else if (signInError.message) {
+          errorMessage = signInError.message;
+        }
+
+        setError(errorMessage);
+        return;
+      }
+
+      // Refresh server-side session data so server components see the new auth state,
+      // then navigate to the generate page.
+      try {
+        // In the Next.js app router, router.refresh() forces server components to
+        // re-render and pick up auth cookies/session set by Supabase.
+        router.refresh();
+      } catch (err) {
+        // If refresh is unavailable for some reason, fall back silently and continue.
+        // This keeps behavior safe across different Next.js versions/runtimes.
+        // eslint-disable-next-line no-console
+        console.warn("Router refresh failed:", err);
+      }
+
       router.push(`/${locale}/generate`);
     } catch (error: any) {
       console.error("Login error:", error);
