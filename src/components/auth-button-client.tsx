@@ -49,9 +49,6 @@ export function AuthButtonClient({ locale }: AuthButtonProps) {
             <Button asChild size="sm" variant={"outline"}>
                 <Link href={`/${locale}/auth/login`}>{t("signIn")}</Link>
             </Button>
-            <Button asChild size="sm" variant={"default"}>
-                <Link href={`/${locale}/auth/sign-up`}>{t("signUp")}</Link>
-            </Button>
         </div>
     );
 }
