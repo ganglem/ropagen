@@ -11,7 +11,7 @@ import ConditionalFooter from "@/components/ui/conditional-footer";
 
 export const metadata: Metadata = {
   title: "ROPAgen",
-  description: "Generate your own ROPA files with ease",
+  description: "Generate your own ROPA files with ease.",
 };
 
 export default async function RootLayout({
