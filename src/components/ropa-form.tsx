@@ -226,6 +226,53 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
     // Check if any AI suggest is currently loading
     const isAnyAiSuggestLoading = Object.values(aiSuggestLoading).some(loading => loading);
 
+    // Simple toast state & helper (local to this component)
+    type Toast = { id: string; message: string; type?: 'info' | 'success' | 'error' };
+    const [toasts, setToasts] = useState<Toast[]>([]);
+
+    function showToast(message: string, type: Toast['type'] = 'info') {
+        const id = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+        setToasts((prev) => [...prev, { id, message, type }]);
+        // auto-dismiss
+        window.setTimeout(() => {
+            setToasts((prev) => prev.filter((t) => t.id !== id));
+        }, 4000);
+    }
+
+    // Basic deep-ish comparison that counts primitive differences between two objects/values
+    function countDifferences(oldVal: any, newVal: any): number {
+        let count = 0;
+        const seen = new WeakSet();
+
+        function recurse(o: any, n: any) {
+            // prevent cycles
+            if (o && typeof o === 'object') {
+                if (seen.has(o)) return;
+                seen.add(o);
+            }
+
+            // if new value is a primitive, direct compare
+            if (n === null || typeof n !== 'object' || Array.isArray(n)) {
+                if (o !== n) count++;
+                return;
+            }
+
+            // both are objects - iterate keys from new object (we consider new object as source of truth)
+            for (const key of Object.keys(n)) {
+                const nv = n[key];
+                const ov = o ? o[key] : undefined;
+                if (nv === null || typeof nv !== 'object' || Array.isArray(nv)) {
+                    if (ov !== nv) count++;
+                } else {
+                    recurse(ov, nv);
+                }
+            }
+        }
+
+        recurse(oldVal, newVal);
+        return count;
+    }
+
     function handleTitleChange(title: string) {
         setDocumentData({...documentData, title});
     }
@@ -445,69 +492,113 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         try {
             const suggestion = await callAPI(documentData, t("locale"), source, selectedModel);
 
+            if (!suggestion) {
+                showToast(t("noSuggestionReturned") || 'No suggestion returned from the AI.', 'info');
+                return;
+            }
+
+            // Helper to compare and apply suggestion for object/string parts
+            function applyIfChanged(oldPart: any, newPart: any, applyFn: (part: any) => void, partName?: string) {
+                if (newPart === undefined || newPart === null) {
+                    showToast(partName ? `${partName}: no suggestion returned` : 'No suggestion returned.', 'info');
+                    return false;
+                }
+
+                const changes = countDifferences(oldPart, newPart);
+                if (changes === 0) {
+                    showToast(partName ? t('noChangesDetected', { part: partName }) : t('noChangesDetected') || 'No changes detected from AI suggestion.', 'info');
+                    return false;
+                }
+
+                applyFn(newPart);
+                showToast(partName ? t('appliedChanges', { count: changes, part: partName }) : `${changes} change(s) applied.`, 'success');
+                return true;
+            }
+
             // Apply the suggestion based on the source
             switch (source) {
                 case 'purposeOfDataProcessing':
                     if (suggestion.purposeOfDataProcessing) {
-                        setDocumentData({...documentData, purposeOfDataProcessing: suggestion.purposeOfDataProcessing});
+                        applyIfChanged(documentData.purposeOfDataProcessing, suggestion.purposeOfDataProcessing, (part) => {
+                            setDocumentData({...documentData, purposeOfDataProcessing: part});
+                        }, t('purposeOfDataProcessing'));
+                    } else {
+                        showToast(t('noSuggestionReturned') || 'No suggestion returned for purpose of data processing.', 'info');
                     }
                     break;
                 case 'technicalOrganizationalMeasures':
                     if (suggestion.technicalOrganizationalMeasures) {
-                        setDocumentData({...documentData, technicalOrganizationalMeasures: suggestion.technicalOrganizationalMeasures});
+                        applyIfChanged(documentData.technicalOrganizationalMeasures, suggestion.technicalOrganizationalMeasures, (part) => {
+                            setDocumentData({...documentData, technicalOrganizationalMeasures: part});
+                        }, t('technicalOrganizationalMeasures'));
+                    } else {
+                        showToast(t('noSuggestionReturned') || 'No suggestion returned for technical/organizational measures.', 'info');
                     }
                     break;
                 case 'legalBasis':
                     if (suggestion.legalBasis) {
-                        setDocumentData({...documentData, legalBasis: suggestion.legalBasis});
+                        applyIfChanged(documentData.legalBasis, suggestion.legalBasis, (part) => {
+                            setDocumentData({...documentData, legalBasis: part});
+                        }, t('legalBasis'));
                     }
                     break;
                 case 'dataSources':
                     if (suggestion.dataSources) {
-                        setDocumentData({
-                            ...documentData,
-                            categories: {
-                                ...documentData.categories,
-                                dataSources: suggestion.dataSources
-                            }
-                        });
+                        applyIfChanged(documentData.categories.dataSources, suggestion.dataSources, (part) => {
+                            setDocumentData({
+                                ...documentData,
+                                categories: {
+                                    ...documentData.categories,
+                                    dataSources: part
+                                }
+                            });
+                        }, t('dataSources'));
                     }
                     break;
                 case 'dataCategories':
                     if (suggestion.dataCategories) {
-                        setDocumentData({
-                            ...documentData,
-                            categories: {
-                                ...documentData.categories,
-                                dataCategories: suggestion.dataCategories
-                            }
-                        });
+                        applyIfChanged(documentData.categories.dataCategories, suggestion.dataCategories, (part) => {
+                            setDocumentData({
+                                ...documentData,
+                                categories: {
+                                    ...documentData.categories,
+                                    dataCategories: part
+                                }
+                            });
+                        }, t('dataCategories'));
                     }
                     break;
                 case 'personCategories':
                     if (suggestion.persons) {
-                        setDocumentData({
-                            ...documentData,
-                            categories: {
-                                ...documentData.categories,
-                                persons: suggestion.persons
-                            }
-                        });
+                        applyIfChanged(documentData.categories.persons, suggestion.persons, (part) => {
+                            setDocumentData({
+                                ...documentData,
+                                categories: {
+                                    ...documentData.categories,
+                                    persons: part
+                                }
+                            });
+                        }, t('personCategories'));
                     }
                     break;
                 case 'retentionPeriods':
                     if (suggestion.retentionPeriods) {
-                        setDocumentData({...documentData, retentionPeriods: suggestion.retentionPeriods});
+                        applyIfChanged(documentData.retentionPeriods, suggestion.retentionPeriods, (part) => {
+                            setDocumentData({...documentData, retentionPeriods: part});
+                        }, t('retentionPeriods'));
                     }
                     break;
                 case 'additionalInfo':
                     if (suggestion.additionalInfo) {
-                        setDocumentData({...documentData, additionalInfo: suggestion.additionalInfo});
+                        applyIfChanged(documentData.additionalInfo, suggestion.additionalInfo, (part) => {
+                            setDocumentData({...documentData, additionalInfo: part});
+                        }, t('additionalInfo'));
                     }
                     break;
             }
         } catch (error) {
             console.error('AI suggestion failed:', error);
+            showToast(t('aiSuggestionFailed') || 'AI suggestion failed. See console for details.', 'error');
             // You might want to show an error toast here
         } finally {
             setAiSuggestLoading({...aiSuggestLoading, [source]: false});
@@ -972,6 +1063,15 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                     </div>
                 </CardContent>
             </Card>
+
+            {/* Toasts (local, simple) */}
+            <div aria-live="polite" className="fixed right-4 bottom-6 z-50 space-y-2">
+                {toasts.map((tst) => (
+                    <div key={tst.id} className={`max-w-sm w-full px-4 py-2 rounded shadow-lg text-sm text-white ${tst.type === 'success' ? 'bg-green-600' : tst.type === 'error' ? 'bg-red-600' : 'bg-gray-700'}`}>
+                        {tst.message}
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }

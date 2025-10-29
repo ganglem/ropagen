@@ -267,9 +267,12 @@
       "retentionPeriods": "Geben Sie an, wie lange Sie personenbezogene Daten vor der Löschung aufbewahren. Definieren Sie Aufbewahrungsfristen basierend auf gesetzlichen Anforderungen, Geschäftsbedürfnissen oder bis zum Widerruf der Einwilligung.",
       "additionalInfo": "Fügen Sie zusätzliche Informationen hinzu, die für diese Verarbeitungstätigkeit relevant sind, wie besondere Sicherheitsmaßnahmen, Drittanbieter-Verarbeiter, internationale Datentransfers oder spezifische Compliance-Hinweise.",
       "generateDocument": "Wählen Sie Ihr KI-Modell und generieren Sie das finale VVT-Dokument. Das System erstellt aus allen bereitgestellten Informationen ein umfassendes, DSGVO-konformes Verzeichnis von Verarbeitungstätigkeiten."
-    }
+    },
+    "noSuggestionReturned": "Kein Vorschlag der KI gegeben.",
+    "noChangesDetected": "Keine Änderungen der KI erkannt.",
+    "appliedChanges": "Es wurde(n) {count} Änderung(en) vorgenommen.",
+    "aiSuggestionFailed": "KI Vorschlag fehlgeschlagen."
   },
-
   "Preview": {
     "generatedDocument": "Erstelltes Dokument",
     "edit": "Bearbeiten",

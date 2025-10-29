@@ -265,7 +265,11 @@
       "retentionPeriods": "Specify how long you keep personal data before deletion. Define retention periods based on legal requirements, business needs, or until consent is withdrawn.",
       "additionalInfo": "Add any extra information relevant to this processing activity, such as special security measures, third-party processors, international data transfers, or specific compliance notes.",
       "generateDocument": "Choose your AI model and generate the final ROPA document. The system will compile all provided information into a comprehensive, GDPR-compliant record of processing activities."
-    }
+    },
+    "noSuggestionReturned": "No suggestion returned from the AI.",
+    "noChangesDetected": "No changes detected from AI suggestion.",
+    "appliedChanges": "Applied {count} change(s).",
+    "aiSuggestionFailed": "AI suggestion failed."
   },
   "Preview": {
     "generatedDocument": "Generated Document",
