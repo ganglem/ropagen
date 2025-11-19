@@ -1,135 +1,26 @@
 ---
-title: How To Use ROPAgen
-description: Step-by-step guide to using the ROPA Generator for GDPR compliance
+title: How to Use ROPAgen
+description: Step-by-step guide on generating GDPR-compliant ROPA documents using ROPAgen
 ---
 
-The ROPA Generator helps you create professional Records of Processing Activities (ROPA) documents required by GDPR Article 30. This guide shows you how to navigate the website and generate compliant documentation.
+## Getting Started with ROPAgen
+ROPAgen simplifies the process of creating GDPR-compliant Records of Processing Activities (ROPA) documents. Follow this step-by-step guide to generate your ROPA document efficiently.
 
-## Your Workflow Options
+### Step 1: Access ROPAgen
+Visit the ROPAgen platform at [ropagen.eu](https://ropagen.eu) and
+create an account or log in if you already have one.
 
-### Option 1: Start with a Template
-Select from pre-built templates that automatically populate your form with common data processing scenarios. Templates are available for HR management, customer relations, and marketing activities.
+### Step 2: Choose a Generation Mode
+ROPAgen offers multiple modes to suit your needs:
+- **📝 Form Mode**: Fill out a guided form with prompts to generate your ROPA document step-by-step.
+- **💬 Explain Mode**: Chat with the LLM to get explanations for each section of your ROPA document.
+- **🔮️ Chat Mode**: Engage in a conversation with the LLM to generate a ROPA document based on your inputs.
 
-### Option 2: Fill Out Form Directly
-Skip templates and build your ROPA from scratch by filling out each section manually.
+### Step 3: Provide Necessary Information
+Depending on the mode you selected, provide the required information about your organization's data processing activities. The LLM will assist you in filling out the form or generating the document.
 
-## Navigating the Form
+### Step 4: Review and Edit
+Once the ROPA document is generated, review it carefully. Make any necessary edits to ensure accuracy and completeness.
 
-### Organization Details
-Enter your company information, contact details, and Data Protection Officer information. These details appear in every generated document.
-
-### Purpose and Legal Basis
-Describe why you process personal data and select the applicable GDPR legal grounds. Be specific about your business objectives.
-
-### Data Categories and Sources
-Choose what types of personal data you process and where it comes from. The form includes comprehensive categories from basic contact information to specialized business data.
-
-### Adding Custom Data
-In any text field, you can add specific details relevant to your organization. The "Additional Information" section lets you include custom requirements or special processing conditions.
-
-### Technical Measures
-Describe your security practices and data protection measures. This becomes a key section in your ROPA document.
-
-## Choose Your AI Model
-
-Select from available language models:
-
-**GPT-4o**: Most comprehensive outputs with detailed GDPR compliance
-**GPT-4.1**: Alternative OpenAI model for varied writing styles
-**Mistral**: European AI provider for data sovereignty requirements
-
-## How the AI Generation Works
-
-When you click generate, the application transforms your form data into a structured prompt for the AI model.
-
-### The Prompt Construction Code
-
-```typescript
-function generatePromptFromData(documentData: DocumentData, locale: string): string {
-    // Convert form selections to readable text
-    const selectedDataSources = Object.entries(documentData.categories.dataSources)
-        .filter(([key, value]) => value === true || (typeof value === 'string' && value.trim() !== ''))
-        .map(([key, value]) => `- ${key.replace(/([A-Z])/g, ' $1').trim()}`)
-        .join('\n');
-
-    // Organize data categories hierarchically
-    const selectedDataCategories = Object.entries(documentData.categories.dataCategories)
-        .map(([categoryKey, categoryData]) => {
-            const selectedItems = Object.entries(categoryData)
-                .filter(([_, isSelected]) => isSelected)
-                .map(([subKey]) => `  - ${subKey.replace(/([A-Z])/g, ' $1').trim()}`)
-                .join('\n');
-
-            return selectedItems ? `${categoryKey}:\n${selectedItems}` : null;
-        })
-        .filter(Boolean)
-        .join('\n\n');
-
-    // Build the complete prompt
-    return `You are a GDPR compliance expert. Generate a professional ROPA document...`;
-}
-```
-
-### The AI Prompt Structure
-
-The AI receives this structured prompt with your data:
-
-```
-You are an expert in data protection compliance. Generate a professional,
-structured Records of Processing Activities (ROPA) document in full compliance
-with the EU General Data Protection Regulation (GDPR).
-
-Language: English
-
-Document Title: [Your Title]
-
-Organization Information:
-- Name: [Your Company]
-- Role: Controller
-- Contact: [Address, Email, Phone]
-- DPO: [Data Protection Officer Details]
-
-Purpose of Data Processing:
-[Your specified business purposes]
-
-Legal Basis for Processing:
-- Art. 6(1)(b): Contract performance
-- Art. 6(1)(c): Legal obligation
-
-Data Sources:
-- Microsoft Office 365
-- HR Software
-- Email Systems
-
-Data Categories:
-Personal Data:
-  - Last Name
-  - First Name
-  - Email Address
-
-Technical and Organizational Measures:
-[Your security measures]
-
-Instructions:
-Create a comprehensive ROPA document with these sections:
-1. Organization and Controller Information
-2. Purpose and Legal Basis for Processing
-3. Data Categories and Sources
-4. Data Subjects and Recipients
-5. Data Retention and Deletion
-6. Technical and Organizational Measures
-
-Output as professional Markdown suitable for DPO review.
-```
-
-### How It Works
-
-The code automatically converts your form selections into readable text, filters out empty fields, and organizes everything into a structured prompt. The AI then generates a professional ROPA document following GDPR Article 30 requirements.
-
-The system handles fallbacks for missing information and ensures all provided data appears in the final document.
-
-## Export Your Document
-
-Once generated, export your ROPA in multiple formats: PDF for official use, Markdown for editing, or plain text for maximum compatibility.
-
-The ROPA Generator streamlines GDPR compliance by transforming complex form data into professional documentation through sophisticated AI prompting and processing.
+### Step 5: Download and Save
+After finalizing your ROPA document, download it in your preferred format (e.g., PDF) and save it securely for your records.
