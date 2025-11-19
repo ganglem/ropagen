@@ -343,7 +343,10 @@
       "accountCreated": "Konto erfolgreich erstellt!",
       "checkEmail": "Bitte überprüfen Sie Ihre E-Mail",
       "resetLinkSent": "Link zum Zurücksetzen wurde gesendet",
-      "passwordUpdated": "Passwort erfolgreich aktualisiert"
+      "passwordUpdated": "Passwort erfolgreich aktualisiert",
+      "signUpTitle": "Vielen Dank für Ihre Registrierung!",
+      "signUpDescription": "Überprüfen Sie Ihre E-Mail zur Bestätigung",
+      "signUpMessage": "Sie haben sich erfolgreich registriert. Bitte überprüfen Sie Ihre E-Mail, um Ihr Konto zu bestätigen, bevor Sie sich anmelden."
     }
   }
 }
