@@ -341,7 +341,10 @@
       "accountCreated": "Account created successfully!",
       "checkEmail": "Please check your email",
       "resetLinkSent": "Reset link sent",
-      "passwordUpdated": "Password updated successfully"
+      "passwordUpdated": "Password updated successfully",
+      "signUpTitle": "Thank you for signing up!",
+      "signUpDescription": "Check your email to confirm",
+      "signUpMessage": "You've successfully signed up. Please check your email to confirm your account before signing in."
     }
   }
 }
