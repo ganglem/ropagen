@@ -4,7 +4,12 @@ import {DocumentData, Template} from "@/models/DocumentData";
 import { generateText } from "ai";
 import {openai} from '@ai-sdk/openai';
 import {Mistral} from "@mistralai/mistralai";
-import {availableModels} from "@/config/models";
+import {availableModels, defaultModel} from "@/config/models";
+import {createOpenRouter} from "@openrouter/ai-sdk-provider";
+
+const openrouter = createOpenRouter({
+    apiKey: process.env.OPENROUTER_API_KEY || '',
+})
 
 export async function fetchMockTemplates(locale: string = "en"): Promise<Template[]> {
     // Dynamically import the correct mock-<locale>.json file
@@ -21,7 +26,7 @@ export async function callAPI(
     data: DocumentData,
     locale: string,
     source: string,
-    selectedModel: string = 'gpt-4o',
+    selectedModel: string = defaultModel,
     chatMode: string = "",
     messages?: ChatMessage[],
     isInitial?: boolean,
@@ -31,63 +36,21 @@ export async function callAPI(
 
         let llmResponse = "";
 
-        const modelEndpoint = availableModels.find(model => model.name == selectedModel)?.endpoint
-
-        if (modelEndpoint == "mistral") {
-            const mistralApiKey = process.env.MISTRAL_API_KEY;
-            const client = new Mistral({apiKey: mistralApiKey});
-
-            let response;
-            // If messages are provided, use chat format
-            if (messages && messages.length > 0) {
-                response = await client.chat.complete({
-                    model: selectedModel,
-                    messages: [
-                        { role: 'system', content: prompt },
-                        ...messages.map(msg => ({
-                            role: msg.role,
-                            content: msg.content
-                        })) as any
-                    ],
-                });
-
-                const content = response.choices[0]?.message?.content;
-                llmResponse = typeof content === 'string' ? content : String(content || '');
-            } else {
-                // Single prompt format for AI suggestions
-                response = await client.chat.complete({
-                    model: selectedModel,
-                    messages: [
-                        {
-                            role: 'user',
-                            content: prompt,
-                        },
-                    ],
-                })
-
-                const content = response.choices[0]?.message?.content;
-                llmResponse = typeof content === 'string' ? content : String(content || '');
-            }
-
-            console.log(response)
-
-        } else if (modelEndpoint == "openai") {
-            // If messages are provided, include conversation in prompt
-            let fullPrompt = prompt;
-            if (messages && messages.length > 0) {
-                const conversationText = messages.map(m => `${m.role}: ${m.content}`).join('\n');
-                fullPrompt = `${prompt}\n\nConversation:\n${conversationText}\n\nassistant:`;
-            }
-
-            const response = await generateText({
-                model: openai(selectedModel),
-                prompt: fullPrompt,
-                temperature: messages && messages.length > 0 ? 0.7 : 0,
-            });
-            llmResponse = response.text || '';
-
-            console.log(response)
+        // If messages are provided, include conversation in prompt
+        let fullPrompt = prompt;
+        if (messages && messages.length > 0) {
+            const conversationText = messages.map(m => `${m.role}: ${m.content}`).join('\n');
+            fullPrompt = `${prompt}\n\nConversation:\n${conversationText}\n\nassistant:`;
         }
+
+        const response = await generateText({
+            model: openrouter(selectedModel),
+            prompt: fullPrompt,
+            temperature: messages && messages.length > 0 ? 0.7 : 0,
+        });
+        llmResponse = response.text || '';
+
+        console.log(response)
 
         try {
             if (source == "finalropa") {
