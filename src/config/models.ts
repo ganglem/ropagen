@@ -2,27 +2,22 @@
 export interface ModelOption {
     name: string;
     label: string;
-    endpoint: string;
 }
 
 export const availableModels: ModelOption[] = [
     {
-        name: "gpt-4.1",
+        name: "openai/gpt-4.1",
         label: "GPT-4.1",
-        endpoint: "openai"
-
     },
     {
-        name: "gpt-4o",
+        name: "openai/chatgpt-4o-latest",
         label: "GPT-4o",
-        endpoint: "openai"
     },
     {
-        name: "magistral-small-latest",
-        label: "Magistral Small",
-        endpoint: "mistral"
+        name: "mistralai/mistral-small-3.2-24b-instruct",
+        label: "Magistral Small 3.2 24B",
     }
 ];
 
 // Default model
-export const defaultModel = "gpt-4o";
+export const defaultModel = "openai/chatgpt-4o-latest";
