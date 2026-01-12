@@ -50,26 +50,7 @@ export default async function RootLayout({
                   ></div>
                 <div className="min-h-screen flex flex-col">
                   <div className="relative flex-grow">
-
-
-                    {/* HEADER */}
-                    <header className="sticky top-0 z-50 pointer-events-none">
-                      <div className="relative pointer-events-none flex items-center justify-center h-16 px-4">
-                        <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2 top-2">
-                          <NavPill
-                            logoSrc="/star.svg"
-                            brandName="ROPAgen"
-                            links={[
-                              {name: t("generate"), href: "/generate"}
-                            ]}
-                            locale={locale}
-                          />
-                        </div>
-                      </div>
-                    </header>
-
-                    {/* MAIN CONTENT */}
-                    <main className="flex-grow">{children}</main>
+                      {children}
                   </div>
 
                   {/* FOOTER - conditionally rendered, hidden on docs pages */}
