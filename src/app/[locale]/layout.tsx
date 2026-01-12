@@ -27,8 +27,6 @@ export default async function RootLayout({
         notFound();
     }
 
-    const t = await getTranslations('Layout');
-
     return (
         <html lang={locale} suppressHydrationWarning>
         <Head>

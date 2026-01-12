@@ -5,7 +5,7 @@ import RopaPreview from "@/components/ropa-preview";
 import {useState, useEffect} from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import RopaChat from "@/components/ropa-chat";
-import RopaExplain from "@/components/ropa-explain";
+import RopaAsk from "@/components/ropa-ask";
 import {useTranslations} from "next-intl";
 
 
@@ -38,7 +38,7 @@ export default function Generate() {
                 </TabsContent>
 
                 <TabsContent value="mode2" className="space-y-6">
-                    <RopaExplain setGeneratedDocument={setGeneratedDocument}/>
+                    <RopaAsk setGeneratedDocument={setGeneratedDocument}/>
                     {generatedDocument != "" && <RopaPreview generatedDocument={generatedDocument} setGeneratedDocument={setGeneratedDocument}/>}
                 </TabsContent>
 
