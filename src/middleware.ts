@@ -6,6 +6,7 @@ import {routing} from './i18n/routing';
 const handleI18nRouting = createIntlMiddleware(routing);
 
 const PROTECTED_ROUTES = ['/generate', '/profile'];
+const OVERWRITTEN_PROTECTED_ROUTES_AS_PUBLIC = ['/generate/ask', '/generate/chat', '/generate/form'];
 
 function stripLocale(pathname: string) {
     const [, first, ...rest] = pathname.split('/');
@@ -58,6 +59,10 @@ export async function middleware(request: NextRequest) {
     const pathWithoutLocale = stripLocale(pathname);
 
     const isProtected = PROTECTED_ROUTES.some(
+        (route) =>
+            pathWithoutLocale === route ||
+            pathWithoutLocale.startsWith(`${route}/`)
+    ) && !OVERWRITTEN_PROTECTED_ROUTES_AS_PUBLIC.some(
         (route) =>
             pathWithoutLocale === route ||
             pathWithoutLocale.startsWith(`${route}/`)
