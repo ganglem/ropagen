@@ -14,7 +14,7 @@ import { DocumentData } from "@/models/DocumentData";
 import SectionChat from "./section-chat";
 import SectionInput from "./section-input";
 
-export default function RopaExplain({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
+export default function RopaAsk({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
     const t = useTranslations('Generate');
 

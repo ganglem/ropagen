@@ -8,7 +8,17 @@ import {Download, Eye, Edit, Loader2} from "lucide-react";
 import {useState, useEffect} from "react";
 import {marked} from "marked";
 
-export default function RopaPreview({generatedDocument, setGeneratedDocument}: { generatedDocument: string, setGeneratedDocument: (doc: string) => void }) {
+export default function RopaPreview({
+    generatedDocument,
+    setGeneratedDocument,
+    userId,
+    mode
+}: {
+    generatedDocument: string,
+    setGeneratedDocument: (doc: string) => void,
+    userId?: string
+    mode?: 'form' | 'ask' | 'chat'
+}) {
 
     const t = useTranslations('Preview');
     const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
@@ -22,6 +32,20 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
             gfm: true,
         });
     }, []);
+
+    const appendDocumentWithMetadata = (document: string) => {
+        let metadata = ""
+
+        if (userId) {
+            metadata += `User ID: ${userId}\n`
+        }
+
+        if (metadata !== "") {
+            return document + `\n\n---\n${metadata}Date: ${new Date().toISOString()}`;
+        }
+
+        return document;
+    }
 
     // Clean markdown content for rendering - always remove code block markers
     const getCleanMarkdown = (markdown: string) => {
@@ -106,6 +130,10 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
         }
     };
 
+    const getFileNameBase = () => {
+        return userId && mode ? `${userId}_${mode}` : 'ropa-document';
+    }
+
     const downloadFile = (content: string, filename: string, mimeType: string) => {
         const blob = new Blob([content], { type: mimeType });
         const url = URL.createObjectURL(blob);
@@ -120,24 +148,24 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
 
     const downloadAsMarkdown = () => {
         // Add markdown code block wrapper for .md download
-        const markdownContent = `\`\`\`markdown\n${getCleanMarkdown(generatedDocument)}\n\`\`\``;
-        downloadFile(markdownContent, 'ropa-document.md', 'text/markdown');
+        const markdownContent = `\`\`\`markdown\n${appendDocumentWithMetadata(getCleanMarkdown(generatedDocument))}\n\`\`\``;
+        downloadFile(markdownContent, `${getFileNameBase()}.md`, 'text/markdown');
     };
 
     const downloadAsText = () => {
         // Strip all markdown syntax for plain text
-        const plainText = stripMarkdownSyntax(generatedDocument);
-        downloadFile(plainText, 'ropa-document.txt', 'text/plain');
+        const plainText = appendDocumentWithMetadata(stripMarkdownSyntax(generatedDocument));
+        downloadFile(plainText, `${getFileNameBase()}.txt`, 'text/plain');
     };
 
     const downloadAsJson = () => {
         const jsonData = {
-            document: generatedDocument, // Keep as-is for JSON
+            document: appendDocumentWithMetadata(generatedDocument), // Keep as-is for JSON
             generatedAt: new Date().toISOString(),
             format: "ROPA Document",
             version: "1.0"
         };
-        downloadFile(JSON.stringify(jsonData, null, 2), 'ropa-document.json', 'application/json');
+        downloadFile(JSON.stringify(jsonData, null, 2), `${getFileNameBase()}.json`, 'application/json');
     };
 
     const downloadAsPdf = async () => {
@@ -151,7 +179,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    markdown: getCleanMarkdown(generatedDocument)
+                    markdown: appendDocumentWithMetadata(getCleanMarkdown(generatedDocument))
                 })
             });
 
@@ -166,7 +194,7 @@ export default function RopaPreview({generatedDocument, setGeneratedDocument}: {
             const url = URL.createObjectURL(pdfBlob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'ropa-document.pdf';
+            a.download = `${getFileNameBase()}.pdf`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

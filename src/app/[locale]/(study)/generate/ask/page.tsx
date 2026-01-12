@@ -1,17 +1,12 @@
 "use client"
 
-import RopaPreview from "@/components/ropa-preview";
-import RopaExplain from "@/components/ropa-explain";
-import {useState} from "react";
+import RopaAsk from "@/components/ropa-ask";
+import StudyGenerate from "@/components/study/study-generate";
 
 export default function AskGeneratePage() {
 
-    const [generatedDocument, setGeneratedDocument] = useState<string>("");
-
-    return (
-        <main className="container mx-auto py-10 relative space-y-6 w-full">
-            <RopaExplain setGeneratedDocument={setGeneratedDocument}/>
-            {generatedDocument != "" && <RopaPreview generatedDocument={generatedDocument} setGeneratedDocument={setGeneratedDocument}/>}
-        </main>
-    )
+    return <StudyGenerate
+        mode={"ask"}
+        ropaForm={RopaAsk}
+    />
 }
