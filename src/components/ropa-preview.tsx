@@ -42,6 +42,10 @@ export default function RopaPreview({
             metadata += `User ID: ${userId}\n`
         }
 
+        if (mode) {
+            metadata += `Mode: ${mode}\n`
+        }
+
         if (getElapsedTime) {
             const elapsedSeconds = getElapsedTime();
             metadata += `Time elapsed: ${elapsedSeconds} seconds\n`
