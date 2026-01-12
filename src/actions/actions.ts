@@ -1,10 +1,8 @@
 "use server";
 
 import {DocumentData, Template} from "@/models/DocumentData";
-import { generateText } from "ai";
-import {openai} from '@ai-sdk/openai';
-import {Mistral} from "@mistralai/mistralai";
-import {availableModels, defaultModel} from "@/config/models";
+import {generateText} from "ai";
+import {defaultModel} from "@/config/models";
 import {createOpenRouter} from "@openrouter/ai-sdk-provider";
 
 const openrouter = createOpenRouter({
