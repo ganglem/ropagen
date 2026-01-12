@@ -12,12 +12,14 @@ export default function RopaPreview({
     generatedDocument,
     setGeneratedDocument,
     userId,
-    mode
+    mode,
+    getElapsedTime
 }: {
     generatedDocument: string,
     setGeneratedDocument: (doc: string) => void,
     userId?: string
-    mode?: 'form' | 'ask' | 'chat'
+    mode?: 'form' | 'ask' | 'chat',
+    getElapsedTime?: () => number
 }) {
 
     const t = useTranslations('Preview');
@@ -38,6 +40,11 @@ export default function RopaPreview({
 
         if (userId) {
             metadata += `User ID: ${userId}\n`
+        }
+
+        if (getElapsedTime) {
+            const elapsedSeconds = getElapsedTime();
+            metadata += `Time elapsed: ${elapsedSeconds} seconds\n`
         }
 
         if (metadata !== "") {
