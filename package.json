@@ -41,6 +41,7 @@
     "next-intl": "^4.1.0",
     "next-themes": "^0.4.6",
     "openai": "^5.1.1",
+    "pg": "^8.16.3",
     "postcss": "^8.5.4",
     "puppeteer": "^24.16.2",
     "puppeteer-core": "^24.19.0",
@@ -51,6 +52,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.8",
     "@types/node": "^20",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tailwindcss": "^4.1.8",

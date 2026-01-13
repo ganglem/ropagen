@@ -146,6 +146,7 @@ export default function RopaPreview({
     }
 
     const downloadFile = (content: string, filename: string, mimeType: string) => {
+        uploadMarkdownDocumentToDatabase();
         const blob = new Blob([content], { type: mimeType });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -156,6 +157,30 @@ export default function RopaPreview({
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     };
+
+    const uploadMarkdownDocumentToDatabase = async () => {
+        const markdownContent = `\`\`\`markdown\n${appendDocumentWithMetadata(getCleanMarkdown(generatedDocument))}\n\`\`\``;
+        try {
+            const response = await fetch('/api/upload-document', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    aiMode: mode,
+                    markdownDocument: markdownContent
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to upload document: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error('Error uploading document:', error);
+            alert('Error uploading document. Please try again.');
+        }
+    }
 
     const downloadAsMarkdown = () => {
         // Add markdown code block wrapper for .md download
@@ -210,6 +235,7 @@ export default function RopaPreview({
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            uploadMarkdownDocumentToDatabase();
         } catch (error) {
             console.error('Error generating PDF:', error);
             alert('Error generating PDF. Please try again.');
