@@ -12,6 +12,7 @@ import type { Metadata } from 'next';
 // @ts-ignore
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
     const params = await props.params;
+    // @ts-ignore
     const page = source.getPage(params.slug);
     if (!page) notFound();
 
@@ -37,6 +38,7 @@ export async function generateMetadata(
     props: PageProps<'/docs/[[...slug]]'>,
 ): Promise<Metadata> {
     const params = await props.params;
+    // @ts-ignore
     const page = source.getPage(params.slug);
     if (!page) notFound();
 
