@@ -32,25 +32,8 @@ export default function SectionInput({ section, documentData, onChange, disabled
     }
 
     function getSectionPlaceholder(section: string): string {
-        if (section === 'retentionPeriods') {
-            return t('deletionTimePlaceholder');
-        } else if (section === 'legalBasis') {
-            return t('otherLegalBasisPlaceholder');
-        } else if (section === 'dataSources') {
-            return t('otherDataSourcesPlaceholder');
-        } else if (section === 'dataCategories') {
-            return t('otherDataCategoriesPlaceholder');
-        } else if (section === 'personCategories') {
-            return t('otherPersonCategoriesPlaceholder');
-        } else if (section === 'purposeOfDataProcessing') {
-            return t('purposeOfDataProcessingPlaceholder');
-        } else if (section === 'technicalOrganizationalMeasures') {
-            return t('technicalOrganizationalMeasuresPlaceholder');
-        } else if (section === 'additionalInfo') {
-            return t('additionalInfoPlaceholder');
-        } else {
-            return '';
-        }
+        const sectionName = t(section as any);
+        return t('inputPlaceholder', { section: sectionName });
     }
 
     const value = getSectionInputValue(section);
@@ -58,12 +41,15 @@ export default function SectionInput({ section, documentData, onChange, disabled
 
 
     return (
-        <Input
-            className={className}
-            value={value}
-            onChange={(e) => onChange(section, e.target.value)}
-            placeholder={placeholder}
-            disabled={disabled}
-        />
+        <>
+
+            <Input
+                className={className}
+                value={value}
+                onChange={(e) => onChange(section, e.target.value)}
+                placeholder={placeholder}
+                disabled={disabled}
+            />
+        </>
     );
 }

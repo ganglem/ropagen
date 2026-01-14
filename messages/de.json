@@ -17,7 +17,7 @@
   "Generate": {
     "locale": "Deutsch",
     "tabForm": "Formular",
-    "tabExplain": "Erklären",
+    "tabAsk": "Ask",
     "tabChat": "Chat",
     "templateInfo": "Template auswählen",
     "templatePlaceholder": "Wählen Sie ein Template aus",
@@ -37,6 +37,7 @@
     "categories": "Dokumentkategorien",
     "additionalInfo": "Zusätzliche Informationen",
     "additionalInfoPlaceholder": "z.B. Besondere Sicherheitsmaßnahmen, Auftragsverarbeiter, internationale Übermittlungen...",
+    "inputPlaceholder": "Geben Sie hier die Informationen für das Dokument für den Abschnitt ein: {section}",
     "generateDocument": "Dokument erstellen",
     "generateButton": "ROPA erstellen",
     "generateButtonTooltip": "Bitte geben Sie einen Dokumenttitel ein, bevor Sie ROPA erstellen",

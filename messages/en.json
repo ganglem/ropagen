@@ -15,7 +15,7 @@
   "Generate": {
     "locale": "English",
     "tabForm": "Form",
-    "tabExplain": "Explain",
+    "tabAsk": "Ask",
     "tabChat": "Chat",
     "templateInfo": "Select a Template",
     "templatePlaceholder": "Choose a template to start with",
@@ -35,6 +35,7 @@
     "categories": "Document Categories",
     "additionalInfo": "Additional Information",
     "additionalInfoPlaceholder": "e.g., Special security measures, third-party processors, international transfers...",
+    "inputPlaceholder": "Enter the information for the document for the section: {section}",
     "generateDocument": "Generate Document",
     "generateButton": "Generate ROPA",
     "generateButtonTooltip": "Please enter a document title before generating ROPA",
