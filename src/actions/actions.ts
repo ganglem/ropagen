@@ -142,7 +142,7 @@ async function generatePromptFromData(
 
         // Add initial message instructions
         if (isInitial) {
-            basePrompt += '\n\nThis is the FIRST message in the conversation. Greet the user, explain what this section is about, analyze the current document context, and immediately provide specific suggestions based on what they have already filled out. Be proactive and suggest concrete data that would fit well with their existing information.';
+            basePrompt += '\n\nThis is the FIRST message in the conversation. Greet the user, briefly explain the purpose of this section without mentioning any examples. Analyze the current document context. At the end, ask them if they need any help or have questions about filling out this section.';
         }
     } else if (chatMode == "explain" && isChat) {
         // Explain mode: use explain prompts
@@ -153,8 +153,8 @@ async function generatePromptFromData(
 
         // Add initial message instructions
         if (isInitial) {
-            basePrompt += '\n\nThis is the FIRST message in the conversation. Greet the user, explain what this section is about, analyze the current document context, and provide a clear and concise explanation of how to fill out this section effectively. Be proactive and suggest concrete data that would fit well with their existing information.';
-        }
+            basePrompt += '\n\nThis is the FIRST message in the conversation. Greet the user, briefly explain the purpose of this section without mentioning any examples. Analyze the current document context. At the end, ask them if they need any help or have questions about filling out this section.';
+                    }
     } else {
         // AI suggestion mode: use regular prompts
         switch (source) {
