@@ -25,6 +25,23 @@ function getLocale(pathname: string) {
 }
 
 export async function middleware(request: NextRequest) {
+    // Handle language name redirects
+    const pathname = request.nextUrl.pathname;
+
+    // Redirect /Deutsch/ to /de/
+    if (pathname.startsWith('/Deutsch/') || pathname === '/Deutsch') {
+        const url = request.nextUrl.clone();
+        url.pathname = pathname.replace(/^\/Deutsch/, '/de');
+        return NextResponse.redirect(url, 301);
+    }
+
+    // Redirect /Englisch/ to /en/
+    if (pathname.startsWith('/Englisch/') || pathname === '/Englisch') {
+        const url = request.nextUrl.clone();
+        url.pathname = pathname.replace(/^\/Englisch/, '/en');
+        return NextResponse.redirect(url, 301);
+    }
+
     const i18nResponse = handleI18nRouting(request);
 
     let supabaseResponse = NextResponse.next({request});
@@ -54,7 +71,6 @@ export async function middleware(request: NextRequest) {
         return i18nResponse;
     }
 
-    const pathname = request.nextUrl.pathname;
     const locale = getLocale(pathname);
     const pathWithoutLocale = stripLocale(pathname);
 
