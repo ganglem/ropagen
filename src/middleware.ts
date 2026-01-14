@@ -42,6 +42,17 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(url, 301);
     }
 
+    // Redirect capitalized generate mode paths to lowercase
+    // e.g., /en/generate/Ask -> /en/generate/ask
+    if (pathname.match(/\/generate\/(Ask|Form|Chat)($|\/)/)) {
+        const url = request.nextUrl.clone();
+        url.pathname = pathname
+            .replace('/generate/Ask', '/generate/ask')
+            .replace('/generate/Form', '/generate/form')
+            .replace('/generate/Chat', '/generate/chat');
+        return NextResponse.redirect(url, 301);
+    }
+
     const i18nResponse = handleI18nRouting(request);
 
     let supabaseResponse = NextResponse.next({request});
