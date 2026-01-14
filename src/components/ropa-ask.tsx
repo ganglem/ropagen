@@ -13,6 +13,7 @@ import { availableModels, defaultModel } from "@/config/models";
 import { DocumentData } from "@/models/DocumentData";
 import SectionChat from "./section-chat";
 import SectionInput from "./section-input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function RopaAsk({setGeneratedDocument}: {setGeneratedDocument: (doc: string) => void}) {
 
@@ -502,16 +503,31 @@ export default function RopaAsk({setGeneratedDocument}: {setGeneratedDocument: (
                                 ))}
                             </SelectContent>
                         </Select>
-                        <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive} className="w-auto flex items-center gap-2">
-                            {isGenerating ? (
-                                <>
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                    {t("generating")}
-                                </>
-                            ) : (
-                                t("generateButton")
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <span>
+                                    <Button
+                                        onClick={handleGenerateDocument}
+                                        disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive || !documentData.title.trim()}
+                                        className="w-auto flex items-center gap-2"
+                                    >
+                                        {isGenerating ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                {t("generating")}
+                                            </>
+                                        ) : (
+                                            t("generateButton")
+                                        )}
+                                    </Button>
+                                </span>
+                            </TooltipTrigger>
+                            {!documentData.title.trim() && (
+                                <TooltipContent side="top">
+                                    <p>{t("generateButtonTooltip")}</p>
+                                </TooltipContent>
                             )}
-                        </Button>
+                        </Tooltip>
                     </div>
                 </CardContent>
             </Card>

@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { DocumentData } from "@/models/DocumentData";
 import ShinyText from "@/components/ui/ShinyText";
 import { marked } from "marked";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Message {
     role: "user" | "assistant";
@@ -254,17 +255,26 @@ export default function SectionChat({
 
     if (!isOpen) {
         return (
-
-                <Button
-                    onClick={() => setIsOpen(true)}
-                    disabled={disabled || !documentData.title}
-                    className="w-full flex items-center gap-2"
-                    variant="outline"
-                >
-                    <MessageSquare className="w-4 h-4" />
-                    {t("chatWithAI") || "Chat with AI"}
-                </Button>
-
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <span className="w-full">
+                        <Button
+                            onClick={() => setIsOpen(true)}
+                            disabled={disabled || !documentData.title}
+                            className="w-full flex items-center gap-2"
+                            variant="outline"
+                        >
+                            <MessageSquare className="w-4 h-4" />
+                            {t("chatWithAI") || "Chat with AI"}
+                        </Button>
+                    </span>
+                </TooltipTrigger>
+                {!documentData.title && (
+                    <TooltipContent side="top">
+                        <p>{t("aiSuggestTooltip")}</p>
+                    </TooltipContent>
+                )}
+            </Tooltip>
         );
     }
 

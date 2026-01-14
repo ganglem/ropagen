@@ -37,6 +37,7 @@
     "additionalInfoPlaceholder": "e.g., Special security measures, third-party processors, international transfers...",
     "generateDocument": "Generate Document",
     "generateButton": "Generate ROPA",
+    "generateButtonTooltip": "Please enter a document title before generating ROPA",
     "generating": "Generating ROPA...",
     "organization": "Organization",
     "organizationName": "Organization Name",

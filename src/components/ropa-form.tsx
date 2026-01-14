@@ -611,24 +611,30 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
         const isButtonDisabled = disabled || isLoading || isAnyAiSuggestLoading;
 
         return (
-            <div
-                className="relative inline-block"
-                title={isButtonDisabled && isTitleMissing ? t("aiSuggestTooltip") : ""}
-            >
-                <Button
-                    variant="outline"
-                    onClick={onClick}
-                    disabled={isButtonDisabled}
-                    className="flex items-center gap-2 ml-2"
-                >
-                    {isLoading ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                        <Sparkles className="w-4 h-4" />
-                    )}
-                    {t("aiSuggest")}
-                </Button>
-            </div>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <span className="relative inline-block">
+                        <Button
+                            variant="outline"
+                            onClick={onClick}
+                            disabled={isButtonDisabled}
+                            className="flex items-center gap-2 ml-2"
+                        >
+                            {isLoading ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                                <Sparkles className="w-4 h-4" />
+                            )}
+                            {t("aiSuggest")}
+                        </Button>
+                    </span>
+                </TooltipTrigger>
+                {isTitleMissing && (
+                    <TooltipContent side="top">
+                        <p>{t("aiSuggestTooltip")}</p>
+                    </TooltipContent>
+                )}
+            </Tooltip>
         );
     }
 
@@ -663,7 +669,6 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
 
     return (
         <div className="space-y-6 w-full">
-            <RopaTemplateSelector onSelect={handleTemplateSelect}></RopaTemplateSelector>
 
             {/* Title Card */}
             <Card>
@@ -1050,16 +1055,31 @@ export default function RopaForm({setGeneratedDocument}: {setGeneratedDocument: 
                             </Select>
                         </div>
 
-                        <Button onClick={handleGenerateDocument} disabled={isGenerating || isAnyAiSuggestLoading} className="w-auto flex items-center gap-2">
-                            {isGenerating ? (
-                                <>
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                    {t("generating")}
-                                </>
-                            ) : (
-                                t("generateButton")
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <span>
+                                    <Button
+                                        onClick={handleGenerateDocument}
+                                        disabled={isGenerating || isAnyAiSuggestLoading || !documentData.title.trim()}
+                                        className="w-auto flex items-center gap-2"
+                                    >
+                                        {isGenerating ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                {t("generating")}
+                                            </>
+                                        ) : (
+                                            t("generateButton")
+                                        )}
+                                    </Button>
+                                </span>
+                            </TooltipTrigger>
+                            {!documentData.title.trim() && (
+                                <TooltipContent side="top">
+                                    <p>{t("generateButtonTooltip")}</p>
+                                </TooltipContent>
                             )}
-                        </Button>
+                        </Tooltip>
                     </div>
                 </CardContent>
             </Card>

@@ -39,6 +39,7 @@
     "additionalInfoPlaceholder": "z.B. Besondere Sicherheitsmaßnahmen, Auftragsverarbeiter, internationale Übermittlungen...",
     "generateDocument": "Dokument erstellen",
     "generateButton": "ROPA erstellen",
+    "generateButtonTooltip": "Bitte geben Sie einen Dokumenttitel ein, bevor Sie ROPA erstellen",
     "generating": "ROPA wird erstellt...",
     "organization": "Organisation",
     "organizationName": "Organisationsname",
@@ -256,7 +257,7 @@
       "authorizedPersons": "Berechtigte Personen"
     },
     "tooltips": {
-      "info": "Geben Sie den Titel und grundlegende Informationen für Ihr VVT-Dokument ein. Dies hilft bei der Identifizierung der spezifischen Verarbeitungstätigkeit, die Sie dokumentieren.",
+      "info": "Geben Sie den Titel und grundlegende Informationen für Ihr ROPA-Dokument ein. Dies hilft bei der Identifizierung der spezifischen Verarbeitungstätigkeit, die Sie dokumentieren.",
       "organization": "Geben Sie Details zu Ihrer Organisation an, einschließlich Name, Kontaktinformationen, Rolle (Verantwortlicher/Auftragsverarbeiter), gesetzlicher Vertreter und Kontaktdaten des Datenschutzbeauftragten.",
       "purposeOfDataProcessing": "Beschreiben Sie, warum Sie personenbezogene Daten verarbeiten. Dies sollte die spezifischen Zwecke und Ziele der Datenverarbeitungstätigkeit erklären, wie z.B. Mitarbeiterverwaltung oder Kundenverwaltung.",
       "technicalOrganizationalMeasures": "Dokumentieren Sie die Sicherheitsmaßnahmen zum Schutz personenbezogener Daten. Dazu gehören technische Schutzmaßnahmen (Verschlüsselung, Zugriffskontrollen) und organisatorische Maßnahmen (Mitarbeiterschulungen, Richtlinien).",
@@ -266,7 +267,7 @@
       "personCategories": "Definieren Sie, wer die betroffenen Personen sind und wer Zugriff auf deren Daten hat. Dazu gehören betroffene Personen, interne Empfänger, externe Empfänger und autorisiertes Personal, das die Daten verarbeitet.",
       "retentionPeriods": "Geben Sie an, wie lange Sie personenbezogene Daten vor der Löschung aufbewahren. Definieren Sie Aufbewahrungsfristen basierend auf gesetzlichen Anforderungen, Geschäftsbedürfnissen oder bis zum Widerruf der Einwilligung.",
       "additionalInfo": "Fügen Sie zusätzliche Informationen hinzu, die für diese Verarbeitungstätigkeit relevant sind, wie besondere Sicherheitsmaßnahmen, Drittanbieter-Verarbeiter, internationale Datentransfers oder spezifische Compliance-Hinweise.",
-      "generateDocument": "Wählen Sie Ihr KI-Modell und generieren Sie das finale VVT-Dokument. Das System erstellt aus allen bereitgestellten Informationen ein umfassendes, DSGVO-konformes Verzeichnis von Verarbeitungstätigkeiten."
+      "generateDocument": "Wählen Sie Ihr KI-Modell und generieren Sie das finale ROPA-Dokument. Das System erstellt aus allen bereitgestellten Informationen ein umfassendes, DSGVO-konformes Verzeichnis von Verarbeitungstätigkeiten."
     },
     "noSuggestionReturned": "Kein Vorschlag der KI gegeben.",
     "noChangesDetected": "Keine Änderungen der KI erkannt.",
