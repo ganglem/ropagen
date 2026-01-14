@@ -1,7 +1,7 @@
 <p>
  <img src="public/star.svg" width="60" align="left" hspace="5">
  <p>
-   <h1><a href="https://gropagen.eu">ROPAgen</a></h1>
+   <h1><a href="https://ropagen.eu">ROPAgen</a></h1>
  </p>
 </p>
 
@@ -30,30 +30,6 @@ Creating ROPA documents is too tedious and time-consuming? ROPAgen is here to he
 - [Supabase](https://supabase.com/) (Database & Auth)
 - [Tailwind CSS](https://tailwindcss.com/) (UI Styling)
 
-
-## ⚙️ Installation
-
-To get started with ROPAgen, follow these steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/ropagen.git
-   cd ropagen
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Set up environment variables (see `.env.example` if available).
-
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser to start using the application.
 
 ## 📜 License
 
