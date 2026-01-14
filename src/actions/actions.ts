@@ -144,11 +144,11 @@ async function generatePromptFromData(
         if (isInitial) {
             basePrompt += '\n\nThis is the FIRST message in the conversation. Greet the user, briefly explain the purpose of this section without mentioning any examples. Analyze the current document context. At the end, ask them if they need any help or have questions about filling out this section.';
         }
-    } else if (chatMode == "explain" && isChat) {
+    } else if (chatMode == "ask" && isChat) {
         // Explain mode: use explain prompts
-        basePrompt = promptTemplate.explain.base || '';
+        basePrompt = promptTemplate.ask.base || '';
         const sectionPromptKey = source.charAt(0).toUpperCase() + source.slice(1);
-        const sectionPrompt = (promptTemplate.explain as any)[sectionPromptKey] || (promptTemplate.explain as any)[source] || '';
+        const sectionPrompt = (promptTemplate.ask as any)[sectionPromptKey] || (promptTemplate.ask as any)[source] || '';
         basePrompt = `${basePrompt}\n\n${sectionPrompt}`;
 
         // Add initial message instructions

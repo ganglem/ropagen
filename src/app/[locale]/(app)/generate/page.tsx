@@ -28,7 +28,7 @@ export default function Generate() {
             <Tabs defaultValue="mode1" className="w-full" onValueChange={handleTabChange}>
                 <TabsList className={`mb-4 flex w-fit mx-auto transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
                     <TabsTrigger value="mode1">{t("tabForm")}</TabsTrigger>
-                    <TabsTrigger value="mode2">{t("tabExplain")}</TabsTrigger>
+                    <TabsTrigger value="mode2">{t("tabAsk")}</TabsTrigger>
                     <TabsTrigger value="mode3">{t("tabChat")}</TabsTrigger>
                 </TabsList>
 
