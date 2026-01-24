@@ -6,10 +6,10 @@ export interface ModelOption {
 
 export const availableModels: ModelOption[] = [
     {
-        name: "mistralai/mistral-small-3.2-24b-instruct",
-        label: "Magistral Small 3.2 24B",
+        name: "mistralai/mistral-large-2512",
+        label: " Mistral Large 3 2512",
     }
 ];
 
 // Default model
-export const defaultModel = "mistralai/mistral-small-3.2-24b-instruct";
+export const defaultModel = "mistralai/mistral-large-2512";

@@ -27,7 +27,8 @@ export async function callAPI(
     selectedModel: string = defaultModel,
     chatMode: string = "",
     messages?: ChatMessage[],
-    isInitial?: boolean,
+    isInitial?: boolean
+
 ): Promise<any> {
     try {
         const prompt = await generatePromptFromData(data, locale, source, chatMode, messages, isInitial);
@@ -44,7 +45,8 @@ export async function callAPI(
         const response = await generateText({
             model: openrouter(selectedModel),
             prompt: fullPrompt,
-            temperature: messages && messages.length > 0 ? 0.7 : 0,
+            temperature: source == "finalropa" ? 0.05 : 0.2,
+            topP: source == "finalropa" ? 0.05 : 0.5,
         });
         llmResponse = response.text || '';
 
