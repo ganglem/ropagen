@@ -178,7 +178,7 @@ export default function RopaPreview({
             }
         } catch (error) {
             console.error('Error uploading document:', error);
-            alert('Error uploading document. Please try again.');
+            //alert('Error uploading document. Please try again.');
         }
     }
 
