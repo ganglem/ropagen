@@ -463,7 +463,7 @@ export default function RopaAsk({setGeneratedDocument}: {setGeneratedDocument: (
                             source={section}
                             documentData={documentData}
                             selectedModel={selectedModel}
-                            chatMode={"explain"}
+                            chatMode={"ask"}
                             disabled={isGenerating || isAnyAiSuggestLoading || isAnyChatActive}
                             onChatStateChange={handleChatStateChange}
                         />
